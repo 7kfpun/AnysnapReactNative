@@ -8,6 +8,8 @@ import {
 } from 'react-native-router-flux';
 
 // Views
+import HomeView from './app/components/home';
+import CameraView from './app/components/camera';
 import MainView from './app/components/main';
 
 // Elements
@@ -21,10 +23,12 @@ import TabIcon from './app/elements/tab-icon';
 
 const scenes = Actions.create(
   <Scene key="root">
+    <Scene key="camera" title="Camera" component={CameraView} direction="vertical" />
+
     <Scene key="tabbar" initial={true} tabs={true}>
-      <Scene key="main" title="Main" icon={TabIcon} iconName="ios-home" component={MainView} />
-      <Scene key="Camera" title="Camera" icon={TabIcon} iconName="ios-camera" component={MainView} />
-      <Scene key="Settings" title="Settings" icon={TabIcon} iconName="ios-settings" component={MainView} />
+      <Scene key="main" title="Main" icon={TabIcon} iconName="ios-home" component={HomeView} />
+      <Scene key="history" title="History" icon={TabIcon} iconName="ios-camera" component={MainView} />
+      <Scene key="settings" title="Settings" icon={TabIcon} iconName="ios-settings" component={MainView} />
     </Scene>
   </Scene>
 );

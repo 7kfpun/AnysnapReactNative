@@ -4,6 +4,9 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -26,7 +29,10 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+          new RNFetchBlobPackage(),
+           new MainReactPackage(),
+            new ImageResizerPackage(),
+            new RNFetchBlobPackage(),
             new VectorIconsPackage(),
             new ReactNativePermissionsPackage(),
             new RCTCameraPackage()
