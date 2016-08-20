@@ -10,6 +10,7 @@ import {
 // Views
 import HomeView from './app/components/home';
 import CameraView from './app/components/camera';
+import ResultView from './app/components/result';
 import MainView from './app/components/main';
 
 // Elements
@@ -24,6 +25,7 @@ import TabIcon from './app/elements/tab-icon';
 const scenes = Actions.create(
   <Scene key="root">
     <Scene key="camera" title="Camera" component={CameraView} direction="vertical" />
+    <Scene key="result" title="Result" component={ResultView} />
 
     <Scene key="tabbar" initial={true} tabs={true}>
       <Scene key="main" title="Main" icon={TabIcon} iconName="ios-home" component={HomeView} />

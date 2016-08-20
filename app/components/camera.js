@@ -9,11 +9,8 @@ import {
 import { Actions } from 'react-native-router-flux';
 import Camera from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
 
-import Reactotron from 'reactotron'; // eslint-disable-line import/no-extraneous-dependencies
-
-import * as api from '../api';
+import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 const styles = StyleSheet.create({
   container: {
@@ -33,27 +30,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Anysnap extends Component {
+export default class CameraView extends Component {
   takePicture() {
     this.camera.capture().then((data) => {
       Reactotron.log({ log: 'Camera captured', data });
 
-      ImageResizer.createResizedImage(data.path, 600, 600, 'JPEG', 40).then((resizedImageUri) => {
-        Reactotron.log({ log: 'Image resized', resizedImageUri });
-
-        api.craftarSearch(data.path)
-        .then((response) => response.json())
-        .then((json) => {
-          Reactotron.log({ log: 'Craftar search', json });
-        })
-        .catch((error) => {
-          Reactotron.log(error);
-        });
-      });
-
       Actions.pop();
+      Actions.result({ image: data.path });
     })
-    .catch(err => alert(err));
+    .catch(err => Reactotron.log(err));
   }
 
   render() {
