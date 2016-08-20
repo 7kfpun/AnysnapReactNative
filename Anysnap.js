@@ -7,10 +7,13 @@ import {
   Scene,
 } from 'react-native-router-flux';
 
+import firebase from 'firebase';
+
 // Views
 import HomeView from './app/components/home';
 import CameraView from './app/components/camera';
 import ResultView from './app/components/result';
+import HistoryView from './app/components/history';
 import MainView from './app/components/main';
 
 // Elements
@@ -22,6 +25,10 @@ import TabIcon from './app/elements/tab-icon';
 //   GoogleAnalytics.setDryRun(true);
 // }
 
+import { config } from './app/config';
+
+firebase.initializeApp(config.firebase);
+
 const scenes = Actions.create(
   <Scene key="root">
     <Scene key="camera" title="Camera" component={CameraView} direction="vertical" />
@@ -29,7 +36,7 @@ const scenes = Actions.create(
 
     <Scene key="tabbar" initial={true} tabs={true}>
       <Scene key="main" title="Main" icon={TabIcon} iconName="ios-home" component={HomeView} />
-      <Scene key="history" title="History" icon={TabIcon} iconName="ios-camera" component={MainView} />
+      <Scene key="history" title="History" icon={TabIcon} iconName="ios-camera" component={HistoryView} />
       <Scene key="settings" title="Settings" icon={TabIcon} iconName="ios-settings" component={MainView} />
     </Scene>
   </Scene>
