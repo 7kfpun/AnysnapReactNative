@@ -14,7 +14,7 @@ import HomeView from './app/components/home';
 import CameraView from './app/components/camera';
 import ResultView from './app/components/result';
 import HistoryView from './app/components/history';
-import MainView from './app/components/main';
+import SettingsView from './app/components/settings';
 
 // Elements
 import TabIcon from './app/elements/tab-icon';
@@ -37,7 +37,7 @@ const scenes = Actions.create(
     <Scene key="tabbar" initial={true} tabs={true}>
       <Scene key="main" title="Main" icon={TabIcon} iconName="ios-home" component={HomeView} />
       <Scene key="history" title="History" icon={TabIcon} iconName="ios-camera" component={HistoryView} />
-      <Scene key="settings" title="Settings" icon={TabIcon} iconName="ios-settings" component={MainView} />
+      <Scene key="settings" title="Settings" icon={TabIcon} iconName="ios-settings" component={SettingsView} />
     </Scene>
   </Scene>
 );
