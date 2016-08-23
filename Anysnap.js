@@ -26,6 +26,7 @@ import TabIcon from './app/elements/tab-icon';
 // }
 
 import { config } from './app/config';
+import I18n from './app/utils/i18n';
 
 firebase.initializeApp(config.firebase);
 
@@ -35,9 +36,9 @@ const scenes = Actions.create(
     <Scene key="result" title="Result" component={ResultView} />
 
     <Scene key="tabbar" initial={true} tabs={true}>
-      <Scene key="main" title="Main" icon={TabIcon} iconName="ios-home" component={HomeView} />
-      <Scene key="history" title="History" icon={TabIcon} iconName="ios-camera" component={HistoryView} />
-      <Scene key="settings" title="Settings" icon={TabIcon} iconName="ios-settings" component={SettingsView} />
+      <Scene key="main" title={I18n.t('main')} icon={TabIcon} iconName="ios-home" component={HomeView} />
+      <Scene key="history" title={I18n.t('history')} icon={TabIcon} iconName="ios-camera" component={HistoryView} />
+      <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="ios-settings" component={SettingsView} />
     </Scene>
   </Scene>
 );

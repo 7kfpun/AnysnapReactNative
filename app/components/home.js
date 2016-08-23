@@ -12,6 +12,8 @@ import Reactotron from 'reactotron'; // eslint-disable-line import/no-extraneous
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
 
+import I18n from '../utils/i18n';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -41,12 +43,12 @@ export default class HomeView extends Component {
       <View style={styles.container}>
         <TouchableHighlight onPress={() => Actions.camera()} underlayColor="white">
           <Text style={styles.button}>
-            Camera
+            {I18n.t('camera')}
           </Text>
         </TouchableHighlight>
         <TouchableHighlight onPress={() => this.pickImage()} underlayColor="white">
           <Text style={styles.button}>
-            Photo library
+            {I18n.t('photo-library')}
           </Text>
         </TouchableHighlight>
       </View>
