@@ -10,6 +10,10 @@ I18n.translations = {
     camera: 'Camera',
     'photo-library': 'Photo library',
     version: 'Version',
+    admin: 'Admin',
+    'admin-pick-image': 'Pick image',
+    'admin-remove-all': 'Remove all',
+    'admin-confirm': 'Confirm',
   },
   zh: {
     main: '主頁',
@@ -18,6 +22,10 @@ I18n.translations = {
     camera: '相機',
     'photo-library': '相冊',
     version: '版本',
+    admin: 'Admin',
+    'admin-pick-image': 'Pick image',
+    'admin-remove-all': 'Remove all',
+    'admin-confirm': 'Confirm',
   },
 };
 
