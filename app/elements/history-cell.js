@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
+import { Actions } from 'react-native-router-flux';
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -90,24 +91,26 @@ export default class HistoryCell extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.leftSide}>
-          <Image
-            style={styles.image}
-            source={{ uri: this.props.history.original }}
-          />
+      <TouchableHighlight onPress={() => Actions.historyDetail({ history: this.props.history })} underlayColor="white">
+        <View style={styles.container}>
+          <View style={styles.leftSide}>
+            <Image
+              style={styles.image}
+              source={{ uri: this.props.history.original }}
+            />
+          </View>
+          <View style={{ padding: 10 }}>
+            {this.state.name && <Text>{this.state.name}</Text>}
+            {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
+              <Text>{this.state.url}</Text>
+            </TouchableHighlight>}
+            <Text>{'tag'}</Text>
+          </View>
+          <View style={styles.rightSide}>
+            <Icon name="ios-arrow-dropright" color="gray" size={24} />
+          </View>
         </View>
-        <View style={{ padding: 10 }}>
-          {this.state.name && <Text>{this.state.name}</Text>}
-          {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
-            <Text>{this.state.url}</Text>
-          </TouchableHighlight>}
-          <Text>{'tag'}</Text>
-        </View>
-        <View style={styles.rightSide}>
-          <Icon name="ios-arrow-dropright" color="gray" size={24} />
-        </View>
-      </View>
+      </TouchableHighlight>
     );
   }
 }
@@ -117,4 +120,5 @@ HistoryCell.propTypes = {
 };
 
 HistoryCell.defaultProps = {
+  history: {},
 };
