@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Dimensions,
   Image,
   Linking,
   StyleSheet,
@@ -10,7 +9,9 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
-import SafariView from 'react-native-safari-view';
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
@@ -19,11 +20,24 @@ import firebase from 'firebase';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    marginBottom: 10,
+    marginBottom: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  leftSide: {
+    margin: 20,
+  },
+  middleSide: {
+    flexDirection: 'row',
+  },
+  rightSide: {
+    justifyContent: 'center',
+    marginRight: 10,
   },
   image: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').width / 2,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     resizeMode: 'cover',
   },
 });
@@ -77,15 +91,21 @@ export default class HistoryCell extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={{ uri: this.props.history.original }}
-        />
+        <View style={styles.leftSide}>
+          <Image
+            style={styles.image}
+            source={{ uri: this.props.history.original }}
+          />
+        </View>
         <View style={{ padding: 10 }}>
           {this.state.name && <Text>{this.state.name}</Text>}
           {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
             <Text>{this.state.url}</Text>
           </TouchableHighlight>}
+          <Text>{'tag'}</Text>
+        </View>
+        <View style={styles.rightSide}>
+          <Icon name="ios-arrow-dropright" color="gray" size={24} />
         </View>
       </View>
     );

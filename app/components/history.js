@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
   ListView,
-  StyleSheet,
   RefreshControl,
+  StyleSheet,
   View,
 } from 'react-native';
 
@@ -10,7 +10,11 @@ import _ from 'underscore';
 import firebase from 'firebase';
 
 // 3rd party libraries
+import { Actions } from 'react-native-router-flux';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
+import Icon from 'react-native-vector-icons/Ionicons';
+import NavigationBar from 'react-native-navbar';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
@@ -21,9 +25,36 @@ const uniqueID = DeviceInfo.getUniqueID();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
-    marginTop: 60,
+    backgroundColor: '#CEDADF',
     marginBottom: 50,
+  },
+  navigatorBarIOS: {
+    backgroundColor: '#2BBDC3',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#00BFA5',
+  },
+  navigatorLeftButton: {
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 50,
+  },
+  navigatorRightButton: {
+    paddingTop: 10,
+    paddingLeft: 50,
+    paddingRight: 10,
+  },
+  toolbar: {
+    height: 56,
+    backgroundColor: '#202020',
+  },
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#E55356',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 28,
+    marginBottom: 5,
   },
 });
 
@@ -76,10 +107,28 @@ export default class HistoryView extends Component {
     this.setState({ refreshing: false });
   }
 
+  renderToolbar() {
+    return (
+      <NavigationBar
+        statusBar={{ tintColor: '#2BBDC3', style: 'light-content' }}
+        style={styles.navigatorBarIOS}
+        title={{ title: this.props.title, tintColor: 'white' }}
+        rightButton={<Icon
+          style={styles.navigatorRightButton}
+          name="md-camera"
+          size={24}
+          color="white"
+          onPress={Actions.camera}
+        />}
+      />
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <ListView
+        {this.renderToolbar()}
+        <SwipeListView
           ref={(c) => { this.scrollView = c; }}
           key={this.state.key}
           refreshControl={
@@ -90,8 +139,24 @@ export default class HistoryView extends Component {
           }
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <HistoryCell history={rowData} />}
+          renderHiddenRow={(data) => (
+            <View style={styles.rowBack}>
+              <View />
+              <Icon name="ios-close" color="white" size={40} />
+            </View>
+          )}
+          rightOpenValue={-75}
+          disableRightSwipe={true}
         />
       </View>
     );
   }
 }
+
+HistoryView.propTypes = {
+  title: React.PropTypes.string,
+};
+
+HistoryView.defaultProps = {
+  title: '',
+};
