@@ -14,6 +14,9 @@ I18n.translations = {
     'admin-pick-image': 'Pick image',
     'admin-remove-all': 'Remove all',
     'admin-confirm': 'Confirm',
+    'account-login': 'Login',
+    username: 'USERNAME',
+    password: 'PASSWORD',
   },
   zh: {
     main: '主頁',
@@ -26,6 +29,9 @@ I18n.translations = {
     'admin-pick-image': 'Pick image',
     'admin-remove-all': 'Remove all',
     'admin-confirm': 'Confirm',
+    'account-login': 'Login',
+    username: '用戶名稱',
+    password: '登錄密碼',
   },
 };
 

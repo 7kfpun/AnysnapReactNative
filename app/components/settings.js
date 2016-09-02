@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
+import { Actions } from 'react-native-router-flux';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
 import DeviceInfo from 'react-native-device-info';
 
@@ -34,6 +35,13 @@ export default class Anysnap extends Component {
               />
             </Section>
 
+            <Section>
+              <Cell
+                cellStyle="Basic"
+                title={I18n.t('account-login')}
+                onPress={() => Actions.login()}
+              />
+            </Section>
           </TableView>
         </ScrollView>
       </View>
