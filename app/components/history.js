@@ -118,7 +118,7 @@ export default class HistoryView extends Component {
           name="md-camera"
           size={24}
           color="white"
-          onPress={Actions.camera}
+          onPress={Actions.pop}
         />}
       />
     );

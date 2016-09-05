@@ -5,6 +5,8 @@ I18n.fallbacks = true;
 I18n.translations = {
   en: {
     main: 'Main',
+    result: 'Result',
+    'more-information': 'More information',
     history: 'History',
     settings: 'Settings',
     camera: 'Camera',
@@ -20,6 +22,8 @@ I18n.translations = {
   },
   zh: {
     main: '主頁',
+    result: 'Result',
+    'more-information': '詳細資料',
     history: '歷史',
     settings: '設定',
     camera: '相機',

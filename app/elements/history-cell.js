@@ -12,11 +12,13 @@ import {
 import { Actions } from 'react-native-router-flux';
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
 
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import firebase from 'firebase';
+
+import TagCell from './tag-cell';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,21 +27,46 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  leftSide: {
+  leftBlock: {
     margin: 20,
   },
-  middleSide: {
-    flexDirection: 'row',
+  middleBlock: {
+    flex: 2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
-  rightSide: {
+  rightBlock: {
     justifyContent: 'center',
     marginRight: 10,
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     resizeMode: 'cover',
+  },
+  title: {
+    fontSize: 16,
+    color: '#212121',
+  },
+  subtitile: {
+    fontSize: 12,
+    color: '#9E9E9E',
+  },
+  tagsGroup: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  tag: {
+    fontSize: 12,
+    color: '#1E88E5',
+  },
+  comma: {
+    fontSize: 12,
+    color: '#1E88E5',
   },
 });
 
@@ -93,21 +120,27 @@ export default class HistoryCell extends Component {
     return (
       <TouchableHighlight onPress={() => Actions.historyDetail({ history: this.props.history })} underlayColor="white">
         <View style={styles.container}>
-          <View style={styles.leftSide}>
+          <View style={styles.leftBlock}>
             <Image
               style={styles.image}
               source={{ uri: this.props.history.original }}
             />
           </View>
-          <View style={{ padding: 10 }}>
-            {this.state.name && <Text>{this.state.name}</Text>}
-            {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
-              <Text>{this.state.url}</Text>
+          <View style={styles.middleBlock}>
+            <Text style={styles.title}>{this.state.name || 'NAME'}</Text>
+            {<TouchableHighlight onPress={() => this.state.url && this.openUrl(this.state.url)} underlayColor="white">
+              <Text style={styles.subtitile}>{this.state.url || 'URL'}</Text>
             </TouchableHighlight>}
-            <Text>{'tag'}</Text>
+            <View style={styles.tagsGroup}>
+              <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
+              <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+              <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+              <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+              <TagCell text="tag" />
+            </View>
           </View>
-          <View style={styles.rightSide}>
-            <Icon name="ios-arrow-dropright" color="gray" size={24} />
+          <View style={styles.rightBlock}>
+            <Icon name="keyboard-arrow-right" color="gray" size={24} />
           </View>
         </View>
       </TouchableHighlight>

@@ -3,6 +3,7 @@ import {
   Dimensions,
   Image,
   Linking,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -13,13 +14,17 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
 import RNFetchBlob from 'react-native-fetch-blob';
-import SafariView from 'react-native-safari-view';
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import firebase from 'firebase';
 
+import TagCell from '../elements/tag-cell';
+
 import * as api from '../api';
+import I18n from '../utils/i18n';
 
 import { config } from '../config';
 
@@ -30,14 +35,44 @@ const uniqueID = DeviceInfo.getUniqueID();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  navbar: {
+    height: 40,
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    flexDirection: 'row',
+    marginTop: 20,
+    paddingLeft: 10,
+  },
+  navbarText: {
+    paddingLeft: 5,
+    color: '#212121',
   },
   image: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').width,
     resizeMode: 'cover',
+  },
+  relatedImageGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  relatedImage: {
+    width: (Dimensions.get('window').width / 3) - 30,
+    height: (Dimensions.get('window').width / 3) - 30,
+    resizeMode: 'cover',
+  },
+  tagsGroup: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  tag: {
+    fontSize: 12,
+    color: '#1E88E5',
   },
 });
 
@@ -46,10 +81,12 @@ export default class ResultView extends Component {
     super(props);
 
     let filename;
-    try {
-      filename = /id=(.*)\&ext/i.exec(this.props.image)[0].replace('id=', '').replace('&ext', '');  // eslint-disable-line no-useless-escape
-    } catch (err) {
-      filename = this.props.image.replace(/^.*[\\\/]/, '').replace('.jpg', '');
+    if (this.props.image) {
+      try {
+        filename = /id=(.*)\&ext/i.exec(this.props.image)[0].replace('id=', '').replace('&ext', '');  // eslint-disable-line no-useless-escape
+      } catch (err) {
+        filename = this.props.image.replace(/^.*[\\\/]/, '').replace('.jpg', '');
+      }
     }
 
     this.state = {
@@ -59,8 +96,8 @@ export default class ResultView extends Component {
   }
 
   componentDidMount() {
-    this.craftarSearch();
-    this.uploadImage();
+    // this.craftarSearch();
+    // this.uploadImage();
   }
 
   craftarSearch() {
@@ -140,9 +177,14 @@ export default class ResultView extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="default" />
+        <View style={styles.navbar}>
+          <Icon name="arrow-back" size={26} color="gray" />
+          <Text style={styles.navbarText}>{I18n.t('more-information')}</Text>
+        </View>
         <Image
           style={styles.image}
-          source={{ uri: this.props.image }}
+          source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
         />
         {this.state.loading && <Text style={styles.button}>
           Loading
@@ -159,6 +201,31 @@ export default class ResultView extends Component {
             {this.state.url}
           </Text>
         </TouchableHighlight>}
+
+        <Text>about AnySnap result</Text>
+        <View style={styles.relatedImageGroup}>
+          <Image
+            style={styles.relatedImage}
+            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+          />
+          <Image
+            style={styles.relatedImage}
+            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+          />
+          <Image
+            style={styles.relatedImage}
+            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+          />
+        </View>
+
+        <Text>related result</Text>
+        <View style={styles.tagsGroup}>
+          <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
+          <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+          <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+          <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+          <TagCell text="tag" />
+        </View>
       </View>
     );
   }

@@ -11,8 +11,8 @@ import firebase from 'firebase';
 
 // Views
 import LoginView from './app/components/login';
-
 import HomeView from './app/components/home';
+import NotificationView from './app/components/notification';
 import CameraView from './app/components/camera';
 import ResultView from './app/components/result';
 import HistoryView from './app/components/history';
@@ -36,19 +36,25 @@ firebase.initializeApp(config.firebase);
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="camera" title="Camera" component={CameraView} direction="vertical" />
-    <Scene key="result" title="Result" component={ResultView} />
+    <Scene key="camera" title="Camera" component={CameraView} hideNavBar={true} direction="vertical" />
 
     <Scene key="login" title="Login" component={LoginView} />
 
-    <Scene key="tabbar" initial={true} tabs={true}>
-      <Scene key="main" title={I18n.t('main')} icon={TabIcon} iconName="ios-home" component={HomeView} />
-      <Scene key="history" title={I18n.t('history')} icon={TabIcon} iconName="ios-camera" hideNavBar={true} component={HistoryView} />
-      <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="ios-settings" component={SettingsView} />
-      <Scene key="admin" title={I18n.t('admin')} icon={TabIcon} iconName="md-cloud-upload" component={AdminView} />
+    <Scene key="tabbar" tabs={true} initial={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
+
+      <Scene key="main" title={I18n.t('result')} icon={TabIcon} iconName="timeline">
+        <Scene key="main" title={I18n.t('main')} component={HomeView} />
+        <Scene key="result" title={I18n.t('result')} component={ResultView} hideNavBar={true} initial={true} />
+      </Scene>
+
+      <Scene key="notification" title={I18n.t('main')} icon={TabIcon} iconName="dashboard" hideNavBar={true} component={NotificationView} />
+      <Scene key="history" title={I18n.t('history')} icon={TabIcon} iconName="add-a-photo" hideNavBar={true} component={HistoryView} />
+      <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="announcement" component={SettingsView} />
+      <Scene key="admin" title={I18n.t('admin')} icon={TabIcon} iconName="account-circle" component={AdminView} />
     </Scene>
 
     <Scene key="historyDetail" title={I18n.t('history')} hideNavBar={true} component={HistoryDetailView} />
+
   </Scene>
 );
 

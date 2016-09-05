@@ -6,19 +6,22 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+  },
+  text: {
+    fontSize: 11,
   },
 });
 
 const TabIcon = function TabIcon(props) {
   return (
     <View style={styles.container}>
-      <Icon name={props.iconName} color={props.selected ? 'red' : 'black'} size={26} />
-      <Text style={{ color: props.selected ? 'red' : 'black' }}>{props.title}</Text>
+      <Icon name={props.iconName} color={props.selected ? 'black' : 'white'} size={24} />
+      {/* <Text style={[styles.text, { color: props.selected ? 'black' : 'white' }]}>{props.title}</Text> */}
     </View>
   );
 };
