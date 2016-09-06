@@ -8,6 +8,7 @@ import {
   Text,
   TouchableHighlight,
   View,
+  ScrollView,
 } from 'react-native';
 
 // 3rd party libraries
@@ -54,16 +55,20 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').width,
     resizeMode: 'cover',
   },
+  bottomBlock: {
+    marginHorizontal: 15,
+    justifyContent: 'space-around',
+  },
   relatedImageGroup: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 15,
   },
   relatedImage: {
     width: (Dimensions.get('window').width / 3) - 30,
     height: (Dimensions.get('window').width / 3) - 30,
     resizeMode: 'cover',
+  },
+  relatedImageBlank: {
+    width: 30,
   },
   tagsGroup: {
     flexDirection: 'row',
@@ -174,6 +179,12 @@ export default class ResultView extends Component {
     }
   }
 
+  renderResult() {
+    return (
+
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -186,45 +197,50 @@ export default class ResultView extends Component {
           style={styles.image}
           source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
         />
-        {this.state.loading && <Text style={styles.button}>
-          Loading
-        </Text>}
-        {this.state.empty && <Text style={styles.button}>
-          No result
-        </Text>}
 
-        {this.state.name && <Text style={styles.button}>
-          {this.state.name}
-        </Text>}
-        {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
-          <Text style={styles.button}>
-            {this.state.url}
-          </Text>
-        </TouchableHighlight>}
+        <View style={styles.bottomBlock}>
+          {this.state.loading && <Text style={styles.button}>
+            Loading
+          </Text>}
+          {this.state.empty && <Text style={styles.button}>
+            No result
+          </Text>}
 
-        <Text>about AnySnap result</Text>
-        <View style={styles.relatedImageGroup}>
-          <Image
-            style={styles.relatedImage}
-            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-          />
-          <Image
-            style={styles.relatedImage}
-            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-          />
-          <Image
-            style={styles.relatedImage}
-            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-          />
-        </View>
+          {this.state.name && <Text style={styles.button}>
+            {this.state.name}
+          </Text>}
+          {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
+            <Text style={styles.button}>
+              {this.state.url}
+            </Text>
+          </TouchableHighlight>}
 
-        <Text>related result</Text>
-        <View style={styles.tagsGroup}>
-          <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
-          <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-          <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-          <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-          <TagCell text="tag" />
+          <Text>about AnySnap result</Text>
+          <ScrollView style={styles.relatedImageGroup} horizontal={true}>
+            <Image
+              style={styles.relatedImage}
+              source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+            />
+            <View style={styles.relatedImageBlank} />
+            <Image
+              style={styles.relatedImage}
+              source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+            />
+            <View style={styles.relatedImageBlank} />
+            <Image
+              style={styles.relatedImage}
+              source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+            />
+          </ScrollView>
+
+          <Text>related result</Text>
+          <View style={styles.tagsGroup}>
+            <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
+            <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+            <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+            <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
+            <TagCell text="tag" />
+          </View>
         </View>
       </View>
     );
