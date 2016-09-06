@@ -4,10 +4,11 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
 import com.i18n.reactnativei18n.ReactNativeI18n;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
@@ -31,8 +32,9 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new RNFetchBlobPackage(),
            new MainReactPackage(),
+            new ImagePickerPackage(),
+            new RNSpinkitPackage(),
             new ReactNativeI18n(),
             new RNDeviceInfo(),
             new ImageResizerPackage(),
