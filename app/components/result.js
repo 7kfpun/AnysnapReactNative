@@ -3,18 +3,19 @@ import {
   Dimensions,
   Image,
   Linking,
-  StatusBar,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
-  ScrollView,
 } from 'react-native';
 
 // 3rd party libraries
 import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
+import NavigationBar from 'react-native-navbar';
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
 import Spinner from 'react-native-spinkit';
 
@@ -26,7 +27,6 @@ import TagsCell from '../elements/tags-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
-import I18n from '../utils/i18n';
 
 const uniqueID = DeviceInfo.getUniqueID();
 
@@ -35,6 +35,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     marginBottom: 50,
+  },
+  navigatorBarIOS: {
+    backgroundColor: 'white',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#DBDBDB',
+  },
+  navigatorLeftButton: {
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 50,
+  },
+  navigatorRightButton: {
+    paddingTop: 10,
+    paddingLeft: 50,
+    paddingRight: 10,
+  },
+  toolbar: {
+    height: 56,
+    backgroundColor: 'white',
+    elevation: 10,
   },
   navbar: {
     height: 40,
@@ -128,7 +148,7 @@ export default class ResultView extends Component {
   }
 
   uploadImage() {
-    Reactotron.log('Upload image');
+    Reactotron.log({ log: 'Upload image', filename: this.state.filename, image: this.props.image });
     api.uploadImage(this.state.filename, this.props.image);
   }
 
@@ -178,29 +198,50 @@ export default class ResultView extends Component {
     );
   }
 
+  renderToolbar() {
+    if (Platform.OS === 'ios') {
+      return (
+        <NavigationBar
+          statusBar={{ tintColor: 'white', style: 'default' }}
+          style={styles.navigatorBarIOS}
+          title={{ title: this.props.title, tintColor: '#4A4A4A' }}
+        />
+      );
+    } else if (Platform.OS === 'android') {
+      return (
+        <Icon.ToolbarAndroid
+          style={styles.toolbar}
+          title={this.props.title}
+          titleColor="#4A4A4A"
+        />
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="default" />
-        <View style={styles.navbar}>
-          <Icon name="arrow-back" size={26} color="gray" />
-          <Text style={styles.navbarText}>{I18n.t('more-information')}</Text>
-        </View>
-        <Image
-          style={styles.image}
-          source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-        />
+        {this.renderToolbar()}
 
-        {this.state.isLoading && this.renderLoading()}
-        {!this.state.isLoading && this.renderResult()}
+        <ScrollView>
+          <Image
+            style={styles.image}
+            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+          />
+
+          {this.state.isLoading && this.renderLoading()}
+          {!this.state.isLoading && this.renderResult()}
+        </ScrollView>
       </View>
     );
   }
 }
 
 ResultView.propTypes = {
+  title: React.PropTypes.string,
   image: React.PropTypes.string,
 };
 
 ResultView.defaultProps = {
+  title: '',
 };

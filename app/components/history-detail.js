@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#CEDADF',
   },
   navigatorBarIOS: {
-    backgroundColor: '#2BBDC3',
+    backgroundColor: 'white',
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#00BFA5',
+    borderBottomColor: '#DBDBDB',
   },
   navigatorLeftButton: {
     paddingTop: 10,
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     height: 56,
-    backgroundColor: '#202020',
+    backgroundColor: 'white',
+    elevation: 10,
   },
   image: {
     width: 200,

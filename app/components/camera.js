@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   navigatorBarIOS: {
     backgroundColor: 'white',
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#37474F',
+    borderBottomColor: '#DBDBDB',
   },
   navigatorLeftButton: {
     paddingTop: 10,
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   toolbar: {
     height: 56,
     backgroundColor: 'white',
+    elevation: 10,
   },
   preview: {
     justifyContent: 'flex-end',
@@ -68,8 +69,7 @@ export default class CameraView extends Component {
     this.camera.capture().then((data) => {
       Reactotron.log({ log: 'Camera captured', data });
 
-      Actions.pop();
-      Actions.result({ image: data.path });
+      Actions.tabbar({ image: data.path });
     })
     .catch(err => Reactotron.log(err));
   }
@@ -78,7 +78,8 @@ export default class CameraView extends Component {
     ImagePicker.launchImageLibrary({}, (response) => {
       Reactotron.log({ log: 'ImagePicker', response });
       if (response) {
-        Actions.result({ image: response.uri });
+        // Actions.result({ image: response.uri });
+        Actions.tabbar({ image: response.uri });
       }
     });
   }
@@ -89,7 +90,7 @@ export default class CameraView extends Component {
         <NavigationBar
           statusBar={{ tintColor: 'white', style: 'default' }}
           style={styles.navigatorBarIOS}
-          title={{ title: this.props.title, tintColor: '#212121' }}
+          title={{ title: this.props.title, tintColor: '#4A4A4A' }}
         />
       );
     } else if (Platform.OS === 'android') {
@@ -97,7 +98,7 @@ export default class CameraView extends Component {
         <Icon.ToolbarAndroid
           style={styles.toolbar}
           title={this.props.title}
-          titleColor="#212121"
+          titleColor="#4A4A4A"
         />
       );
     }
@@ -137,34 +138,15 @@ export default class CameraView extends Component {
           aspect={Camera.constants.Aspect.fill}
           captureTarget={Camera.constants.CaptureTarget.temp}
           // onBarCodeRead={data => this.onBarCodeRead(data)}
-        >
-        </Camera>}
+        />}
 
         <View style={styles.footerBlock}>
           <Icon name="collections" size={24} color="#9E9E9E" onPress={() => this.pickImage()} />
           <Icon name="radio-button-checked" size={80} color="#9E9E9E" onPress={() => this.takePicture()} />
-          <Icon name="playlist-play" size={24} color="#9E9E9E" onPress={() => console.log()} />
+          <Icon name="playlist-play" size={24} color="#9E9E9E" onPress={() => Actions.tabbar()} />
         </View>
       </View>
     );
-
-    // <View style={styles.cameraIcons}>
-    //   <TouchableHighlight onPress={() => this.pickImage()} underlayColor="transparent">
-    //     <View style={styles.library}>
-    //       <Icon name="photo-library" size={26} color="white" />
-    //       <Text style={styles.text}>{I18n.t('photo-library')}</Text>
-    //     </View>
-    //   </TouchableHighlight>
-    //
-    //   <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
-    //
-    //   <TouchableHighlight onPress={() => Actions.tabbar()} underlayColor="transparent">
-    //     <View style={styles.moreButton}>
-    //       <Icon name="format-list-bulleted" size={26} color="white" />
-    //       <Text style={[styles.text, { fontSize: 12 }]}>{I18n.t('photo-library')}</Text>
-    //     </View>
-    //   </TouchableHighlight>
-    // </View>
   }
 }
 

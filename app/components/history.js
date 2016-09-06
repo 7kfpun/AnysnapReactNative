@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   ListView,
+  Platform,
   RefreshControl,
   StyleSheet,
   View,
@@ -13,12 +14,14 @@ import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import HistoryCell from '../elements/history-cell';
+
+import I18n from '../utils/i18n';
 
 const uniqueID = DeviceInfo.getUniqueID();
 
@@ -29,9 +32,9 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   navigatorBarIOS: {
-    backgroundColor: '#2BBDC3',
+    backgroundColor: 'white',
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#00BFA5',
+    borderBottomColor: '#DBDBDB',
   },
   navigatorLeftButton: {
     paddingTop: 10,
@@ -45,7 +48,8 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     height: 56,
-    backgroundColor: '#202020',
+    backgroundColor: 'white',
+    elevation: 10,
   },
   rowBack: {
     alignItems: 'center',
@@ -73,6 +77,12 @@ export default class HistoryView extends Component {
 
   componentDidMount() {
     this.prepareRows();
+  }
+
+  onActionSelected(position) {
+    if (position === 0) {  // index of 'Done'
+      Actions.pop();
+    }
   }
 
   prepareRows() {
@@ -108,20 +118,34 @@ export default class HistoryView extends Component {
   }
 
   renderToolbar() {
-    return (
-      <NavigationBar
-        statusBar={{ tintColor: '#2BBDC3', style: 'light-content' }}
-        style={styles.navigatorBarIOS}
-        title={{ title: this.props.title, tintColor: 'white' }}
-        rightButton={<Icon
-          style={styles.navigatorRightButton}
-          name="md-camera"
-          size={24}
-          color="white"
-          onPress={Actions.pop}
-        />}
-      />
-    );
+    if (Platform.OS === 'ios') {
+      return (
+        <NavigationBar
+          statusBar={{ tintColor: '#2BBDC3', style: 'light-content' }}
+          style={styles.navigatorBarIOS}
+          title={{ title: this.props.title, tintColor: '#4A4A4A' }}
+          rightButton={<Icon
+            style={styles.navigatorRightButton}
+            name="timeline"
+            size={24}
+            color="#4A4A4A"
+            onPress={Actions.pop}
+          />}
+        />
+      );
+    } else if (Platform.OS === 'android') {
+      return (
+        <Icon.ToolbarAndroid
+          style={styles.toolbar}
+          title={this.props.title}
+          titleColor="#4A4A4A"
+          actions={[
+            { title: I18n.t('done'), iconName: 'timeline', iconSize: 26, show: 'always' },
+          ]}
+          onActionSelected={(position) => this.onActionSelected(position)}
+        />
+      );
+    }
   }
 
   render() {
@@ -142,7 +166,7 @@ export default class HistoryView extends Component {
           renderHiddenRow={(data) => (
             <View style={styles.rowBack}>
               <View />
-              <Icon name="ios-close" color="white" size={40} />
+              <Icon name="close" color="white" size={40} />
             </View>
           )}
           rightOpenValue={-75}
