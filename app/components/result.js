@@ -13,23 +13,19 @@ import {
 
 // 3rd party libraries
 import DeviceInfo from 'react-native-device-info';
-import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
-import RNFetchBlob from 'react-native-fetch-blob';
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import Spinner from 'react-native-spinkit';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import firebase from 'firebase';
 
-import TagCell from '../elements/tag-cell';
+import TagsCell from '../elements/tags-cell';
 
 import * as api from '../api';
 import I18n from '../utils/i18n';
-
-import { config } from '../config';
-
-const gcloudStorage = config.firebase.storageBucket;
 
 const uniqueID = DeviceInfo.getUniqueID();
 
@@ -37,6 +33,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    marginBottom: 50,
   },
   navbar: {
     height: 40,
@@ -55,8 +52,12 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').width,
     resizeMode: 'cover',
   },
+  spinner: {
+    margin: 50,
+  },
   bottomBlock: {
-    marginHorizontal: 15,
+    flex: 1,
+    margin: 15,
     justifyContent: 'space-around',
   },
   relatedImageGroup: {
@@ -69,15 +70,6 @@ const styles = StyleSheet.create({
   },
   relatedImageBlank: {
     width: 30,
-  },
-  tagsGroup: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  tag: {
-    fontSize: 12,
-    color: '#1E88E5',
   },
 });
 
@@ -96,7 +88,9 @@ export default class ResultView extends Component {
 
     this.state = {
       filename,
-      loading: true,
+      // isLoading: true,
+      isLoading: false,
+      tags: ['tag0', 'tag1', 'tag2'],
     };
   }
 
@@ -113,7 +107,7 @@ export default class ResultView extends Component {
       api.craftarSearch(resizedImageUri)
       .then((response) => response.json())
       .then((json) => {
-        that.setState({ loading: false });
+        that.setState({ isLoading: false });
         Reactotron.log({ log: 'Craftar search', json });
 
         if (json.results && json.results.length > 0) {
@@ -139,29 +133,8 @@ export default class ResultView extends Component {
   }
 
   uploadImage() {
-    Reactotron.log(`https://www.googleapis.com/upload/storage/v1/b/${gcloudStorage}/o?uploadType=media&name=${this.state.filename}`);
-
-    RNFetchBlob.fetch(
-      'POST',
-      `https://www.googleapis.com/upload/storage/v1/b/${gcloudStorage}/o?uploadType=media&name=${this.state.filename}`,
-      {
-        'Content-Type': 'image/jpeg',
-      },
-      RNFetchBlob.wrap(this.props.image)
-    )
-    .then((response) => response.json())
-    .then((json) => {
-      Reactotron.log({ log: 'Uploaded image', json });
-
-      try {
-        firebase.database().ref(`app/bucket/${this.state.filename}`).set(json);
-      } catch (err) {
-        console.warn(err);
-      }
-    })
-    .catch((error) => {
-      console.warn(error);
-    });
+    Reactotron.log('Upload image');
+    api.uploadImage(this.state.filename, this.props.image);
   }
 
   openUrl(url) {
@@ -179,9 +152,49 @@ export default class ResultView extends Component {
     }
   }
 
+  renderLoading() {
+    return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <Spinner style={styles.spinner} size={40} type={'Pulse'} color={'#424242'} />
+    </View>);
+  }
+
   renderResult() {
     return (
+      <View style={styles.bottomBlock}>
+        {this.state.empty && <Text style={styles.button}>
+          No result
+        </Text>}
 
+        {this.state.name && <Text style={styles.button}>
+          {this.state.name}
+        </Text>}
+        {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
+          <Text style={styles.button}>
+            {this.state.url}
+          </Text>
+        </TouchableHighlight>}
+
+        <Text>about AnySnap result</Text>
+        <ScrollView style={styles.relatedImageGroup} horizontal={true}>
+          <Image
+            style={styles.relatedImage}
+            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+          />
+          <View style={styles.relatedImageBlank} />
+          <Image
+            style={styles.relatedImage}
+            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+          />
+          <View style={styles.relatedImageBlank} />
+          <Image
+            style={styles.relatedImage}
+            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+          />
+        </ScrollView>
+
+        <Text>related result</Text>
+        <TagsCell tags={this.state.tags} />
+      </View>
     );
   }
 
@@ -198,50 +211,8 @@ export default class ResultView extends Component {
           source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
         />
 
-        <View style={styles.bottomBlock}>
-          {this.state.loading && <Text style={styles.button}>
-            Loading
-          </Text>}
-          {this.state.empty && <Text style={styles.button}>
-            No result
-          </Text>}
-
-          {this.state.name && <Text style={styles.button}>
-            {this.state.name}
-          </Text>}
-          {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
-            <Text style={styles.button}>
-              {this.state.url}
-            </Text>
-          </TouchableHighlight>}
-
-          <Text>about AnySnap result</Text>
-          <ScrollView style={styles.relatedImageGroup} horizontal={true}>
-            <Image
-              style={styles.relatedImage}
-              source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-            />
-            <View style={styles.relatedImageBlank} />
-            <Image
-              style={styles.relatedImage}
-              source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-            />
-            <View style={styles.relatedImageBlank} />
-            <Image
-              style={styles.relatedImage}
-              source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-            />
-          </ScrollView>
-
-          <Text>related result</Text>
-          <View style={styles.tagsGroup}>
-            <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
-            <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-            <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-            <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-            <TagCell text="tag" />
-          </View>
-        </View>
+        {this.state.isLoading && this.renderLoading()}
+        {!this.state.isLoading && this.renderResult()}
       </View>
     );
   }

@@ -18,7 +18,7 @@ import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneou
 
 import firebase from 'firebase';
 
-import TagCell from './tag-cell';
+import TagsCell from './tags-cell';
 
 const styles = StyleSheet.create({
   container: {
@@ -54,20 +54,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#9E9E9E',
   },
-  tagsGroup: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  tag: {
-    fontSize: 12,
-    color: '#1E88E5',
-  },
-  comma: {
-    fontSize: 12,
-    color: '#1E88E5',
-  },
 });
 
 export default class HistoryCell extends Component {
@@ -75,6 +61,7 @@ export default class HistoryCell extends Component {
     super(props);
 
     this.state = {
+      tags: ['tag0', 'tag1', 'tag2'],
     };
   }
 
@@ -131,13 +118,8 @@ export default class HistoryCell extends Component {
             {<TouchableHighlight onPress={() => this.state.url && this.openUrl(this.state.url)} underlayColor="white">
               <Text style={styles.subtitile}>{this.state.url || 'URL'}</Text>
             </TouchableHighlight>}
-            <View style={styles.tagsGroup}>
-              <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
-              <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-              <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-              <Text style={styles.tag}>{'tag'}</Text><Text style={styles.comma}>{', '}</Text>
-              <TagCell text="tag" />
-            </View>
+
+            <TagsCell tags={this.state.tags} />
           </View>
           <View style={styles.rightBlock}>
             <Icon name="keyboard-arrow-right" color="gray" size={24} />
