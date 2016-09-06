@@ -23,6 +23,7 @@ import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneou
 import firebase from 'firebase';
 
 import TagsCell from '../elements/tags-cell';
+import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
 import I18n from '../utils/i18n';
@@ -57,19 +58,13 @@ const styles = StyleSheet.create({
   },
   bottomBlock: {
     flex: 1,
-    margin: 15,
+    marginHorizontal: 15,
+    marginVertical: 5,
     justifyContent: 'space-around',
   },
-  relatedImageGroup: {
-    flexDirection: 'row',
-  },
-  relatedImage: {
-    width: (Dimensions.get('window').width / 3) - 30,
-    height: (Dimensions.get('window').width / 3) - 30,
-    resizeMode: 'cover',
-  },
-  relatedImageBlank: {
-    width: 30,
+  text: {
+    fontSize: 12,
+    color: '#212121',
   },
 });
 
@@ -90,7 +85,7 @@ export default class ResultView extends Component {
       filename,
       // isLoading: true,
       isLoading: false,
-      tags: ['tag0', 'tag1', 'tag2'],
+      tags: ['tag0', 'tag1', 'tag2', 'tag3'],
     };
   }
 
@@ -174,25 +169,10 @@ export default class ResultView extends Component {
           </Text>
         </TouchableHighlight>}
 
-        <Text>about AnySnap result</Text>
-        <ScrollView style={styles.relatedImageGroup} horizontal={true}>
-          <Image
-            style={styles.relatedImage}
-            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-          />
-          <View style={styles.relatedImageBlank} />
-          <Image
-            style={styles.relatedImage}
-            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-          />
-          <View style={styles.relatedImageBlank} />
-          <Image
-            style={styles.relatedImage}
-            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-          />
-        </ScrollView>
+        <Text style={styles.text}>about AnySnap result</Text>
+        <RelatedImagesCell tags={this.state.tags} />
 
-        <Text>related result</Text>
+        <Text style={styles.text}>related result</Text>
         <TagsCell tags={this.state.tags} />
       </View>
     );

@@ -40,23 +40,14 @@ export default class TagsCell extends Component {
     }
   }
 
-  renderTag(text) {
-    return (
-      <TouchableHighlight onPress={() => this.openUrl(text)} underlayColor="white">
-        <Text style={styles.text}>{text}</Text>
-      </TouchableHighlight>
-    );
-  }
-
   render() {
     const tagsLength = this.props.tags.length;
     return (
       <View style={styles.container}>
         <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
         {this.props.tags.map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
-          <Text style={styles.tag}>{item}{tagsLength !== i + 1 ? ',' : ''}</Text>
-        </TouchableHighlight>
-        )}
+          <Text style={styles.text}>{item}{tagsLength !== i + 1 ? ',' : ''}</Text>
+        </TouchableHighlight>)}
       </View>
     );
   }
