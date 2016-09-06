@@ -10,10 +10,12 @@ import {
 // 3rd party libraries
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import Spinner from 'react-native-spinkit';
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
@@ -44,7 +46,8 @@ export default class TagsCell extends Component {
     const tagsLength = this.props.tags.length;
     return (
       <View style={styles.container}>
-        <Icon style={{ marginRight: 2 }} name="local-offer" color="gray" size={12} />
+        <Icon style={{ marginRight: 2 }} name="local-offer" color="#7F7F7F" size={12} />
+        {this.props.tags.length === 0 && <Spinner style={styles.spinner} size={14} type="ThreeBounce" color="#7F7F7F" />}
         {this.props.tags.map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
           <Text style={styles.text}>{item}{tagsLength !== i + 1 ? ',' : ''}</Text>
         </TouchableHighlight>)}
@@ -58,5 +61,5 @@ TagsCell.propTypes = {
 };
 
 TagsCell.defaultProps = {
-  tags: ['loading...'],
+  tags: [],
 };

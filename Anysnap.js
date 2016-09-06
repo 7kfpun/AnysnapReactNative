@@ -36,19 +36,18 @@ firebase.initializeApp(config.firebase);
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="camera" title="Camera" component={CameraView} hideNavBar={true} direction="vertical" />
+    <Scene key="camera" title={I18n.t('camera')} component={CameraView} hideNavBar={true} direction="vertical" initial={true} />
 
     <Scene key="login" title="Login" component={LoginView} />
 
-    <Scene key="tabbar" tabs={true} initial={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
-
-      <Scene key="main" title={I18n.t('result')} icon={TabIcon} iconName="timeline">
-        <Scene key="main" title={I18n.t('main')} component={HomeView} />
-        <Scene key="result" title={I18n.t('result')} component={ResultView} hideNavBar={true} initial={true} />
+    <Scene key="tabbar" tabs={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
+      <Scene key="main" title={I18n.t('more-information')} icon={TabIcon} iconName="timeline">
+        <Scene key="mainFirst" title={I18n.t('more-information')} component={HomeView} />
+        <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} initial={true} />
       </Scene>
 
-      <Scene key="notification" title={I18n.t('main')} icon={TabIcon} iconName="dashboard" hideNavBar={true} component={NotificationView} />
-      <Scene key="history" title={I18n.t('history')} icon={TabIcon} iconName="add-a-photo" hideNavBar={true} component={HistoryView} />
+      <Scene key="history" title={I18n.t('history')} icon={TabIcon} iconName="dashboard" hideNavBar={true} component={HistoryView} />
+      <Scene key="notification" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" hideNavBar={true} component={NotificationView} />
       <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="announcement" component={SettingsView} />
       <Scene key="admin" title={I18n.t('admin')} icon={TabIcon} iconName="account-circle" component={AdminView} />
     </Scene>

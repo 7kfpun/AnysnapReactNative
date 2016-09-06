@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
-import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
 import NavigationBar from 'react-native-navbar';
@@ -21,14 +20,10 @@ import Spinner from 'react-native-spinkit';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
-import firebase from 'firebase';
-
 import TagsCell from '../elements/tags-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
-
-const uniqueID = DeviceInfo.getUniqueID();
 
 const styles = StyleSheet.create({
   container: {
@@ -105,13 +100,15 @@ export default class ResultView extends Component {
       filename,
       // isLoading: true,
       isLoading: false,
-      tags: ['tag0', 'tag1', 'tag2', 'tag3'],
+      tags: [],
     };
   }
 
   componentDidMount() {
-    // this.craftarSearch();
-    // this.uploadImage();
+    if (this.props.image) {
+      // this.craftarSearch();
+      this.uploadImage();
+    }
   }
 
   craftarSearch() {
@@ -119,11 +116,9 @@ export default class ResultView extends Component {
     ImageResizer.createResizedImage(this.props.image, 600, 600, 'JPEG', 40).then((resizedImageUri) => {
       Reactotron.log({ log: 'Image resized', resizedImageUri });
 
-      api.craftarSearch(resizedImageUri)
-      .then((response) => response.json())
+      api.craftarSearch(this.state.filename, resizedImageUri)
       .then((json) => {
         that.setState({ isLoading: false });
-        Reactotron.log({ log: 'Craftar search', json });
 
         if (json.results && json.results.length > 0) {
           if (json.results[0].item && json.results[0].item.url) {
@@ -135,21 +130,21 @@ export default class ResultView extends Component {
         } else {
           that.setState({ empty: true });
         }
-
-        firebase.database().ref(`app/img/${this.state.filename}/timestamp`).set(new Date().getTime());
-        firebase.database().ref(`app/img/${this.state.filename}/uniqueID`).set(uniqueID);
-        firebase.database().ref(`app/img/${this.state.filename}/original`).set(this.props.image);
-        firebase.database().ref(`app/craftar/${this.state.filename}`).set(json);
-      })
-      .catch((error) => {
-        Reactotron.log({ error });
       });
     });
   }
 
   uploadImage() {
     Reactotron.log({ log: 'Upload image', filename: this.state.filename, image: this.props.image });
-    api.uploadImage(this.state.filename, this.props.image);
+    api.uploadImage(this.state.filename, this.props.image)
+    .then(() => {
+      api.googleVision(this.state.filename)
+      .then((json) => {
+        Reactotron.log({ log: 'Google vision done', labelAnnotations: json.responses[0].labelAnnotations });
+        const tags = json.responses[0].labelAnnotations.map((item) => item.description);
+        this.setState({ tags });
+      });
+    });
   }
 
   openUrl(url) {
@@ -169,7 +164,7 @@ export default class ResultView extends Component {
 
   renderLoading() {
     return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <Spinner style={styles.spinner} size={40} type={'Pulse'} color={'#424242'} />
+      <Spinner style={styles.spinner} size={40} type="Pulse" color="#424242" />
     </View>);
   }
 

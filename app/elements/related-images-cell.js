@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Dimensions,
   Image,
+  TouchableHighlight,
   Linking,
   ScrollView,
   StyleSheet,
@@ -11,6 +12,7 @@ import {
 
 // 3rd party libraries
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import Spinner from 'react-native-spinkit';
 
 const BLANK_WIDTH = 30;
 
@@ -22,6 +24,13 @@ const styles = StyleSheet.create({
     width: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
     height: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
     resizeMode: 'cover',
+  },
+  imageLoading: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: Dimensions.get('window').width,
+    height: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
   },
   blank: {
     width: BLANK_WIDTH,
@@ -53,14 +62,21 @@ export default class RelatedImagesCell extends Component {
     const tagsLength = this.props.tags.length;
     return (
       <ScrollView style={styles.container} horizontal={true}>
+        {this.props.tags.length === 0 && <View style={styles.imageLoading}>
+          <Spinner style={styles.spinner} size={40} type="Bounce" color="#7F7F7F" />
+          <Spinner style={styles.spinner} size={40} type="Bounce" color="#7F7F7F" />
+          <Spinner style={styles.spinner} size={40} type="Bounce" color="#7F7F7F" />
+        </View>}
         {this.props.tags.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Image
-              style={styles.image}
-              source={{ uri: 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-            />
-            <Text style={styles.text}>{item}</Text>
-          </View>
+          <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Image
+                style={styles.image}
+                source={{ uri: 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+              />
+              <Text style={styles.text}>{item}</Text>
+            </View>
+          </TouchableHighlight>
           {tagsLength !== i + 1 ? <View style={styles.blank} /> : null}
         </View>
         )}
