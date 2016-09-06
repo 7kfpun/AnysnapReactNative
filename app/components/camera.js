@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Dimensions,
-  ImagePickerIOS,
+  Platform,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -12,50 +12,47 @@ import {
 import { Actions } from 'react-native-router-flux';
 import Camera from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-import I18n from '../utils/i18n';
+import ImagePicker from 'react-native-image-picker';
+import NavigationBar from 'react-native-navbar';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
+
+import I18n from '../utils/i18n';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  navigatorBarIOS: {
+    backgroundColor: 'white',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#37474F',
+  },
+  navigatorLeftButton: {
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 50,
+  },
+  navigatorRightButton: {
+    paddingTop: 10,
+    paddingLeft: 50,
+    paddingRight: 10,
+  },
+  toolbar: {
+    height: 56,
+    backgroundColor: 'white',
+  },
   preview: {
-    flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    height: Dimensions.get('window').height,
     width: Dimensions.get('window').width,
+    height: Dimensions.get('window').width,
   },
-  cameraIcons: {
-    width: Dimensions.get('window').width - 30,
+  footerBlock: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-  },
-  capture: {
-    marginBottom: 20,
-    paddingTop: 50,
-  },
-  library: {
-    marginBottom: 24,
-    paddingTop: 50,
-    paddingRight: 40,
-    justifyContent: 'center',
+    backgroundColor: '#EEEEEE',
+    justifyContent: 'space-around',
     alignItems: 'center',
-  },
-  moreButton: {
-    marginBottom: 24,
-    paddingTop: 50,
-    paddingLeft: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: 'white',
-    fontSize: 14,
-    marginTop: 5,
   },
 });
 
@@ -64,7 +61,6 @@ export default class CameraView extends Component {
     super(props);
 
     this.state = {
-      permission: 'DENIED',
     };
   }
 
@@ -79,17 +75,39 @@ export default class CameraView extends Component {
   }
 
   pickImage() {
-    ImagePickerIOS.openSelectDialog({}, (response) => {
-      Reactotron.log(response);
+    ImagePicker.launchImageLibrary({}, (response) => {
+      Reactotron.log({ log: 'ImagePicker', response });
       if (response) {
-        Actions.result({ image: response });
+        Actions.result({ image: response.uri });
       }
-    }, (err) => console.log(err));
+    });
+  }
+
+  renderToolbar() {
+    if (Platform.OS === 'ios') {
+      return (
+        <NavigationBar
+          statusBar={{ tintColor: 'white', style: 'default' }}
+          style={styles.navigatorBarIOS}
+          title={{ title: this.props.title, tintColor: '#212121' }}
+        />
+      );
+    } else if (Platform.OS === 'android') {
+      return (
+        <Icon.ToolbarAndroid
+          style={styles.toolbar}
+          title={this.props.title}
+          titleColor="#212121"
+        />
+      );
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
+        {this.renderToolbar()}
+
         {this.state.permission === 'CAMERA-DENIED' && <View style={styles.preview}>
           <View style={styles.cameraIcons}>
             <TouchableHighlight onPress={() => this.pickImage()} underlayColor="black">
@@ -120,46 +138,40 @@ export default class CameraView extends Component {
           captureTarget={Camera.constants.CaptureTarget.temp}
           // onBarCodeRead={data => this.onBarCodeRead(data)}
         >
-          <View style={styles.cameraIcons}>
-            <TouchableHighlight onPress={() => this.pickImage()} underlayColor="transparent">
-              <View style={styles.library}>
-                <Icon name="photo-library" size={26} color="white" />
-                <Text style={styles.text}>{I18n.t('photo-library')}</Text>
-              </View>
-            </TouchableHighlight>
-
-            <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
-
-            <TouchableHighlight onPress={() => Actions.tabbar()} underlayColor="transparent">
-              <View style={styles.moreButton}>
-                <Icon name="format-list-bulleted" size={26} color="white" />
-                <Text style={[styles.text, { fontSize: 12 }]}>{I18n.t('photo-library')}</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
         </Camera>}
+
+        <View style={styles.footerBlock}>
+          <Icon name="collections" size={24} color="#9E9E9E" onPress={() => this.pickImage()} />
+          <Icon name="radio-button-checked" size={80} color="#9E9E9E" onPress={() => this.takePicture()} />
+          <Icon name="playlist-play" size={24} color="#9E9E9E" onPress={() => console.log()} />
+        </View>
       </View>
     );
 
-    // return (
-    //   <View style={styles.container}>
-    //     <Camera
-    //       ref={(cam) => {
-    //         this.camera = cam;
-    //       }}
-    //       style={styles.preview}
-    //       captureAudio={false}
-    //       aspect={Camera.constants.Aspect.fill}
-    //       captureTarget={Camera.constants.CaptureTarget.temp}
-    //       onBarCodeRead={data => this.onBarCodeRead(data)}
-    //     >
-    //       <View>
-    //         <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
+    // <View style={styles.cameraIcons}>
+    //   <TouchableHighlight onPress={() => this.pickImage()} underlayColor="transparent">
+    //     <View style={styles.library}>
+    //       <Icon name="photo-library" size={26} color="white" />
+    //       <Text style={styles.text}>{I18n.t('photo-library')}</Text>
+    //     </View>
+    //   </TouchableHighlight>
     //
-    //         <Icon name="settings" style={styles.settings} size={24} color="white" onPress={() => this.takePicture()} />
-    //       </View>
-    //     </Camera>
-    //   </View>
-    // );
+    //   <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
+    //
+    //   <TouchableHighlight onPress={() => Actions.tabbar()} underlayColor="transparent">
+    //     <View style={styles.moreButton}>
+    //       <Icon name="format-list-bulleted" size={26} color="white" />
+    //       <Text style={[styles.text, { fontSize: 12 }]}>{I18n.t('photo-library')}</Text>
+    //     </View>
+    //   </TouchableHighlight>
+    // </View>
   }
 }
+
+CameraView.propTypes = {
+  title: React.PropTypes.string,
+};
+
+CameraView.defaultProps = {
+  title: '',
+};
