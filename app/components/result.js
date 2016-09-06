@@ -148,13 +148,13 @@ export default class ResultView extends Component {
   }
 
   openUrl(url) {
-    try {
+    if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
         .catch(err => {
           console.error('Cannot open safari', err);
         });
-    } catch (err) {
+    } else if (Platform.OS === 'android') {
       Linking.openURL(url)
         .catch(err1 => {
           console.error('Cannot open url', err1);

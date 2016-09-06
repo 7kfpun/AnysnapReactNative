@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import {
   Dimensions,
   Image,
-  TouchableHighlight,
   Linking,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableHighlight,
   View,
 } from 'react-native';
 
@@ -44,13 +45,13 @@ const styles = StyleSheet.create({
 export default class RelatedImagesCell extends Component {
   openUrl(query) {
     const url = `https://www.google.com/search?q=${query}`;
-    try {
+    if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
         .catch(err => {
           console.error('Cannot open safari', err);
         });
-    } catch (err) {
+    } else if (Platform.OS === 'android') {
       Linking.openURL(url)
         .catch(err1 => {
           console.error('Cannot open url', err1);

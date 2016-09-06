@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {
   Linking,
+  Platform,
   StyleSheet,
-  View,
   Text,
   TouchableHighlight,
+  View,
 } from 'react-native';
 
 // 3rd party libraries
@@ -28,13 +29,13 @@ const styles = StyleSheet.create({
 export default class TagsCell extends Component {
   openUrl(query) {
     const url = `https://www.google.com/search?q=${query}`;
-    try {
+    if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
         .catch(err => {
           console.error('Cannot open safari', err);
         });
-    } catch (err) {
+    } else if (Platform.OS === 'android') {
       Linking.openURL(url)
         .catch(err1 => {
           console.error('Cannot open url', err1);
@@ -49,7 +50,7 @@ export default class TagsCell extends Component {
         <Icon style={{ marginRight: 2 }} name="local-offer" color="#7F7F7F" size={12} />
         {this.props.tags.length === 0 && <Spinner style={styles.spinner} size={14} type="ThreeBounce" color="#7F7F7F" />}
         {this.props.tags.map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
-          <Text style={styles.text}>{item}{tagsLength !== i + 1 ? ',' : ''}</Text>
+          <Text style={styles.text}>{item}{tagsLength !== i + 1 ? ', ' : ''}</Text>
         </TouchableHighlight>)}
       </View>
     );
