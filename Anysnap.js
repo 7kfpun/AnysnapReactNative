@@ -41,7 +41,7 @@ const scenes = Actions.create(
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
       <Scene key="main" title={I18n.t('more-information')} icon={TabIcon} iconName="timeline" hideNavBar={true}>
-        <Scene key="history" title={I18n.t('history')} component={HistoryView} initial={true} />
+        <Scene key="history" title={I18n.t('history')} component={HistoryView} />
         <Scene key="result" title={I18n.t('more-information')} component={ResultView} />
       </Scene>
 

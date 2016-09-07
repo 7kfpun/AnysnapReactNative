@@ -69,7 +69,7 @@ export default class CameraView extends Component {
     this.camera.capture().then((data) => {
       Reactotron.log({ log: 'Camera captured', data });
 
-      Actions.tabbar({ image: data.path });
+      Actions.tabbar({ image: data.path, newImage: true });
     })
     .catch(err => Reactotron.log(err));
   }
@@ -80,7 +80,7 @@ export default class CameraView extends Component {
       if (response && response.uri) {
         // Actions.result({ image: response.uri });
         const uri = Platform.OS === 'ios' ? response.uri.replace('file://', '') : response.uri;
-        Actions.tabbar({ image: uri });
+        Actions.tabbar({ image: uri, newImage: true });
       }
     });
   }

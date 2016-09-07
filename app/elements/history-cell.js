@@ -111,7 +111,13 @@ export default class HistoryCell extends Component {
 
   render() {
     return (
-      <TouchableHighlight onPress={() => Actions.result({ image: this.props.history.bucket && this.props.history.bucket.mediaLink })} underlayColor="white">
+      <TouchableHighlight
+        onPress={() => Actions.result({
+          image: this.props.history.bucket && this.props.history.bucket.mediaLink,
+          tags: this.state.tags,
+        })}
+        underlayColor="white"
+      >
         <View style={styles.container}>
           <View style={styles.leftBlock}>
             <Image

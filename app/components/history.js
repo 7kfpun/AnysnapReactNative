@@ -79,7 +79,7 @@ export default class HistoryView extends Component {
   }
 
   componentDidMount() {
-    if (this.props.image) {
+    if (this.props.image && this.props.newImage) {
       Actions.result({ image: this.props.image });
     }
 
@@ -189,9 +189,11 @@ export default class HistoryView extends Component {
 HistoryView.propTypes = {
   title: React.PropTypes.string,
   image: React.PropTypes.string,
+  newImage: React.PropTypes.bool,
 };
 
 HistoryView.defaultProps = {
   title: '',
   image: '',
+  newImage: false,
 };

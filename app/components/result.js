@@ -101,12 +101,12 @@ export default class ResultView extends Component {
       filename,
       // isLoading: true,
       isLoading: false,
-      tags: [],
+      tags: this.props.tags || [],
     };
   }
 
   componentDidMount() {
-    if (this.props.image) {
+    if (this.props.tags.length === 0) {
       // this.craftarSearch();
       this.uploadImage();
     }
@@ -249,8 +249,11 @@ export default class ResultView extends Component {
 ResultView.propTypes = {
   title: React.PropTypes.string,
   image: React.PropTypes.string,
+  tags: React.PropTypes.array,
 };
 
 ResultView.defaultProps = {
   title: '',
+  image: '',
+  tags: [],
 };
