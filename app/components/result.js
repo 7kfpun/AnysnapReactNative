@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
+import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
 import NavigationBar from 'react-native-navbar';
@@ -200,6 +201,19 @@ export default class ResultView extends Component {
           statusBar={{ tintColor: 'white', style: 'default' }}
           style={styles.navigatorBarIOS}
           title={{ title: this.props.title, tintColor: '#4A4A4A' }}
+          leftButton={<Icon
+            style={styles.navigatorLeftButton}
+            name="inbox"
+            size={26}
+            color="gray"
+            onPress={Actions.pop}
+          />}
+          rightButton={<Icon
+            style={styles.navigatorRightButton}
+            name="sms-failed"
+            size={26}
+            color="gray"
+          />}
         />
       );
     } else if (Platform.OS === 'android') {

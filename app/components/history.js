@@ -52,13 +52,16 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   rowBack: {
-    alignItems: 'center',
-    backgroundColor: '#E55356',
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingRight: 28,
+    justifyContent: 'flex-end',
     marginBottom: 5,
+    backgroundColor: '#E55356',
+  },
+  rowBackBlock: {
+    width: 75,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -76,6 +79,10 @@ export default class HistoryView extends Component {
   }
 
   componentDidMount() {
+    if (this.props.image) {
+      Actions.result({ image: this.props.image });
+    }
+
     this.prepareRows();
   }
 
@@ -122,7 +129,6 @@ export default class HistoryView extends Component {
     if (Platform.OS === 'ios') {
       return (
         <NavigationBar
-          statusBar={{ tintColor: '#2BBDC3', style: 'light-content' }}
           style={styles.navigatorBarIOS}
           title={{ title: this.props.title, tintColor: '#4A4A4A' }}
           rightButton={<Icon
@@ -156,6 +162,7 @@ export default class HistoryView extends Component {
         <SwipeListView
           ref={(c) => { this.scrollView = c; }}
           key={this.state.key}
+          style={{ marginTop: 2 }}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -164,10 +171,11 @@ export default class HistoryView extends Component {
           }
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <HistoryCell history={rowData} />}
-          renderHiddenRow={(data) => (
+          renderHiddenRow={() => (
             <View style={styles.rowBack}>
-              <View />
-              <Icon name="close" color="white" size={40} />
+              <View style={styles.rowBackBlock}>
+                <Icon name="close" color="white" size={30} />
+              </View>
             </View>
           )}
           rightOpenValue={-75}
@@ -180,8 +188,10 @@ export default class HistoryView extends Component {
 
 HistoryView.propTypes = {
   title: React.PropTypes.string,
+  image: React.PropTypes.string,
 };
 
 HistoryView.defaultProps = {
   title: '',
+  image: '',
 };

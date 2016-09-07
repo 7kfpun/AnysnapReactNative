@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#DBDBDB',
   },
   leftBlock: {
     margin: 15,
@@ -109,7 +111,7 @@ export default class HistoryCell extends Component {
 
   render() {
     return (
-      <TouchableHighlight onPress={() => Actions.historyDetail({ history: this.props.history })} underlayColor="white">
+      <TouchableHighlight onPress={() => Actions.result({ image: this.props.history.bucket && this.props.history.bucket.mediaLink })} underlayColor="white">
         <View style={styles.container}>
           <View style={styles.leftBlock}>
             <Image
