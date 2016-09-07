@@ -87,12 +87,13 @@ export default class HistoryView extends Component {
 
   prepareRows() {
     const that = this;
-    const ref = firebase.database().ref('app/img');
+    const ref = firebase.database().ref('app/image');
     this.setState({ refreshing: true });
 
     ref.orderByChild('uniqueID').equalTo(uniqueID).once('value')
       .then((snapshot) => {
         const value = snapshot.val();
+        Reactotron.log({ log: 'Firebase', value });
         if (value) {
           let images = Object.keys(value).map((key) => Object.assign({ id: key }, value[key]));
           images = images.filter((item) => !item.isDeleted);

@@ -77,7 +77,7 @@ export default class CameraView extends Component {
   pickImage() {
     ImagePicker.launchImageLibrary({}, (response) => {
       Reactotron.log({ log: 'ImagePicker', response });
-      if (response) {
+      if (response && response.uri) {
         // Actions.result({ image: response.uri });
         const uri = Platform.OS === 'ios' ? response.uri.replace('file://', '') : response.uri;
         Actions.tabbar({ image: uri });

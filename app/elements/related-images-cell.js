@@ -25,6 +25,12 @@ const styles = StyleSheet.create({
     width: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
     height: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
     resizeMode: 'cover',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#DBDBDB',
+  },
+  imageBlock: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   imageLoading: {
     flexDirection: 'row',
@@ -70,10 +76,10 @@ export default class RelatedImagesCell extends Component {
         </View>}
         {this.props.tags.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
           <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.imageBlock}>
               <Image
                 style={styles.image}
-                source={{ uri: 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
+                source={require('../../assets/google.png')}  // eslint-disable-line global-require
               />
               <Text style={styles.text}>{item}</Text>
             </View>

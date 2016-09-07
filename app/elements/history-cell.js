@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import firebase from 'firebase';
+import moment from 'moment';
 
 import TagsCell from './tags-cell';
 
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   leftBlock: {
-    margin: 20,
+    margin: 15,
   },
   middleBlock: {
     flex: 2,
@@ -41,9 +42,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
     resizeMode: 'cover',
   },
   title: {
@@ -61,23 +61,27 @@ export default class HistoryCell extends Component {
     super(props);
 
     this.state = {
-      tags: ['tag0', 'tag1', 'tag2'],
+      tags: [''],
     };
   }
 
   componentDidMount() {
+    this.checkVision();
+    // this.checkCrafh();
+  }
+
+  checkVision() {
     const that = this;
     if (this.props.history.id) {
-      const ref = firebase.database().ref(`app/craftar/${this.props.history.id}`);
+      const ref = firebase.database().ref(`app/vision/${this.props.history.id}`);
       ref.once('value').then((snapshot) => {
         if (snapshot) {
           const value = snapshot.val();
-          if (value.results && value.results.length > 0) {
-            if (value.results[0].item && value.results[0].item.url) {
-              that.setState({
-                name: value.results[0].item.name,
-                url: value.results[0].item.url,
-              });
+          Reactotron.log({ log: 'Check vision', value });
+          if (value.responses && value.responses.length > 0) {
+            if (value.responses[0].labelAnnotations && value.responses[0].labelAnnotations.length > 0) {
+              const tags = value.responses[0].labelAnnotations.map((item) => item.description);
+              that.setState({ tags });
             }
           }
         }
@@ -110,15 +114,12 @@ export default class HistoryCell extends Component {
           <View style={styles.leftBlock}>
             <Image
               style={styles.image}
-              source={{ uri: this.props.history.original }}
+              source={{ uri: this.props.history.bucket && this.props.history.bucket.mediaLink }}
             />
           </View>
           <View style={styles.middleBlock}>
-            <Text style={styles.title}>{this.state.name || 'NAME'}</Text>
-            {<TouchableHighlight onPress={() => this.state.url && this.openUrl(this.state.url)} underlayColor="white">
-              <Text style={styles.subtitile}>{this.state.url || 'URL'}</Text>
-            </TouchableHighlight>}
-
+            <Text style={styles.title}>{(this.state.tags.length > 0 && this.state.tags[0]) || ''}</Text>
+            <Text style={styles.subtitile}>{(this.props.history.timestamp && moment(this.props.history.timestamp).format('LLL')) || ''}</Text>
             <TagsCell tags={this.state.tags} />
           </View>
           <View style={styles.rightBlock}>

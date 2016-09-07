@@ -33,10 +33,15 @@ export function craftarSearch(filename, path) {
   .then((json) => {
     Reactotron.log({ log: 'Craftar search', json });
 
-    firebase.database().ref(`app/img/${filename}/timestamp`).set(new Date().getTime());
-    firebase.database().ref(`app/img/${filename}/uniqueID`).set(uniqueID);
-    firebase.database().ref(`app/img/${filename}/original`).set(path);
-    firebase.database().ref(`app/craftar/${filename}`).set(json);
+    try {
+      firebase.database().ref(`app/image/${filename}/id`).set(filename);
+      firebase.database().ref(`app/image/${filename}/timestamp`).set(new Date().getTime());
+      firebase.database().ref(`app/image/${filename}/uniqueID`).set(uniqueID);
+      firebase.database().ref(`app/image/${filename}/original`).set(path);
+      firebase.database().ref(`app/craftar/${filename}`).set(json);
+    } catch (err) {
+      console.warn(err);
+    }
 
     return json;
   })
@@ -111,7 +116,10 @@ export function uploadImage(filename, image) {
     Reactotron.log({ log: 'Uploaded image', json });
 
     try {
-      firebase.database().ref(`app/bucket/${filename}`).set(json);
+      firebase.database().ref(`app/image/${filename}/id`).set(filename);
+      firebase.database().ref(`app/image/${filename}/timestamp`).set(new Date().getTime());
+      firebase.database().ref(`app/image/${filename}/uniqueID`).set(uniqueID);
+      firebase.database().ref(`app/image/${filename}/bucket`).set(json);
     } catch (err) {
       console.warn(err);
     }
