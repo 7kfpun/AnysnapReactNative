@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   ListView,
   Platform,
   RefreshControl,
@@ -73,7 +74,7 @@ export default class HistoryView extends Component {
     this.state = {
       ds,
       key: Math.random(),
-      dataSource: ds.cloneWithRows([{}]),
+      dataSource: ds.cloneWithRows([]),
       refreshing: false,
     };
   }
@@ -159,6 +160,11 @@ export default class HistoryView extends Component {
     return (
       <View style={styles.container}>
         {this.renderToolbar()}
+        {!this.state.images && <ActivityIndicator
+          animating={true}
+          style={{ height: 60 }}
+          size="small"
+        />}
         <SwipeListView
           ref={(c) => { this.scrollView = c; }}
           key={this.state.key}
@@ -170,6 +176,7 @@ export default class HistoryView extends Component {
             />
           }
           dataSource={this.state.dataSource}
+          enableEmptySections={true}
           renderRow={(rowData) => <HistoryCell history={rowData} />}
           renderHiddenRow={() => (
             <View style={styles.rowBack}>
