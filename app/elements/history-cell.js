@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Image,
   Linking,
+  Platform,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -95,16 +96,16 @@ export default class HistoryCell extends Component {
   }
 
   openUrl(url) {
-    try {
+    if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
-        .catch(err => {
+        .catch((err) => {
           console.error('Cannot open safari', err);
         });
-    } catch (err) {
+    } else if (Platform.OS === 'android') {
       Linking.openURL(url)
-        .catch(err1 => {
-          console.error('Cannot open url', err1);
+        .catch((err) => {
+          console.error('Cannot open url', err);
         });
     }
   }
@@ -128,7 +129,7 @@ export default class HistoryCell extends Component {
           <View style={styles.middleBlock}>
             <Text style={styles.title}>{(this.state.tags.length > 0 && this.state.tags[0]) || ''}</Text>
             <Text style={styles.subtitile}>{(this.props.history.timestamp && moment(this.props.history.timestamp).format('LLL')) || ''}</Text>
-            <TagsCell tags={this.state.tags} />
+            <TagsCell tags={this.state.tags} maximum={8} />
           </View>
           <View style={styles.rightBlock}>
             <Icon name="keyboard-arrow-right" color="gray" size={24} />

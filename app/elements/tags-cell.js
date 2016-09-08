@@ -45,12 +45,12 @@ export default class TagsCell extends Component {
   }
 
   render() {
-    const tagsLength = this.props.tags.length;
+    const tagsLength = Math.min(this.props.tags.length, this.props.maximum);
     return (
       <View style={styles.container}>
         <Icon style={{ marginRight: 2 }} name="label-outline" color="#7F7F7F" size={12} />
         {this.props.tags.length === 0 && <Spinner style={styles.spinner} size={14} type="ThreeBounce" color="#7F7F7F" />}
-        {this.props.tags.map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
+        {this.props.tags.slice(0, this.props.maximum).map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
           <Text style={styles.text}>{item}{tagsLength !== i + 1 ? ', ' : ''}</Text>
         </TouchableHighlight>)}
       </View>
@@ -60,6 +60,7 @@ export default class TagsCell extends Component {
 
 TagsCell.propTypes = {
   tags: React.PropTypes.array,
+  maximum: React.PropTypes.number,
 };
 
 TagsCell.defaultProps = {

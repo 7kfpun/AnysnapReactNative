@@ -106,7 +106,6 @@ export default class HistoryView extends Component {
           let images = Object.keys(value).map((key) => Object.assign({ id: key }, value[key]));
           images = images.filter((item) => !item.isDeleted);
           images = _.sortBy(images, 'timestamp').reverse();
-          Reactotron.log(images);
 
           that.setState({
             images,

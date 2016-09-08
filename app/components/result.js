@@ -7,7 +7,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableHighlight,
   View,
 } from 'react-native';
 
@@ -22,6 +21,7 @@ import Spinner from 'react-native-spinkit';
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import TagsCell from '../elements/tags-cell';
+import CraftarImagesCell from '../elements/craftar-images-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
@@ -107,8 +107,8 @@ export default class ResultView extends Component {
 
   componentDidMount() {
     if (this.props.tags.length === 0) {
-      // this.craftarSearch();
-      this.uploadImage();
+      this.craftarSearch();
+      this.googleVision();
     }
   }
 
@@ -123,19 +123,19 @@ export default class ResultView extends Component {
 
         if (json.results && json.results.length > 0) {
           if (json.results[0].item && json.results[0].item.url) {
+            Reactotron.log({ log: 'Craftar matched', name: json.results[0].item.name });
             that.setState({
               name: json.results[0].item.name,
               url: json.results[0].item.url,
+              key: Math.random(),
             });
           }
-        } else {
-          that.setState({ empty: true });
         }
       });
     });
   }
 
-  uploadImage() {
+  googleVision() {
     Reactotron.log({ log: 'Upload image', filename: this.state.filename, image: this.props.image });
     api.uploadImage(this.state.filename, this.props.image)
     .then(() => {
@@ -172,21 +172,11 @@ export default class ResultView extends Component {
   renderResult() {
     return (
       <View style={styles.bottomBlock}>
-        {this.state.empty && <Text style={styles.button}>
-          No result
-        </Text>}
-
-        {this.state.name && <Text style={styles.button}>
-          {this.state.name}
-        </Text>}
-        {this.state.url && <TouchableHighlight onPress={() => this.openUrl(this.state.url)} underlayColor="white">
-          <Text style={styles.button}>
-            {this.state.url}
-          </Text>
-        </TouchableHighlight>}
-
         <Text style={styles.text}>about AnySnap result</Text>
-        <RelatedImagesCell tags={this.state.tags} />
+        <ScrollView horizontal={true}>
+          <CraftarImagesCell name={this.state.name} key={this.state.key} />
+          <RelatedImagesCell tags={this.state.tags} />
+        </ScrollView>
 
         <Text style={styles.text}>related result</Text>
         <TagsCell tags={this.state.tags} />
