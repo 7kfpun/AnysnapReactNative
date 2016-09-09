@@ -69,8 +69,27 @@ export default class HistoryCell extends Component {
   }
 
   componentDidMount() {
+    this.checkCraftar();
     this.checkVision();
-    // this.checkCrafh();
+  }
+
+  checkCraftar() {
+    const that = this;
+    if (this.props.history.id) {
+      const ref = firebase.database().ref(`app/craftar/${this.props.history.id}`);
+      ref.once('value').then((snapshot) => {
+        if (snapshot) {
+          const value = snapshot.val();
+          Reactotron.log({ log: 'Check craftar', value });
+          if (value.results && value.results.length > 0) {
+            that.setState({ name: value.results[0].item && value.results[0].item.name });
+          }
+        }
+      })
+      .catch((error) => {
+        Reactotron.log(error);
+      });
+    }
   }
 
   checkVision() {
@@ -127,7 +146,7 @@ export default class HistoryCell extends Component {
             />
           </View>
           <View style={styles.middleBlock}>
-            <Text style={styles.title}>{(this.state.tags.length > 0 && this.state.tags[0]) || ''}</Text>
+            <Text style={styles.title}>{(this.state.name || (this.state.tags.length > 0 && this.state.tags[0])) || ''}</Text>
             <Text style={styles.subtitile}>{(this.props.history.timestamp && moment(this.props.history.timestamp).format('LLL')) || ''}</Text>
             <TagsCell tags={this.state.tags} maximum={8} />
           </View>
