@@ -48,12 +48,21 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').width,
   },
+  cameraOptionBlock: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    padding: 20,
+  },
   footerBlock: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#EEEEEE',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 20,
   },
 });
 
@@ -62,6 +71,8 @@ export default class CameraView extends Component {
     super(props);
 
     this.state = {
+      isFlashOn: false,
+      isCameraFront: false,
     };
   }
 
@@ -139,12 +150,19 @@ export default class CameraView extends Component {
           aspect={Camera.constants.Aspect.fill}
           captureTarget={Camera.constants.CaptureTarget.temp}
           // onBarCodeRead={data => this.onBarCodeRead(data)}
-        />}
+          flashMode={this.state.isFlashOn ? Camera.constants.FlashMode.on : Camera.constants.FlashMode.off}
+          type={this.state.isCameraFront ? Camera.constants.Type.front : Camera.constants.Type.back}
+        >
+          <View style={styles.cameraOptionBlock}>
+            <Icon name={this.state.isFlashOn ? 'flash-off' : 'flash-on'} size={24} color="#9E9E9E" onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })} />
+            <Icon name={this.state.isCameraFront ? 'camera-rear' : 'camera-front'} size={24} color="#9E9E9E" onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })} />
+          </View>
+        </Camera>}
 
         <View style={styles.footerBlock}>
           <Icon name="collections" size={24} color="#9E9E9E" onPress={() => this.pickImage()} />
           <Icon name="radio-button-checked" size={80} color="#9E9E9E" onPress={() => this.takePicture()} />
-          <Icon name="playlist-play" size={24} color="#9E9E9E" onPress={() => Actions.tabbar()} />
+          <Icon name="timeline" size={24} color="#9E9E9E" onPress={() => Actions.tabbar()} />
         </View>
       </View>
     );
