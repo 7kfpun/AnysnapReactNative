@@ -13,6 +13,7 @@ import ResultView from './components/result';
 import HistoryView from './components/history';
 import SettingsView from './components/settings';
 // import AdminView from './components/admin';
+import IntroView from './components/intro';
 
 // Elements
 import TabIcon from './elements/tab-icon';
@@ -26,7 +27,7 @@ const scenes = Actions.create(
     <Scene key="login" title="Login" component={LoginView} />
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
-      <Scene key="main" title={I18n.t('more-information')} icon={TabIcon} iconName="timeline">
+      <Scene key="main" icon={TabIcon} iconName="timeline">
         <Scene key="history" title={I18n.t('history')} component={HistoryView} hideNavBar={true} />
         <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} />
       </Scene>
@@ -34,7 +35,12 @@ const scenes = Actions.create(
       <Scene key="mainFirst" title={I18n.t('more-information')} icon={TabIcon} iconName="dashboard" component={HomeView} hideNavBar={true} />
       <Scene key="cameraTab" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" component={CameraTabView} hideNavBar={true} />
       <Scene key="notification" title={I18n.t('notification')} icon={TabIcon} iconName="announcement" component={NotificationView} hideNavBar={true} />
-      <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="account-circle" component={SettingsView} hideNavBar={true} />
+
+      <Scene key="settings" icon={TabIcon} iconName="account-circle">
+        <Scene key="settingsMain" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
+        <Scene key="settingsIntro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" />
+        <Scene key="settingsSendMail" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
+      </Scene>
     </Scene>
   </Scene>
 );
