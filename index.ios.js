@@ -4,7 +4,7 @@ import {
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
-import Anysnap from './Anysnap';
+import Anysnap from './app';
 
 Reactotron.connect({ enabled: __DEV__ });  // eslint-disable-line no-undef
 

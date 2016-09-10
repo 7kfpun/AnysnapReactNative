@@ -1,38 +1,23 @@
 import React from 'react';
 
 // 3rd party libraries
-import {
-  Actions,
-  Router,
-  Scene,
-} from 'react-native-router-flux';
-
-import firebase from 'firebase';
+import { Actions, Scene } from 'react-native-router-flux';
 
 // Views
-import LoginView from './app/components/login';
-import HomeView from './app/components/home';
-import NotificationView from './app/components/notification';
-import CameraView from './app/components/camera';
-import CameraTabView from './app/components/camera-tab';
-import ResultView from './app/components/result';
-import HistoryView from './app/components/history';
-import SettingsView from './app/components/settings';
-import AdminView from './app/components/admin';
+import LoginView from './components/login';
+import HomeView from './components/home';
+// import NotificationView from './components/notification';
+import CameraView from './components/camera';
+import CameraTabView from './components/camera-tab';
+import ResultView from './components/result';
+import HistoryView from './components/history';
+import SettingsView from './components/settings';
+import AdminView from './components/admin';
 
 // Elements
-import TabIcon from './app/elements/tab-icon';
+import TabIcon from './elements/tab-icon';
 
-// GoogleAnalytics.setTrackerId(config.googleAnalytics[Platform.OS]);
-//
-// if (DeviceInfo.getDeviceName() === 'iPhone Simulator') {
-//   GoogleAnalytics.setDryRun(true);
-// }
-
-import { config } from './app/config';
-import I18n from './app/utils/i18n';
-
-firebase.initializeApp(config.firebase);
+import I18n from './utils/i18n';
 
 const scenes = Actions.create(
   <Scene key="root">
@@ -54,9 +39,4 @@ const scenes = Actions.create(
   </Scene>
 );
 
-
-const App = function App() {
-  return <Router scenes={scenes} />;
-};
-
-export default App;
+export default scenes;

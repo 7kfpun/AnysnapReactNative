@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
