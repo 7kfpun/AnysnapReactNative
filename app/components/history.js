@@ -22,36 +22,12 @@ import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneou
 
 import HistoryCell from '../elements/history-cell';
 
+import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
 
 const uniqueID = DeviceInfo.getUniqueID();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#CEDADF',
-    marginBottom: 50,
-  },
-  navigatorBarIOS: {
-    backgroundColor: 'white',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#DBDBDB',
-  },
-  navigatorLeftButton: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingRight: 50,
-  },
-  navigatorRightButton: {
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 10,
-  },
-  toolbar: {
-    height: 56,
-    backgroundColor: 'white',
-    elevation: 10,
-  },
+const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   rowBack: {
     flex: 1,
     flexDirection: 'row',
@@ -64,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+}));
 
 export default class HistoryView extends Component {
   constructor(props) {

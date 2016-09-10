@@ -17,31 +17,12 @@ import NavigationBar from 'react-native-navbar';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
+import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   container: {
     flex: 1,
-  },
-  navigatorBarIOS: {
-    backgroundColor: 'white',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#DBDBDB',
-  },
-  navigatorLeftButton: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingRight: 50,
-  },
-  navigatorRightButton: {
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 10,
-  },
-  toolbar: {
-    height: 56,
-    backgroundColor: 'white',
-    elevation: 10,
   },
   preview: {
     justifyContent: 'flex-end',
@@ -64,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-});
+}));
 
 export default class CameraView extends Component {
   constructor(props) {
@@ -74,6 +55,8 @@ export default class CameraView extends Component {
       isFlashOn: false,
       isCameraFront: false,
     };
+
+    console.log('commonStyle', commonStyle);
   }
 
   takePicture() {

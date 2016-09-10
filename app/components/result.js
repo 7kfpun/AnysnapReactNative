@@ -26,43 +26,13 @@ import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
 
-const styles = StyleSheet.create({
+import commonStyle from '../utils/common-styles';
+
+const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   container: {
     flex: 1,
     backgroundColor: 'white',
     marginBottom: 50,
-  },
-  navigatorBarIOS: {
-    backgroundColor: 'white',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#DBDBDB',
-  },
-  navigatorLeftButton: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingRight: 50,
-  },
-  navigatorRightButton: {
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 10,
-  },
-  toolbar: {
-    height: 56,
-    backgroundColor: 'white',
-    elevation: 10,
-  },
-  navbar: {
-    height: 40,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginTop: 20,
-    paddingLeft: 10,
-  },
-  navbarText: {
-    paddingLeft: 5,
-    color: '#212121',
   },
   image: {
     width: Dimensions.get('window').width,
@@ -82,7 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#212121',
   },
-});
+}));
 
 export default class ResultView extends Component {
   constructor(props) {

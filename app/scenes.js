@@ -6,13 +6,13 @@ import { Actions, Scene } from 'react-native-router-flux';
 // Views
 import LoginView from './components/login';
 import HomeView from './components/home';
-// import NotificationView from './components/notification';
+import NotificationView from './components/notification';
 import CameraView from './components/camera';
 import CameraTabView from './components/camera-tab';
 import ResultView from './components/result';
 import HistoryView from './components/history';
 import SettingsView from './components/settings';
-import AdminView from './components/admin';
+// import AdminView from './components/admin';
 
 // Elements
 import TabIcon from './elements/tab-icon';
@@ -26,15 +26,15 @@ const scenes = Actions.create(
     <Scene key="login" title="Login" component={LoginView} />
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
-      <Scene key="main" title={I18n.t('more-information')} icon={TabIcon} iconName="timeline" hideNavBar={true}>
-        <Scene key="history" title={I18n.t('history')} component={HistoryView} />
-        <Scene key="result" title={I18n.t('more-information')} component={ResultView} />
+      <Scene key="main" title={I18n.t('more-information')} icon={TabIcon} iconName="timeline">
+        <Scene key="history" title={I18n.t('history')} component={HistoryView} hideNavBar={true} />
+        <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} />
       </Scene>
 
-      <Scene key="mainFirst" title={I18n.t('more-information')} icon={TabIcon} iconName="dashboard" hideNavBar={true} component={HomeView} />
-      <Scene key="cameraTab" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" hideNavBar={true} component={CameraTabView} />
-      <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="announcement" component={SettingsView} />
-      <Scene key="admin" title={I18n.t('admin')} icon={TabIcon} iconName="account-circle" component={AdminView} />
+      <Scene key="mainFirst" title={I18n.t('more-information')} icon={TabIcon} iconName="dashboard" component={HomeView} hideNavBar={true} />
+      <Scene key="cameraTab" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" component={CameraTabView} hideNavBar={true} />
+      <Scene key="notification" title={I18n.t('notification')} icon={TabIcon} iconName="announcement" component={NotificationView} hideNavBar={true} />
+      <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="account-circle" component={SettingsView} hideNavBar={true} />
     </Scene>
   </Scene>
 );
