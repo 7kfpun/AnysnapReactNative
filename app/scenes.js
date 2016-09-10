@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 // 3rd party libraries
 import { Actions, Scene } from 'react-native-router-flux';
@@ -14,6 +14,7 @@ import HistoryView from './components/history';
 import SettingsView from './components/settings';
 // import AdminView from './components/admin';
 import IntroView from './components/intro';
+import FeedbackView from './components/feedback';
 
 // Elements
 import TabIcon from './elements/tab-icon';
@@ -39,6 +40,7 @@ const scenes = Actions.create(
       <Scene key="settings" icon={TabIcon} iconName="account-circle">
         <Scene key="settingsMain" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
         <Scene key="settingsIntro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" />
+        <Scene key="settingsFeedback" title={I18n.t('feedback')} component={FeedbackView} hideNavBar={true} hideTabBar={true} direction="vertical" />
         <Scene key="settingsSendMail" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
       </Scene>
     </Scene>

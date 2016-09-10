@@ -12,8 +12,8 @@ import { Cell, Section, TableView } from 'react-native-tableview-simple';
 import { GiftedForm } from 'react-native-gifted-form';
 import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ZocialIcon from 'react-native-vector-icons/Zocial';
 import NavigationBar from 'react-native-navbar';
+import ZocialIcon from 'react-native-vector-icons/Zocial';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
@@ -77,6 +77,11 @@ export default class SettingsView extends Component {
                 cellStyle="Basic"
                 title={I18n.t('account-login')}
                 onPress={() => Actions.login()}
+              />
+              <Cell
+                cellStyle="Basic"
+                title={I18n.t('feedback')}
+                onPress={() => Actions.settingsFeedback()}
               />
             </Section>
           </TableView>

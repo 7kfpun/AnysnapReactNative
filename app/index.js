@@ -18,6 +18,10 @@ import { config } from './config';
 
 firebase.initializeApp(config.firebase);
 
+console.ignoredYellowBox = [
+  'Warning: Failed prop type: Invalid prop `title` of type `object` supplied to `exports`, expected `string`.',
+];
+
 const App = function App() {
   return <Router scenes={scenes} />;
 };
