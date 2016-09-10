@@ -81,7 +81,7 @@ export default class HistoryView extends Component {
 
   componentDidMount() {
     if (this.props.image && this.props.newImage) {
-      Actions.result({ image: this.props.image });
+      Actions.result({ image: this.props.image, type: 'replace' });
     }
 
     this.prepareRows();
@@ -136,7 +136,6 @@ export default class HistoryView extends Component {
             name="timeline"
             size={24}
             color="#4A4A4A"
-            onPress={Actions.pop}
           />}
         />
       );

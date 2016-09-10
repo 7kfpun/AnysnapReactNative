@@ -196,7 +196,7 @@ export default class ResultView extends Component {
             name="inbox"
             size={26}
             color="gray"
-            onPress={Actions.pop}
+            onPress={() => Actions.history({ type: 'replace' })}
           />}
           rightButton={<Icon
             style={styles.navigatorRightButton}
@@ -239,7 +239,7 @@ export default class ResultView extends Component {
 ResultView.propTypes = {
   title: React.PropTypes.string,
   image: React.PropTypes.string,
-  tags: React.PropTypes.array,
+  tags: React.PropTypes.arrayOf(React.PropTypes.string),
 };
 
 ResultView.defaultProps = {

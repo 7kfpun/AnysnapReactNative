@@ -10,7 +10,7 @@ import {
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
-import Camera from 'react-native-camera';
+import Camera from 'react-native-camera';  // eslint-disable-line import/no-named-as-default,import/no-named-as-default-member
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
 import NavigationBar from 'react-native-navbar';

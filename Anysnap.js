@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 // 3rd party libraries
 import {
@@ -14,6 +14,7 @@ import LoginView from './app/components/login';
 import HomeView from './app/components/home';
 import NotificationView from './app/components/notification';
 import CameraView from './app/components/camera';
+import CameraTabView from './app/components/camera-tab';
 import ResultView from './app/components/result';
 import HistoryView from './app/components/history';
 import SettingsView from './app/components/settings';
@@ -46,7 +47,7 @@ const scenes = Actions.create(
       </Scene>
 
       <Scene key="mainFirst" title={I18n.t('more-information')} icon={TabIcon} iconName="dashboard" hideNavBar={true} component={HomeView} />
-      <Scene key="notification" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" hideNavBar={true} component={NotificationView} />
+      <Scene key="cameraTab" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" hideNavBar={true} component={CameraTabView} />
       <Scene key="settings" title={I18n.t('settings')} icon={TabIcon} iconName="announcement" component={SettingsView} />
       <Scene key="admin" title={I18n.t('admin')} icon={TabIcon} iconName="account-circle" component={AdminView} />
     </Scene>

@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   StyleSheet,
-  // Text,
   View,
 } from 'react-native';
 
@@ -20,7 +19,14 @@ const styles = StyleSheet.create({
 const TabIcon = function TabIcon(props) {
   return (
     <View style={styles.container}>
-      <Icon name={props.iconName} color={props.selected ? 'black' : 'white'} size={24} />
+      <Icon
+        style={{
+          marginBottom: props.iconName === 'add-a-photo' ? 5 : 0,
+        }}
+        name={props.iconName}
+        color={props.selected ? 'black' : 'white'}
+        size={props.iconName === 'add-a-photo' ? 38 : 24}
+      />
       {/* <Text style={[styles.text, { color: props.selected ? 'black' : 'white' }]}>{props.title}</Text> */}
     </View>
   );
@@ -28,7 +34,7 @@ const TabIcon = function TabIcon(props) {
 
 TabIcon.propTypes = {
   selected: React.PropTypes.bool,
-  title: React.PropTypes.string,
+  // title: React.PropTypes.string,
   iconName: React.PropTypes.string,
 };
 
