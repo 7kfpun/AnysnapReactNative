@@ -55,6 +55,7 @@ export default class CameraView extends Component {
     this.state = {
       isFlashOn: false,
       isCameraFront: false,
+      isIntroDone: false,
     };
 
     console.log('commonStyle', commonStyle);
@@ -147,15 +148,27 @@ export default class CameraView extends Component {
           type={this.state.isCameraFront ? Camera.constants.Type.front : Camera.constants.Type.back}
         >
           <View style={styles.cameraOptionBlock}>
-            <Icon name={this.state.isFlashOn ? 'flash-on' : 'flash-off'} size={24} color="#9E9E9E" onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })} />
-            <Icon name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'} size={24} color="#9E9E9E" onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })} />
+            <Icon
+              style={{ paddingTop: 40, paddingRight: 40 }}
+              name={this.state.isFlashOn ? 'flash-on' : 'flash-off'}
+              size={24}
+              color="#9E9E9E"
+              onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })}
+            />
+            <Icon
+              style={{ paddingTop: 40, paddingLeft: 40 }}
+              name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'}
+              size={24}
+              color="#9E9E9E"
+              onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })}
+            />
           </View>
         </Camera>}
 
         <View style={styles.footerBlock}>
-          <Icon name="collections" size={24} color="#9E9E9E" onPress={() => this.pickImage()} />
-          <Icon name="radio-button-checked" size={80} color="#9E9E9E" onPress={() => this.takePicture()} />
-          <Icon name="timeline" size={24} color="#9E9E9E" onPress={Actions.tabbar} />
+          <Icon style={{ paddingVertical: 40, paddingRight: 40 }} name="collections" size={24} color="#9E9E9E" onPress={() => this.pickImage()} />
+          <Icon style={{ padding: 40 }} name="radio-button-checked" size={80} color="#9E9E9E" onPress={() => this.takePicture()} />
+          <Icon style={{ paddingVertical: 40, paddingLeft: 40 }} name="timeline" size={24} color="#9E9E9E" onPress={Actions.tabbar} />
         </View>
       </View>
     );

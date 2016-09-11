@@ -9,7 +9,8 @@ export default class IntroView extends Component {
   onSkipBtnHandle(index) {
     console.log(index);
     Actions.pop();
-    store.save('isIntroDone', true);
+    store.delete('isIntroDone');
+    // store.save('isIntroDone', true);
   }
 
   onSlideChangeHandle(index, total) {
@@ -18,7 +19,8 @@ export default class IntroView extends Component {
 
   doneBtnHandle() {
     Actions.pop();
-    store.save('isIntroDone', true);
+    store.delete('isIntroDone');
+    // store.save('isIntroDone', true);
   }
 
   nextBtnHandle(index) {
