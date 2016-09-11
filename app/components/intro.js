@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 
 // 3rd party libraries
-import AppIntro from 'react-native-app-intro';  // eslint-disable-line import/no-named-as-default,import/no-named-as-default-member
 import { Actions } from 'react-native-router-flux';
+import AppIntro from 'react-native-app-intro';  // eslint-disable-line import/no-named-as-default,import/no-named-as-default-member
+import store from 'react-native-simple-store';
 
 export default class IntroView extends Component {
   onSkipBtnHandle(index) {
     console.log(index);
     Actions.pop();
+    store.save('isIntroDone', true);
   }
 
   onSlideChangeHandle(index, total) {
@@ -16,6 +18,7 @@ export default class IntroView extends Component {
 
   doneBtnHandle() {
     Actions.pop();
+    store.save('isIntroDone', true);
   }
 
   nextBtnHandle(index) {

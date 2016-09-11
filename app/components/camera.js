@@ -14,6 +14,7 @@ import Camera from 'react-native-camera';  // eslint-disable-line import/no-name
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
 import NavigationBar from 'react-native-navbar';
+import store from 'react-native-simple-store';
 
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
@@ -57,6 +58,15 @@ export default class CameraView extends Component {
     };
 
     console.log('commonStyle', commonStyle);
+  }
+
+  componentDidMount() {
+    store.get('isIntroDone')
+      .then((isIntroDone) => {
+        if (!isIntroDone) {
+          Actions.intro();
+        }
+      });
   }
 
   takePicture() {
@@ -145,7 +155,7 @@ export default class CameraView extends Component {
         <View style={styles.footerBlock}>
           <Icon name="collections" size={24} color="#9E9E9E" onPress={() => this.pickImage()} />
           <Icon name="radio-button-checked" size={80} color="#9E9E9E" onPress={() => this.takePicture()} />
-          <Icon name="timeline" size={24} color="#9E9E9E" onPress={() => Actions.tabbar()} />
+          <Icon name="timeline" size={24} color="#9E9E9E" onPress={Actions.tabbar} />
         </View>
       </View>
     );
