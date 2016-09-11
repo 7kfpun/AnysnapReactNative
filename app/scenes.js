@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 // 3rd party libraries
 import { Actions, Scene } from 'react-native-router-flux';
 
 // Views
-import LoginView from './components/login';
 import HomeView from './components/home';
 import NotificationView from './components/notification';
 import CameraView from './components/camera';
@@ -15,6 +14,7 @@ import SettingsView from './components/settings';
 // import AdminView from './components/admin';
 import IntroView from './components/intro';
 import FeedbackView from './components/feedback';
+import LoginView from './components/login';
 
 // Elements
 import TabIcon from './elements/tab-icon';
@@ -24,8 +24,6 @@ import I18n from './utils/i18n';
 const scenes = Actions.create(
   <Scene key="root">
     <Scene key="camera" title={I18n.t('camera')} component={CameraView} hideNavBar={true} direction="vertical" initial={true} />
-
-    <Scene key="login" title="Login" component={LoginView} />
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
       <Scene key="main" icon={TabIcon} iconName="timeline">
@@ -40,6 +38,7 @@ const scenes = Actions.create(
       <Scene key="settings" icon={TabIcon} iconName="account-circle">
         <Scene key="settingsMain" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
         <Scene key="settingsIntro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" />
+        <Scene key="settingsLogin" title={I18n.t('login')} component={LoginView} hideNavBar={true} hideTabBar={true} direction="vertical" />
         <Scene key="settingsFeedback" title={I18n.t('feedback')} component={FeedbackView} hideNavBar={true} hideTabBar={true} direction="vertical" />
         <Scene key="settingsSendMail" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
       </Scene>
