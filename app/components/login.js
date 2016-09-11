@@ -122,11 +122,11 @@ export default class LoginView extends Component {
 
             <GiftedForm.SeparatorWidget />
 
-            {/* <GiftedForm.SubmitWidget
-              // title={<ZocialIcon.Button backgroundColor="#527DBE" name="facebook" size={20} color="white">
-              //   {I18n.t('login-facebook')}
-              // </ZocialIcon.Button>}
-              title={I18n.t('login-facebook')}
+            <GiftedForm.SubmitWidget
+              title={<ZocialIcon.Button backgroundColor="#527DBE" name="facebook" size={20} color="white">
+                {I18n.t('login-facebook')}
+              </ZocialIcon.Button>}
+              // title={I18n.t('login-facebook')}
               widgetStyles={{
                 submitButton: {
                   backgroundColor: '#527DBE',
@@ -139,7 +139,7 @@ export default class LoginView extends Component {
                   console.log('Is valid');
                 }
               }}
-            /> */}
+            />
 
             <GiftedForm.SubmitWidget
               title={<ZocialIcon.Button backgroundColor="#DD4A37" name="google" size={20} color="white">

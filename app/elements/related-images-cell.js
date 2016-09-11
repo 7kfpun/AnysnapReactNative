@@ -93,7 +93,7 @@ export default class RelatedImagesCell extends Component {
 }
 
 RelatedImagesCell.propTypes = {
-  tags: React.PropTypes.array,
+  tags: React.PropTypes.arrayOf(React.PropTypes.string),
 };
 
 RelatedImagesCell.defaultProps = {

@@ -5,6 +5,7 @@ import { Actions, Scene } from 'react-native-router-flux';
 
 // Views
 import HomeView from './components/home';
+import FeedView from './components/feed';
 import NotificationView from './components/notification';
 import CameraView from './components/camera';
 import CameraTabView from './components/camera-tab';
@@ -31,7 +32,7 @@ const scenes = Actions.create(
         <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} />
       </Scene>
 
-      <Scene key="mainFirst" title={I18n.t('more-information')} icon={TabIcon} iconName="dashboard" component={HomeView} hideNavBar={true} />
+      <Scene key="feed" title={I18n.t('feed')} icon={TabIcon} iconName="dashboard" component={FeedView} hideNavBar={true} />
       <Scene key="cameraTab" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" component={CameraTabView} hideNavBar={true} />
       <Scene key="notification" title={I18n.t('notification')} icon={TabIcon} iconName="announcement" component={NotificationView} hideNavBar={true} />
 

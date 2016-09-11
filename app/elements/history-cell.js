@@ -160,7 +160,11 @@ export default class HistoryCell extends Component {
 }
 
 HistoryCell.propTypes = {
-  history: React.PropTypes.object,
+  history: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    bucket: React.PropTypes.object,
+    timestamp: React.PropTypes.number,
+  }),
 };
 
 HistoryCell.defaultProps = {
