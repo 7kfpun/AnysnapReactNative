@@ -63,12 +63,6 @@ export default class HistoryView extends Component {
     this.prepareRows();
   }
 
-  onActionSelected(position) {
-    if (position === 0) {  // index of 'Done'
-      Actions.pop();
-    }
-  }
-
   prepareRows() {
     const that = this;
     const ref = firebase.database().ref('app/image');
@@ -107,12 +101,6 @@ export default class HistoryView extends Component {
         <NavigationBar
           style={styles.navigatorBarIOS}
           title={{ title: this.props.title, tintColor: '#4A4A4A' }}
-          rightButton={<Icon
-            style={styles.navigatorRightButton}
-            name="timeline"
-            size={24}
-            color="#4A4A4A"
-          />}
         />
       );
     } else if (Platform.OS === 'android') {
@@ -121,10 +109,6 @@ export default class HistoryView extends Component {
           style={styles.toolbar}
           title={this.props.title}
           titleColor="#4A4A4A"
-          actions={[
-            { title: I18n.t('done'), iconName: 'timeline', iconSize: 26, show: 'always' },
-          ]}
-          onActionSelected={(position) => this.onActionSelected(position)}
         />
       );
     }

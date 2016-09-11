@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 
 import commonStyle from '../utils/common-styles';
-import I18n from '../utils/i18n';
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
 }));
@@ -31,10 +30,6 @@ export default class NotificationView extends Component {
           style={styles.toolbar}
           title={this.props.title}
           titleColor="#4A4A4A"
-          actions={[
-            { title: I18n.t('done'), iconName: 'timeline', iconSize: 26, show: 'always' },
-          ]}
-          onActionSelected={(position) => this.onActionSelected(position)}
         />
       );
     }

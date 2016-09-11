@@ -11,7 +11,7 @@ I18n.translations = {
     feed: 'Recommended',
     notification: 'Notification',
     settings: 'Settings',
-    intro: 'Intriduction',
+    intro: 'Introduction',
     feedback: 'Feedback',
     subject: 'Subject',
     camera: 'Camera',

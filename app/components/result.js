@@ -25,6 +25,7 @@ import CraftarImagesCell from '../elements/craftar-images-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
+import I18n from '../utils/i18n';
 
 import commonStyle from '../utils/common-styles';
 
@@ -79,6 +80,12 @@ export default class ResultView extends Component {
     if (this.props.tags.length === 0) {
       this.craftarSearch();
       this.googleVision();
+    }
+  }
+
+  onActionSelected(position) {
+    if (position === 0) {  // index of 'History'
+      Actions.history({ type: 'replace' });
     }
   }
 
@@ -182,6 +189,10 @@ export default class ResultView extends Component {
           style={styles.toolbar}
           title={this.props.title}
           titleColor="#4A4A4A"
+          actions={[
+            { title: I18n.t('history'), iconName: 'inbox', iconSize: 26, show: 'always' },
+          ]}
+          onActionSelected={(position) => this.onActionSelected(position)}
         />
       );
     }
