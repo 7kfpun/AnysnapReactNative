@@ -137,8 +137,8 @@ export default class CameraView extends Component {
           type={this.state.isCameraFront ? Camera.constants.Type.front : Camera.constants.Type.back}
         >
           <View style={styles.cameraOptionBlock}>
-            <Icon name={this.state.isFlashOn ? 'flash-off' : 'flash-on'} size={24} color="#9E9E9E" onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })} />
-            <Icon name={this.state.isCameraFront ? 'camera-rear' : 'camera-front'} size={24} color="#9E9E9E" onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })} />
+            <Icon name={this.state.isFlashOn ? 'flash-on' : 'flash-off'} size={24} color="#9E9E9E" onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })} />
+            <Icon name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'} size={24} color="#9E9E9E" onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })} />
           </View>
         </Camera>}
 
