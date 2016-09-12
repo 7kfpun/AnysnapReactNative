@@ -102,7 +102,7 @@ export default class HistoryCell extends Component {
           Reactotron.log({ log: 'Check vision', value });
           if (value.responses && value.responses.length > 0) {
             if (value.responses[0].labelAnnotations && value.responses[0].labelAnnotations.length > 0) {
-              const tags = value.responses[0].labelAnnotations.map((item) => item.description);
+              const tags = value.responses[0].labelAnnotations.map(item => item.description);
               that.setState({ tags });
             }
           }
@@ -133,6 +133,7 @@ export default class HistoryCell extends Component {
     return (
       <TouchableHighlight
         onPress={() => Actions.result({
+          craftar: this.state.name,
           image: this.props.history.bucket && this.props.history.bucket.mediaLink,
           tags: this.state.tags,
         })}

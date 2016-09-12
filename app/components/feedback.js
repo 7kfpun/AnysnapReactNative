@@ -73,7 +73,7 @@ export default class FeedbackView extends Component {
             clearOnClose={true}
 
 
-            onValueChange={(data) => console.log(data)}
+            onValueChange={data => console.log(data)}
 
             defaults={{
               /*

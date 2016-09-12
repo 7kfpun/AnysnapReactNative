@@ -30,6 +30,7 @@ I18n.translations = {
     'login-facebook': 'Login with Facebook',
     'login-google': 'Login with Google+',
     cancel: 'Cancel',
+    'anysnap-results': 'AnySnap results',
   },
   zh: {
     main: '主頁',
@@ -58,6 +59,7 @@ I18n.translations = {
     'login-facebook': '使用 Facebook 帳戶登錄',
     'login-google': '使用 Google+ 帳戶登錄',
     cancel: '取消',
+    'anysnap-results': 'AnySnap 結果',
   },
 };
 

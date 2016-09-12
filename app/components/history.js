@@ -72,8 +72,8 @@ export default class HistoryView extends Component {
         const value = snapshot.val();
         Reactotron.log({ log: 'Firebase', value });
         if (value) {
-          let images = Object.keys(value).map((key) => Object.assign({ id: key }, value[key]));
-          images = images.filter((item) => !item.isDeleted);
+          let images = Object.keys(value).map(key => Object.assign({ id: key }, value[key]));
+          images = images.filter(item => !item.isDeleted);
           images = _.sortBy(images, 'timestamp').reverse();
 
           that.setState({
@@ -134,7 +134,7 @@ export default class HistoryView extends Component {
           }
           dataSource={this.state.dataSource}
           enableEmptySections={true}
-          renderRow={(rowData) => <HistoryCell history={rowData} />}
+          renderRow={rowData => <HistoryCell history={rowData} />}
           renderHiddenRow={() => (
             <View style={styles.rowBack}>
               <View style={styles.rowBackBlock}>

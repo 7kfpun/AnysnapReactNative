@@ -45,8 +45,8 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   },
   bottomBlock: {
     flex: 1,
-    marginHorizontal: 15,
-    marginVertical: 5,
+    marginHorizontal: 10,
+    marginVertical: 10,
     justifyContent: 'space-around',
   },
   text: {
@@ -91,7 +91,7 @@ export default class ResultView extends Component {
 
   craftarSearch() {
     const that = this;
-    ImageResizer.createResizedImage(this.props.image, 600, 600, 'JPEG', 40).then((resizedImageUri) => {
+    ImageResizer.createResizedImage(this.props.image, 800, 800, 'JPEG', 60).then((resizedImageUri) => {
       Reactotron.log({ log: 'Image resized', resizedImageUri });
 
       api.craftarSearch(this.state.filename, resizedImageUri)
@@ -129,12 +129,12 @@ export default class ResultView extends Component {
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
-        .catch(err => {
+        .catch((err) => {
           console.error('Cannot open safari', err);
         });
     } else if (Platform.OS === 'android') {
       Linking.openURL(url)
-        .catch(err1 => {
+        .catch((err1) => {
           console.error('Cannot open url', err1);
         });
     }
@@ -149,13 +149,12 @@ export default class ResultView extends Component {
   renderResult() {
     return (
       <View style={styles.bottomBlock}>
-        <Text style={styles.text}>about AnySnap result</Text>
+        <Text style={styles.text}>{I18n.t('anysnap-results')}</Text>
         <ScrollView horizontal={true}>
-          <CraftarImagesCell name={this.state.name} key={this.state.key} />
+          <CraftarImagesCell name={this.props.craftar || this.state.name} key={this.state.key} />
           <RelatedImagesCell tags={this.state.tags} />
         </ScrollView>
 
-        <Text style={styles.text}>related result</Text>
         <TagsCell tags={this.state.tags} />
       </View>
     );
@@ -175,12 +174,12 @@ export default class ResultView extends Component {
             color="gray"
             onPress={() => Actions.history({ type: 'replace' })}
           />}
-          rightButton={<Icon
-            style={styles.navigatorRightButton}
-            name="sms-failed"
-            size={26}
-            color="gray"
-          />}
+          // rightButton={<Icon
+          //   style={styles.navigatorRightButton}
+          //   name="sms-failed"
+          //   size={26}
+          //   color="gray"
+          // />}
         />
       );
     } else if (Platform.OS === 'android') {
@@ -221,10 +220,9 @@ ResultView.propTypes = {
   title: React.PropTypes.string,
   image: React.PropTypes.string,
   tags: React.PropTypes.arrayOf(React.PropTypes.string),
+  craftar: React.PropTypes.string,
 };
 
 ResultView.defaultProps = {
-  title: '',
-  image: '',
   tags: [],
 };

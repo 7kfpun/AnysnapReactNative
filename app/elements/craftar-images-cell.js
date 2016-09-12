@@ -17,15 +17,16 @@ import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneou
 
 import firebase from 'firebase';
 
-const BLANK_WIDTH = 30;
+const BLANK_WIDTH = 10;
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    marginTop: 5,
   },
   image: {
-    width: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
-    height: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
+    width: ((Dimensions.get('window').width - 20) - (2 * BLANK_WIDTH)) / 3,
+    height: ((Dimensions.get('window').width - 20) - (2 * BLANK_WIDTH)) / 3,
     resizeMode: 'cover',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#DBDBDB',
@@ -38,8 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    width: Dimensions.get('window').width,
-    height: (Dimensions.get('window').width / 3) - BLANK_WIDTH,
+    width: Dimensions.get('window').width - 20,
+    height: ((Dimensions.get('window').width - 20) - (2 * BLANK_WIDTH)) / 3,
   },
   blank: {
     width: BLANK_WIDTH,
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#9E9E9E',
     fontSize: 10,
+    lineHeight: 15,
   },
 });
 
@@ -80,12 +82,12 @@ export default class CraftarImagesCell extends Component {
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
-        .catch(err => {
+        .catch((err) => {
           console.error('Cannot open safari', err);
         });
     } else if (Platform.OS === 'android') {
       Linking.openURL(url)
-        .catch(err => {
+        .catch((err) => {
           console.error('Cannot open url', err);
         });
     }

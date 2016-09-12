@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 5,
   },
   text: {
     fontSize: 12,
@@ -33,25 +34,26 @@ export default class TagsCell extends Component {
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
-        .catch(err => {
+        .catch((err) => {
           console.error('Cannot open safari', err);
         });
     } else if (Platform.OS === 'android') {
       Linking.openURL(url)
-        .catch(err1 => {
-          console.error('Cannot open url', err1);
+        .catch((err) => {
+          console.error('Cannot open url', err);
         });
     }
   }
 
   render() {
     const tagsLength = Math.min(this.props.tags.length, this.props.maximum);
+    console.log('tagsLength', this.props.tags.length, this.props.maximum, tagsLength);
     return (
       <View style={styles.container}>
         <Icon style={{ marginRight: 2 }} name="label-outline" color="#7F7F7F" size={12} />
         {this.props.tags.length === 0 && <Spinner style={styles.spinner} size={14} type="ThreeBounce" color="#7F7F7F" />}
         {this.props.tags.slice(0, this.props.maximum).map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
-          <Text style={styles.text}>{item}{tagsLength !== i + 1 ? ', ' : ''}</Text>
+          <Text style={styles.text}>{item}{i + 1 < tagsLength ? ', ' : ''}</Text>
         </TouchableHighlight>)}
       </View>
     );
@@ -59,10 +61,11 @@ export default class TagsCell extends Component {
 }
 
 TagsCell.propTypes = {
-  tags: React.PropTypes.array,
+  tags: React.PropTypes.arrayOf(React.PropTypes.string),
   maximum: React.PropTypes.number,
 };
 
 TagsCell.defaultProps = {
   tags: [],
+  maximum: 20,
 };
