@@ -119,7 +119,7 @@ export default class ResultView extends Component {
       api.googleVision(this.state.filename)
       .then((json) => {
         Reactotron.log({ log: 'Google vision done', labelAnnotations: json.responses[0].labelAnnotations });
-        const tags = json.responses[0].labelAnnotations.map((item) => item.description);
+        const tags = json.responses[0].labelAnnotations.map(item => item.description);
         this.setState({ tags });
       });
     });
@@ -192,7 +192,7 @@ export default class ResultView extends Component {
           actions={[
             { title: I18n.t('history'), iconName: 'inbox', iconSize: 26, show: 'always' },
           ]}
-          onActionSelected={(position) => this.onActionSelected(position)}
+          onActionSelected={position => this.onActionSelected(position)}
         />
       );
     }

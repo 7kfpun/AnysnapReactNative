@@ -37,7 +37,7 @@ export default class LoginView extends Component {
           style={styles.navigatorBarIOS}
           title={{ title: this.props.title, tintColor: '#4A4A4A' }}
           rightButton={{
-            title: 'Cancel',
+            title: I18n.t('cancel'),
             handler: Actions.pop,
           }}
         />
@@ -132,7 +132,7 @@ export default class LoginView extends Component {
                   backgroundColor: '#527DBE',
                 },
               }}
-              onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {
+              onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {  // eslint-disable-line no-unused-vars
                 Reactotron.log(values);
                 console.log(values);
                 if (isValid === true) {
@@ -151,7 +151,7 @@ export default class LoginView extends Component {
                   backgroundColor: '#DD4A37',
                 },
               }}
-              onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {
+              onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {  // eslint-disable-line no-unused-vars
                 Reactotron.log(values);
                 console.log(values);
                 if (isValid === true) {

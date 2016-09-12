@@ -39,7 +39,7 @@ export default class FeedbackView extends Component {
           style={styles.navigatorBarIOS}
           title={{ title: this.props.title, tintColor: '#4A4A4A' }}
           rightButton={{
-            title: 'Cancel',
+            title: I18n.t('cancel'),
             handler: Actions.pop,
           }}
         />

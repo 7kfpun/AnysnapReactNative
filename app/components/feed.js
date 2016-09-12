@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import _ from 'underscore';
+import _ from 'lodash';  // eslint-disable-line import/no-extraneous-dependencies
 import firebase from 'firebase';
 
 // 3rd party libraries
@@ -69,7 +69,8 @@ export default class FeedView extends Component {
         const value = snapshot.val();
         Reactotron.log({ log: 'Feed', value });
         if (value) {
-          const data = _.values(value);
+          let data = _.values(value);
+          data = _.shuffle(data);
           that.setState({
             data,
             dataSource: this.state.dataSource.cloneWithRows(data),

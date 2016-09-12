@@ -35,7 +35,7 @@ export default class HomeView extends Component {
       Reactotron.log({ log: 'Image picked', data });
 
       Actions.result({ image: data });
-    }, (err) => Reactotron.log(err));
+    }, err => Reactotron.log(err));
   }
 
   render() {

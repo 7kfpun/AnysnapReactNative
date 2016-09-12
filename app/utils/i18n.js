@@ -29,6 +29,7 @@ I18n.translations = {
     login: 'Login',
     'login-facebook': 'Login with Facebook',
     'login-google': 'Login with Google+',
+    cancel: 'Cancel',
   },
   zh: {
     main: '主頁',
@@ -56,6 +57,7 @@ I18n.translations = {
     login: '登錄',
     'login-facebook': '使用 Facebook 帳戶登錄',
     'login-google': '使用 Google+ 帳戶登錄',
+    cancel: '取消',
   },
 };
 

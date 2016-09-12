@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import _ from 'underscore';
+import _ from 'lodash';  // eslint-disable-line import/no-extraneous-dependencies
 import firebase from 'firebase';
 
 // 3rd party libraries
@@ -23,7 +23,6 @@ import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneou
 import HistoryCell from '../elements/history-cell';
 
 import commonStyle from '../utils/common-styles';
-import I18n from '../utils/i18n';
 
 const uniqueID = DeviceInfo.getUniqueID();
 
