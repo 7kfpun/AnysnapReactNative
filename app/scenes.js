@@ -4,7 +4,7 @@ import React from 'react';
 import { Actions, Scene } from 'react-native-router-flux';
 
 // Views
-import HomeView from './components/home';
+// import HomeView from './components/home';
 import FeedView from './components/feed';
 import NotificationView from './components/notification';
 import CameraView from './components/camera';

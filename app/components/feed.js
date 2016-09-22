@@ -129,7 +129,7 @@ export default class FeedView extends Component {
           }
           dataSource={this.state.dataSource}
           enableEmptySections={true}
-          renderRow={(rowData) => <FeedCell data={rowData} />}
+          renderRow={rowData => <FeedCell data={rowData} />}
           renderHiddenRow={() => (
             <View style={styles.rowBack}>
               <View style={styles.rowBackBlock}>

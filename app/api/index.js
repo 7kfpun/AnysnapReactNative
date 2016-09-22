@@ -3,7 +3,7 @@ import firebase from 'firebase';
 // 3rd party libraries
 import DeviceInfo from 'react-native-device-info';
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'react-native-fetch-blob';  // eslint-disable-line import/no-named-as-default,import/no-named-as-default-member
 
 import { config } from '../config';
 
@@ -22,14 +22,9 @@ export function craftarSearch(filename, path) {
       { name: 'image', filename: 'image.jpg', data: RNFetchBlob.wrap(path) },
     ]
   )
-  .uploadProgress((written, total) => {
-    console.log('uploaded', written / total);
-  })
-  // listen to download progress event
-  .progress((received, total) => {
-    console.log('progress', received / total);
-  })
-  .then((response) => response.json())
+  .uploadProgress((written, total) => console.log('uploaded', written / total))
+  .progress((received, total) => console.log('progress', received / total))
+  .then(response => response.json())
   .then((json) => {
     Reactotron.log({ log: 'Craftar search', json });
 
@@ -45,7 +40,7 @@ export function craftarSearch(filename, path) {
 
     return json;
   })
-  .catch((error) => console.error('Error', error));
+  .catch(error => console.error('Error', error));
 }
 
 // curl -X POST \
@@ -69,8 +64,8 @@ export function craftarCreateItem(name, url) {
       }),
     }
   )
-  .then((response) => response.json())
-  .catch((error) => console.error('Error', error));
+  .then(response => response.json())
+  .catch(error => console.error('Error', error));
 }
 
 // curl -X POST
@@ -98,7 +93,7 @@ export function craftarCreateImage(item, file) {
   .progress((received, total) => {
     console.log('progress', received / total);
   })
-  .catch((error) => console.error('Error', error));
+  .catch(error => console.error('Error', error));
 }
 
 export function uploadImage(filename, image) {
@@ -111,7 +106,7 @@ export function uploadImage(filename, image) {
     },
     RNFetchBlob.wrap(image)
   )
-  .then((response) => response.json())
+  .then(response => response.json())
   .then((json) => {
     Reactotron.log({ log: 'Uploaded image', json });
 
@@ -126,9 +121,7 @@ export function uploadImage(filename, image) {
 
     return json;
   })
-  .catch((error) => {
-    console.warn(error);
-  });
+  .catch(error => console.warn(error));
 }
 
 
@@ -165,7 +158,7 @@ export function googleVision(filename) {
         ],
       }),
     })
-    .then((response) => response.json())
+    .then(response => response.json())
     .then((json) => {
       Reactotron.log({ log: 'Google vision image', json });
 
@@ -177,7 +170,5 @@ export function googleVision(filename) {
 
       return json;
     })
-    .catch((error) => {
-      console.warn(error);
-    });
+    .catch(error => console.warn(error));
 }

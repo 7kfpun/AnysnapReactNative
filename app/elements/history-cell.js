@@ -133,6 +133,7 @@ export default class HistoryCell extends Component {
     return (
       <TouchableHighlight
         onPress={() => Actions.result({
+          type: 'replace',
           craftar: this.state.name,
           image: this.props.history.bucket && this.props.history.bucket.mediaLink,
           tags: this.state.tags,

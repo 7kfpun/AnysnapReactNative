@@ -149,16 +149,16 @@ export default class CameraView extends Component {
         >
           <View style={styles.cameraOptionBlock}>
             <Icon
-              style={{ paddingTop: 40, paddingRight: 40 }}
+              style={{ paddingTop: 20, paddingRight: 20 }}
               name={this.state.isFlashOn ? 'flash-on' : 'flash-off'}
-              size={24}
+              size={28}
               color="#9E9E9E"
               onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })}
             />
             <Icon
-              style={{ paddingTop: 40, paddingLeft: 40 }}
+              style={{ paddingTop: 20, paddingLeft: 20 }}
               name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'}
-              size={24}
+              size={28}
               color="#9E9E9E"
               onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })}
             />
@@ -166,9 +166,9 @@ export default class CameraView extends Component {
         </Camera>}
 
         <View style={styles.footerBlock}>
-          <Icon style={{ paddingVertical: 40, paddingRight: 40 }} name="collections" size={24} color="#9E9E9E" onPress={() => this.pickImage()} />
-          <Icon style={{ padding: 40 }} name="radio-button-checked" size={80} color="#9E9E9E" onPress={() => this.takePicture()} />
-          <Icon style={{ paddingVertical: 40, paddingLeft: 40 }} name="timeline" size={24} color="#9E9E9E" onPress={Actions.tabbar} />
+          <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={28} color="#9E9E9E" onPress={() => this.pickImage()} />
+          <Icon style={{ padding: 20 }} name="radio-button-checked" size={100} color="#9E9E9E" onPress={() => this.takePicture()} />
+          <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="timeline" size={28} color="#9E9E9E" onPress={Actions.tabbar} />
         </View>
       </View>
     );

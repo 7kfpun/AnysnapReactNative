@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
-import { Actions } from 'react-native-router-flux';
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
 
 const styles = StyleSheet.create({
