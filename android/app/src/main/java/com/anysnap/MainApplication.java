@@ -7,13 +7,12 @@ import com.facebook.react.ReactApplication;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
-import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.i18n.reactnativei18n.ReactNativeI18n;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
+
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -35,10 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new RNSpinkitPackage(),
           new MainReactPackage(),
-          new RCTCameraPackage(),
           new VectorIconsPackage(),
           new RNSpinkitPackage(),
-          new ReactNativePermissionsPackage(),
           new ImageResizerPackage(),
           new ImagePickerPackage(),
           new ReactNativeI18n(),

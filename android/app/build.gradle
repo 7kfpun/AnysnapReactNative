@@ -128,7 +128,6 @@ android {
 dependencies {
     compile project(':react-native-vector-icons')
     compile project(':react-native-spinkit')
-    compile project(':react-native-permissions')
     compile project(':react-native-image-resizer')
     compile project(':react-native-image-picker')
     compile project(':react-native-i18n')
