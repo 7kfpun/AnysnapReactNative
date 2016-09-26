@@ -114,6 +114,8 @@ export default class ResultView extends Component {
 
   googleVision() {
     Reactotron.log({ log: 'Upload image', filename: this.state.filename, image: this.props.image });
+    api.uploadImageS3(this.state.filename, this.props.image);
+
     api.uploadImage(this.state.filename, this.props.image)
     .then(() => {
       api.googleVision(this.state.filename)

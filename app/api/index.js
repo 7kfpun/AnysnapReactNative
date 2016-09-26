@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 
 // 3rd party libraries
+import { RNS3 } from 'react-native-aws3';
 import DeviceInfo from 'react-native-device-info';
 import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 import RNFetchBlob from 'react-native-fetch-blob';  // eslint-disable-line import/no-named-as-default,import/no-named-as-default-member
@@ -96,6 +97,7 @@ export function craftarCreateImage(item, file) {
   .catch(error => console.error('Error', error));
 }
 
+
 export function uploadImage(filename, image) {
   console.log(filename);
   return RNFetchBlob.fetch(
@@ -124,6 +126,38 @@ export function uploadImage(filename, image) {
   .catch(error => console.warn(error));
 }
 
+export function uploadImageS3(filename, image) {
+  console.log(filename);
+  const file = {
+    uri: image,
+    name: `${filename}.jpg`,
+    type: 'image/jpeg',
+  };
+
+  const options = Object.assign(config.s3, { keyPrefix: `test/${uniqueID}/` });
+
+  return RNS3.put(file, options).then((json) => {
+    if (json.status !== 201) {
+      throw new Error('Failed to upload image to S3.');
+    }
+
+    console.log(json.body);
+
+    Reactotron.log({ log: 'Uploaded image S3', json });
+
+    try {
+      firebase.database().ref(`app/image/${filename}/id`).set(filename);
+      firebase.database().ref(`app/image/${filename}/timestamp`).set(new Date().getTime());
+      firebase.database().ref(`app/image/${filename}/uniqueID`).set(uniqueID);
+      firebase.database().ref(`app/image/${filename}/s3`).set(json);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    return json;
+  })
+  .catch(error => console.warn(error));
+}
 
 export function googleVision(filename) {
   console.log(filename);
