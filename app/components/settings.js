@@ -12,6 +12,7 @@ import { Cell, Section, TableView } from 'react-native-tableview-simple';
 import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
+import store from 'react-native-simple-store';
 
 import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
@@ -28,6 +29,22 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
 }));
 
 export default class SettingsView extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      UniqueID: '',
+    };
+  }
+
+  componentDidMount() {
+    const that = this;
+    store.get('UniqueID')
+    .then((UniqueID) => {
+      that.setState({ UniqueID });
+    });
+  }
+
   renderToolbar() {
     if (Platform.OS === 'ios') {
       return (
@@ -59,7 +76,17 @@ export default class SettingsView extends Component {
               <Cell
                 cellStyle="RightDetail"
                 title={I18n.t('settings')}
-                detail={`${DeviceInfo.getVersion()} (${DeviceInfo.getBuildNumber()})`}
+                detail={`${this.state.UniqueID}`}
+              />
+              <Cell
+                cellStyle="RightDetail"
+                title={I18n.t('settings')}
+                detail={`${DeviceInfo.getUniqueID()}`}
+              />
+              <Cell
+                cellStyle="RightDetail"
+                title={I18n.t('version')}
+                detail={`${DeviceInfo.getReadableVersion()}`}
               />
             </Section>
 
