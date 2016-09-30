@@ -13,6 +13,13 @@ import NavigationBar from 'react-native-navbar';
 import commonStyle from '../utils/common-styles';
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
+  body: {
+    flex: 1,
+    marginVertical: 2,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));
 
 export default class NotificationView extends Component {
@@ -39,7 +46,9 @@ export default class NotificationView extends Component {
     return (
       <View style={styles.container}>
         {this.renderToolbar()}
-        <Text>Notification</Text>
+        <View style={styles.body}>
+          <Text>No notifications yet</Text>
+        </View>
       </View>
     );
   }

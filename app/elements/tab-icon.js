@@ -19,14 +19,7 @@ const styles = StyleSheet.create({
 const TabIcon = function TabIcon(props) {
   return (
     <View style={styles.container}>
-      <Icon
-        style={{
-          marginBottom: props.iconName === 'add-a-photo' ? 5 : 0,
-        }}
-        name={props.iconName}
-        color={props.selected ? 'black' : 'white'}
-        size={props.iconName === 'add-a-photo' ? 38 : 24}
-      />
+      <Icon name={props.iconName} color={props.selected ? 'black' : '#CEDADF'} size={24} />
       {/* <Text style={[styles.text, { color: props.selected ? 'black' : 'white' }]}>{props.title}</Text> */}
     </View>
   );

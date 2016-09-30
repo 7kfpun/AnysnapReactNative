@@ -75,16 +75,6 @@ export default class SettingsView extends Component {
             <Section>
               <Cell
                 cellStyle="RightDetail"
-                title={I18n.t('settings')}
-                detail={`${this.state.UniqueID}`}
-              />
-              <Cell
-                cellStyle="RightDetail"
-                title={I18n.t('settings')}
-                detail={`${DeviceInfo.getUniqueID()}`}
-              />
-              <Cell
-                cellStyle="RightDetail"
                 title={I18n.t('version')}
                 detail={`${DeviceInfo.getReadableVersion()}`}
               />

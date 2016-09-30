@@ -27,7 +27,7 @@ const scenes = Actions.create(
     <Scene key="camera" title={I18n.t('camera')} component={CameraView} hideNavBar={true} direction="vertical" initial={true} />
     <Scene key="intro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" panHandlers={null} />
 
-    <Scene key="tabbar" tabs={true} tabBarStyle={{ backgroundColor: '#2BBDC3' }}>
+    <Scene key="tabbar" tabs={true}>
       <Scene key="main" icon={TabIcon} iconName="timeline">
         <Scene key="history" title={I18n.t('history')} component={HistoryView} hideNavBar={true} />
         <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} />

@@ -10,6 +10,7 @@ import {
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
+import Button from 'apsl-react-native-button';
 import Camera from 'react-native-camera';  // eslint-disable-line import/no-named-as-default,import/no-named-as-default-member
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
@@ -38,13 +39,26 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
     alignItems: 'flex-end',
     padding: 20,
   },
-  footerBlock: {
+  snapBlock: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#EEEEEE',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
+  },
+  footerBlock: {
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  footerButton: {
+    height: 30,
+    borderRadius: 0,
+    borderWidth: 0,
+    borderColor: '#CCCCCC',
+  },
+  selectedFooterButton: {
+    borderBottomWidth: StyleSheet.hairlineWidth * 5,
   },
 }));
 
@@ -56,6 +70,7 @@ export default class CameraView extends Component {
       isFlashOn: false,
       isCameraFront: false,
       isIntroDone: false,
+      selectedFeature: 'book',
     };
 
     console.log('commonStyle', commonStyle);
@@ -152,23 +167,46 @@ export default class CameraView extends Component {
               style={{ paddingTop: 20, paddingRight: 20 }}
               name={this.state.isFlashOn ? 'flash-on' : 'flash-off'}
               size={28}
-              color="#9E9E9E"
+              color="white"
               onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })}
             />
             <Icon
               style={{ paddingTop: 20, paddingLeft: 20 }}
               name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'}
               size={28}
-              color="#9E9E9E"
+              color="white"
               onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })}
             />
           </View>
         </Camera>}
 
-        <View style={styles.footerBlock}>
+        <View style={styles.snapBlock}>
           <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={28} color="#9E9E9E" onPress={() => this.pickImage()} />
-          <Icon style={{ padding: 20 }} name="radio-button-checked" size={100} color="#9E9E9E" onPress={() => this.takePicture()} />
+          <Icon style={{ padding: 0 }} name="radio-button-checked" size={120} color="#9E9E9E" onPress={() => this.takePicture()} />
           <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="timeline" size={28} color="#9E9E9E" onPress={Actions.tabbar} />
+        </View>
+        <View style={styles.footerBlock}>
+          <Button
+            style={[styles.footerButton, this.state.selectedFeature === 'book' ? styles.selectedFooterButton : null]}
+            onPress={() => this.setState({ selectedFeature: 'book' })}
+            textStyle={{ fontSize: 14 }}
+          >
+            BOOK COVER
+          </Button>
+          <Button
+            style={[styles.footerButton, this.state.selectedFeature === 'search' ? styles.selectedFooterButton : null]}
+            onPress={() => this.setState({ selectedFeature: 'search' })}
+            textStyle={{ fontSize: 14 }}
+          >
+            SEARCH
+          </Button>
+          <Button
+            style={[styles.footerButton, this.state.selectedFeature === 'codescan' ? styles.selectedFooterButton : null]}
+            onPress={() => this.setState({ selectedFeature: 'codescan' })}
+            textStyle={{ fontSize: 14 }}
+          >
+            CODE SCAN
+          </Button>
         </View>
       </View>
     );

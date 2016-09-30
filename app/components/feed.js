@@ -137,7 +137,7 @@ export default class FeedView extends Component {
               </View>
             </View>
           )}
-          rightOpenValue={-75}
+          disableLeftSwipe={true}
           disableRightSwipe={true}
         />
       </View>
