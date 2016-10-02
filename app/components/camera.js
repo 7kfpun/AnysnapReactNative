@@ -17,8 +17,6 @@ import ImagePicker from 'react-native-image-picker';
 import NavigationBar from 'react-native-navbar';
 import store from 'react-native-simple-store';
 
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
-
 import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
 
@@ -88,16 +86,16 @@ export default class CameraView extends Component {
 
   takePicture() {
     this.camera.capture().then((data) => {
-      Reactotron.log({ log: 'Camera captured', data });
+      console.log('Camera captured', data);
 
       Actions.tabbar({ image: data.path, newImage: true });
     })
-    .catch(err => Reactotron.log(err));
+    .catch(err => console.error(err));
   }
 
   pickImage() {
     ImagePicker.launchImageLibrary({}, (response) => {
-      Reactotron.log({ log: 'ImagePicker', response });
+      console.log('ImagePicker', response);
       if (response && response.uri) {
         // Actions.result({ image: response.uri });
         const uri = Platform.OS === 'ios' ? response.uri.replace('file://', '') : response.uri;

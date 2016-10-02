@@ -10,7 +10,7 @@ import {
 
 // 3rd party libraries
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 import Spinner from 'react-native-spinkit';
 
 const styles = StyleSheet.create({
@@ -34,14 +34,10 @@ export default class TagsCell extends Component {
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
-        .catch((err) => {
-          console.error('Cannot open safari', err);
-        });
+        .catch(err => console.error('Cannot open safari', err));
     } else if (Platform.OS === 'android') {
       Linking.openURL(url)
-        .catch((err) => {
-          console.error('Cannot open url', err);
-        });
+        .catch(err => console.error('Cannot open url', err));
     }
   }
 

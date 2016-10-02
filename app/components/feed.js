@@ -17,8 +17,6 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
-
 import FeedCell from '../elements/feed-cell';
 
 import commonStyle from '../utils/common-styles';
@@ -67,7 +65,7 @@ export default class FeedView extends Component {
     ref.once('value')
       .then((snapshot) => {
         const value = snapshot.val();
-        Reactotron.log({ log: 'Feed', value });
+        console.log('Feed', value);
         if (value) {
           let data = _.values(value);
           data = _.shuffle(data);
@@ -79,7 +77,7 @@ export default class FeedView extends Component {
         }
       })
       .catch((error) => {
-        Reactotron.log(error);
+        console.error(error);
         that.setState({
           loading: false,
           hasResult: false,

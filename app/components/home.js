@@ -7,8 +7,6 @@ import {
   View,
 } from 'react-native';
 
-import Reactotron from 'reactotron'; // eslint-disable-line import/no-extraneous-dependencies
-
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
 
@@ -32,10 +30,10 @@ const styles = StyleSheet.create({
 export default class HomeView extends Component {
   pickImage() {
     ImagePickerIOS.openSelectDialog({}, (data) => {
-      Reactotron.log({ log: 'Image picked', data });
+      console.log('Image picked', data);
 
       Actions.result({ image: data });
-    }, err => Reactotron.log(err));
+    }, err => console.error(err));
   }
 
   render() {

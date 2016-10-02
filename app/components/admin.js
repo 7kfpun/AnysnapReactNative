@@ -11,9 +11,7 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
-import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
-
-import Reactotron from 'reactotron'; // eslint-disable-line import/no-extraneous-dependencies
+import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved,import/extensions
 
 import I18n from '../utils/i18n';
 
@@ -51,32 +49,32 @@ export default class AdminView extends Component {
 
   pickImage() {
     ImagePickerIOS.openSelectDialog({}, (data) => {
-      Reactotron.log({ log: 'Image picked', data });
+      console.log('Image picked', data);
 
       if (!this.state.pickedImages.includes(data)) {
         this.state.pickedImages.push(data);
         this.setState({ pickedImages: this.state.pickedImages });
       }
-    }, err => Reactotron.log(err));
+    }, err => console.error(err));
   }
 
   uploadPickedImages() {
     // const that = this;
 
     this.state.pickedImages.forEach((value) => {
-      Reactotron.log({ log: 'CraftarCreateImage', resource_uri: 'response.resource_uri', value });
+      console.log('CraftarCreateImage', value);
       ImageResizer.createResizedImage(value, 600, 600, 'JPEG', 40).then((resizedImageUri) => {
-        Reactotron.log({ log: 'Image resized', resizedImageUri });
+        console.log('Image resized', resizedImageUri);
 
         api.craftarCreateImage('response.resource_uri', resizedImageUri);
       });
     });
 
     // if (this.state.pickedImages.length > 0 && this.state.name && this.state.url) {
-    //   Reactotron.log({ log: 'CraftarCreateItem', name: this.state.name, url: this.state.url });
+    //   console.log({ log: 'CraftarCreateItem', name: this.state.name, url: this.state.url });
     //   api.craftarCreateItem(this.state.name, this.state.url)
     //   .then((response) => {
-    //     Reactotron.log(response);
+    //     console.log(response);
     //     if (response.error && response.error.code && response.error.message) {
     //       Alert.alert(
     //         response.error.code,
@@ -87,7 +85,7 @@ export default class AdminView extends Component {
     //       );
     //     } else if (response.name && response.url && response.uuid) {
     //       this.state.pickedImages.forEach((value) => {
-    //         Reactotron.log({ log: 'CraftarCreateImage', resource_uri: response.resource_uri, value });
+    //         console.log({ log: 'CraftarCreateImage', resource_uri: response.resource_uri, value });
     //         api.craftarCreateImage(response.resource_uri, value);
     //       });
     //     }

@@ -13,8 +13,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 import ZocialIcon from 'react-native-vector-icons/Zocial';
 
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
-
 import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
 
@@ -133,7 +131,7 @@ export default class LoginView extends Component {
                 },
               }}
               onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {  // eslint-disable-line no-unused-vars
-                Reactotron.log(values);
+                console.log(values);
                 console.log(values);
                 if (isValid === true) {
                   console.log('Is valid');
@@ -152,7 +150,6 @@ export default class LoginView extends Component {
                 },
               }}
               onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {  // eslint-disable-line no-unused-vars
-                Reactotron.log(values);
                 console.log(values);
                 if (isValid === true) {
                   console.log('Is valid');

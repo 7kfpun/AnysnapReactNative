@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 // 3rd party libraries
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 
 const styles = StyleSheet.create({
   container: {
@@ -51,14 +51,10 @@ export default class FeedCell extends Component {
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
-        .catch((err) => {
-          console.error('Cannot open safari', err);
-        });
+        .catch(err => console.error('Cannot open safari', err));
     } else if (Platform.OS === 'android') {
       Linking.openURL(url)
-        .catch((err) => {
-          console.error('Cannot open url', err);
-        });
+        .catch(err => console.error('Cannot open url', err));
     }
   }
 

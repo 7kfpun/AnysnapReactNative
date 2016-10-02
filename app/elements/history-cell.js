@@ -11,11 +11,9 @@ import {
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import firebase from 'firebase';
 import moment from 'moment';
@@ -80,15 +78,13 @@ export default class HistoryCell extends Component {
       ref.once('value').then((snapshot) => {
         if (snapshot) {
           const value = snapshot.val();
-          Reactotron.log({ log: 'Check craftar', value });
+          console.log('Check craftar', value);
           if (value.results && value.results.length > 0) {
             that.setState({ name: value.results[0].item && value.results[0].item.name });
           }
         }
       })
-      .catch((error) => {
-        Reactotron.log(error);
-      });
+      .catch(err => console.error(err));
     }
   }
 
@@ -99,7 +95,7 @@ export default class HistoryCell extends Component {
       ref.once('value').then((snapshot) => {
         if (snapshot) {
           const value = snapshot.val();
-          Reactotron.log({ log: 'Check vision', value });
+          console.log('Check vision', value);
           if (value.responses && value.responses.length > 0) {
             if (value.responses[0].labelAnnotations && value.responses[0].labelAnnotations.length > 0) {
               const tags = value.responses[0].labelAnnotations.map(item => item.description);
@@ -108,9 +104,7 @@ export default class HistoryCell extends Component {
           }
         }
       })
-      .catch((error) => {
-        Reactotron.log(error);
-      });
+      .catch(err => console.error(err));
     }
   }
 
@@ -118,14 +112,10 @@ export default class HistoryCell extends Component {
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
-        .catch((err) => {
-          console.error('Cannot open safari', err);
-        });
+        .catch(err => console.error('Cannot open safari', err));
     } else if (Platform.OS === 'android') {
       Linking.openURL(url)
-        .catch((err) => {
-          console.error('Cannot open url', err);
-        });
+        .catch(err => console.error('Cannot open url', err));
     }
   }
 

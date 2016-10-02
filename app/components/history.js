@@ -22,8 +22,6 @@ import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
-
 import HistoryCell from '../elements/history-cell';
 
 import commonStyle from '../utils/common-styles';
@@ -74,7 +72,7 @@ export default class HistoryView extends Component {
     ref.orderByChild('uniqueID').equalTo(uniqueID).once('value')
       .then((snapshot) => {
         const value = snapshot.val();
-        Reactotron.log({ log: 'Firebase', value });
+        console.log('Firebase', value);
         if (value) {
           let images = Object.keys(value).map(key => Object.assign({ id: key }, value[key]));
           images = images.filter(item => !item.isDeleted);
@@ -90,7 +88,7 @@ export default class HistoryView extends Component {
         }
       })
       .catch((error) => {
-        Reactotron.log(error);
+        console.error(error);
         that.setState({
           loading: false,
           hasResult: false,

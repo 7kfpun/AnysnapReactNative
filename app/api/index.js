@@ -3,7 +3,6 @@ import firebase from 'firebase';
 // 3rd party libraries
 import { RNS3 } from 'react-native-aws3';
 import DeviceInfo from 'react-native-device-info';
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 import RNFetchBlob from 'react-native-fetch-blob';  // eslint-disable-line import/no-named-as-default,import/no-named-as-default-member
 
 import { config } from '../config';
@@ -27,7 +26,7 @@ export function craftarSearch(filename, path) {
   .progress((received, total) => console.log('progress', received / total))
   .then(response => response.json())
   .then((json) => {
-    Reactotron.log({ log: 'Craftar search', json });
+    console.log('Craftar search', json);
 
     try {
       firebase.database().ref(`app/image/${filename}/id`).set(filename);
@@ -110,7 +109,7 @@ export function uploadImage(filename, image) {
   )
   .then(response => response.json())
   .then((json) => {
-    Reactotron.log({ log: 'Uploaded image', json });
+    console.log('Uploaded image', json);
 
     try {
       firebase.database().ref(`app/image/${filename}/id`).set(filename);
@@ -141,9 +140,7 @@ export function uploadImageS3(filename, image) {
       throw new Error('Failed to upload image to S3.');
     }
 
-    console.log(json.body);
-
-    Reactotron.log({ log: 'Uploaded image S3', json });
+    console.log('Uploaded image S3', json);
 
     try {
       firebase.database().ref(`app/image/${filename}/id`).set(filename);
@@ -194,7 +191,7 @@ export function googleVision(filename) {
     })
     .then(response => response.json())
     .then((json) => {
-      Reactotron.log({ log: 'Google vision image', json });
+      console.log('Google vision image', json);
 
       try {
         firebase.database().ref(`app/vision/${filename}`).set(json);

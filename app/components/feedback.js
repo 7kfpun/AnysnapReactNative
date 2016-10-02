@@ -14,8 +14,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 // import ZocialIcon from 'react-native-vector-icons/Zocial';
 
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
-
 import { config } from '../config';
 import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
@@ -167,7 +165,7 @@ export default class FeedbackView extends Component {
               }}
               onSubmit={(isValid, values) => {
                 if (isValid === true) {
-                  Reactotron.log({ log: 'Send email', values });
+                  console.log('Send email', values);
                   // curl -s --user 'api:key-3ax6xnjp29jd6fds4gc373sgvjxteol0' \
                   // https://api.mailgun.net/v3/samples.mailgun.org/messages \
                   //  -F from='Excited User <excited@samples.mailgun.org>' \

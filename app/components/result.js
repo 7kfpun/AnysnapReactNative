@@ -13,12 +13,10 @@ import {
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved
+import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved,import/extensions
 import NavigationBar from 'react-native-navbar';
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 import Spinner from 'react-native-spinkit';
-
-import Reactotron from 'reactotron';  // eslint-disable-line import/no-extraneous-dependencies
 
 import TagsCell from '../elements/tags-cell';
 import CraftarImagesCell from '../elements/craftar-images-cell';
@@ -92,7 +90,7 @@ export default class ResultView extends Component {
   craftarSearch() {
     const that = this;
     ImageResizer.createResizedImage(this.props.image, 800, 800, 'JPEG', 60).then((resizedImageUri) => {
-      Reactotron.log({ log: 'Image resized', resizedImageUri });
+      console.log('Image resized', resizedImageUri);
 
       api.craftarSearch(this.state.filename, resizedImageUri)
       .then((json) => {
@@ -100,7 +98,7 @@ export default class ResultView extends Component {
 
         if (json.results && json.results.length > 0) {
           if (json.results[0].item && json.results[0].item.url) {
-            Reactotron.log({ log: 'Craftar matched', name: json.results[0].item.name });
+            console.log('Craftar matched', json.results[0].item.name);
             that.setState({
               name: json.results[0].item.name,
               url: json.results[0].item.url,
@@ -113,14 +111,14 @@ export default class ResultView extends Component {
   }
 
   googleVision() {
-    Reactotron.log({ log: 'Upload image', filename: this.state.filename, image: this.props.image });
+    console.log('Upload image', this.state.filename, this.props.image);
     api.uploadImageS3(this.state.filename, this.props.image);
 
     api.uploadImage(this.state.filename, this.props.image)
     .then(() => {
       api.googleVision(this.state.filename)
       .then((json) => {
-        Reactotron.log({ log: 'Google vision done', labelAnnotations: json.responses[0].labelAnnotations });
+        console.log('Google vision done', json.responses[0].labelAnnotations);
         const tags = json.responses[0].labelAnnotations.map(item => item.description);
         this.setState({ tags });
       });
