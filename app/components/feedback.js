@@ -21,10 +21,6 @@ import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
-  container: {
-    flex: 1,
-    backgroundColor: '#EFEFF4',
-  },
   form: {
     backgroundColor: '#EFEFF4',
   },
@@ -38,10 +34,10 @@ export default class FeedbackView extends Component {
           statusBar={{ tintColor: 'white', style: 'default' }}
           style={styles.navigatorBarIOS}
           title={{ title: this.props.title, tintColor: '#4A4A4A' }}
-          rightButton={{
-            title: I18n.t('cancel'),
-            handler: Actions.pop,
-          }}
+          // rightButton={{
+          //   title: I18n.t('cancel'),
+          //   handler: Actions.pop,
+          // }}
         />
       );
     } else if (Platform.OS === 'android') {

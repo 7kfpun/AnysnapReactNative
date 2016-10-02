@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {
   ActivityIndicator,
+  Dimensions,
+  Image,
   ListView,
   Platform,
   RefreshControl,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 
@@ -13,6 +16,7 @@ import firebase from 'firebase';
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
+import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -81,6 +85,8 @@ export default class HistoryView extends Component {
             dataSource: this.state.dataSource.cloneWithRows(images),
             key: Math.random(),
           });
+        } else {
+          that.setState({ isNothing: true });
         }
       })
       .catch((error) => {
@@ -113,7 +119,34 @@ export default class HistoryView extends Component {
     }
   }
 
+  renderNothing() {
+    return (
+      <View style={styles.container}>
+        {this.renderToolbar()}
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Image
+            style={{
+              width: Dimensions.get('window').width / 2,
+              height: Dimensions.get('window').width / 2,
+              resizeMode: 'cover',
+            }}
+            source={require('../../assets/images/no-photo.png')}
+          />
+
+          <Text>Nothing here!</Text>
+          <Text>Take any thing, dont leave it emtry.</Text>
+
+          <Button borderRadius={30} title="TAKE A PHOTO" onPress={Actions.pop} />
+        </View>
+      </View>
+    );
+  }
+
   render() {
+    if (this.state.isNothing) {
+      return this.renderNothing();
+    }
+
     return (
       <View style={styles.container}>
         {this.renderToolbar()}

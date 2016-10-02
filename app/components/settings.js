@@ -18,11 +18,6 @@ import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
-  container: {
-    flex: 1,
-    backgroundColor: '#EFEFF4',
-    marginBottom: 50,
-  },
   form: {
     backgroundColor: '#EFEFF4',
   },
@@ -69,7 +64,6 @@ export default class SettingsView extends Component {
     return (
       <View style={styles.container}>
         {this.renderToolbar()}
-
         <ScrollView>
           <TableView>
             <Section>

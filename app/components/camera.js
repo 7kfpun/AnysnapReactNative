@@ -49,9 +49,10 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   footerBlock: {
     height: 40,
     flexDirection: 'row',
-    justifyContent: 'space-around',
   },
   footerButton: {
+    flex: 1,
+    marginHorizontal: 20,
     height: 30,
     borderRadius: 0,
     borderWidth: 0,

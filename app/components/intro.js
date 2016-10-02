@@ -29,30 +29,30 @@ export default class IntroView extends Component {
 
   render() {
     const pageArray = [{
-      title: 'Page 1',
-      description: 'Description 1',
-      img: 'https://goo.gl/Bnc3XP',
-      imgStyle: {
-        height: 80 * 2.5,
-        width: 109 * 2.5,
-      },
-      backgroundColor: '#fa931d',
-      fontColor: '#fff',
+      title: 'SCAN THE BOOK COVER',
+      description: '',
+      backgroundColor: 'white',
+      fontColor: '#606060',
       level: 10,
     }, {
-      title: 'Page 2',
-      description: 'Description 2',
-      img: 'https://goo.gl/GPO6JB',
-      imgStyle: {
-        height: 93 * 2.5,
-        width: 103 * 2.5,
-      },
-      backgroundColor: '#a4b602',
-      fontColor: '#fff',
+      title: 'SCAN BARCODE & QR CODE',
+      description: '',
+      backgroundColor: 'white',
+      fontColor: '#606060',
+      level: 10,
+    }, {
+      title: 'IMAGE SEARCH',
+      description: '',
+      backgroundColor: 'white',
+      fontColor: '#606060',
       level: 10,
     }];
     return (
       <AppIntro
+        dotColor="#CEEEFA"
+        activeDotColor="#40B1EC"
+        rightTextColor="#15B4F1"
+        leftTextColor="black"
         onNextBtnClick={this.nextBtnHandle}
         onDoneBtnClick={this.doneBtnHandle}
         onSkipBtnClick={this.onSkipBtnHandle}

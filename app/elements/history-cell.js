@@ -153,7 +153,7 @@ export default class HistoryCell extends Component {
             <TagsCell tags={this.state.tags} maximum={8} />
           </View>
           <View style={styles.rightBlock}>
-            <Icon name="keyboard-arrow-right" color="gray" size={24} />
+            <Icon name="keyboard-arrow-right" color="#D2DEE3" size={24} />
           </View>
         </View>
       </TouchableHighlight>
