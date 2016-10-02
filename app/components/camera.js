@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   Dimensions,
+  Image,
   Platform,
   StyleSheet,
   Text,
@@ -131,21 +132,19 @@ export default class CameraView extends Component {
 
         {this.state.permission === 'CAMERA-DENIED' && <View style={styles.preview}>
           <View style={styles.cameraIcons}>
-            <TouchableHighlight onPress={() => this.pickImage()} underlayColor="black">
-              <View style={styles.library}>
-                <Icon name="photo-library" size={26} color="white" />
-                <Text style={styles.text}>{I18n.t('photo-library')}</Text>
-              </View>
+            <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={28} color="#9E9E9E" onPress={() => this.pickImage()} />
+            {/* <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.askPermission('camera')} /> */}
+            <TouchableHighlight onPress={() => this.askPermission('camera')} underlayColor="white">
+              <Image
+                style={{
+                  width: Math.min(Dimensions.get('window').width / 4, 110),
+                  height: Math.min(Dimensions.get('window').width / 4, 110),
+                  resizeMode: 'cover',
+                }}
+                source={require('../../assets/images/capture-button.png')}
+              />
             </TouchableHighlight>
-
-            <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.askPermission('camera')} />
-
-            <TouchableHighlight onPress={() => Actions.timeline()} underlayColor="black">
-              <View style={styles.moreButton}>
-                <Icon name="format-list-bulleted" size={26} color="white" />
-                <Text style={styles.text}>{I18n.t('photo-library')}</Text>
-              </View>
-            </TouchableHighlight>
+            <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="timeline" size={28} color="#9E9E9E" onPress={Actions.tabbar} />
           </View>
         </View>}
 
@@ -181,7 +180,17 @@ export default class CameraView extends Component {
 
         <View style={styles.snapBlock}>
           <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={28} color="#9E9E9E" onPress={() => this.pickImage()} />
-          <Icon style={{ padding: 0 }} name="radio-button-checked" size={120} color="#9E9E9E" onPress={() => this.takePicture()} />
+          {/* <Icon style={{ padding: 0 }} name="radio-button-checked" size={120} color="#9E9E9E" onPress={() => this.takePicture()} /> */}
+          <TouchableHighlight onPress={() => this.takePicture()} underlayColor="white">
+            <Image
+              style={{
+                width: Math.min(Dimensions.get('window').width / 4, 110),
+                height: Math.min(Dimensions.get('window').width / 4, 110),
+                resizeMode: 'cover',
+              }}
+              source={require('../../assets/images/capture-button.png')}
+            />
+          </TouchableHighlight>
           <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="timeline" size={28} color="#9E9E9E" onPress={Actions.tabbar} />
         </View>
         <View style={styles.footerBlock}>

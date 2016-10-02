@@ -12,11 +12,11 @@ import CameraView from './components/camera';
 import CameraTabView from './components/camera-tab';
 import ResultView from './components/result';
 import HistoryView from './components/history';
-import SettingsView from './components/settings';
+// import SettingsView from './components/settings';
 // import AdminView from './components/admin';
 import IntroView from './components/intro';
 import FeedbackView from './components/feedback';
-import LoginView from './components/login';
+// import LoginView from './components/login';
 
 // Elements
 import TabIcon from './elements/tab-icon';
@@ -25,7 +25,7 @@ import I18n from './utils/i18n';
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="camera" title={I18n.t('camera')} component={CameraView} hideNavBar={true} direction="vertical" initial={true} />
+    <Scene key="camera" title={'AnySnap'} component={CameraView} hideNavBar={true} direction="vertical" initial={true} />
     <Scene key="intro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" panHandlers={null} />
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#DBDBDB' }}>
