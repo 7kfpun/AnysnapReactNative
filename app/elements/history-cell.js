@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
   Image,
-  Linking,
-  Platform,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -11,7 +9,6 @@ import {
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -62,25 +59,42 @@ export default class HistoryCell extends Component {
     super(props);
 
     this.state = {
-      tags: [''],
+      tags: [],
     };
   }
 
   componentDidMount() {
-    this.checkCraftar();
-    this.checkVision();
+    this.checkLogo();
+    this.checkTag();
   }
 
-  checkCraftar() {
+  checkLogo() {
     const that = this;
     if (this.props.history.id) {
-      const ref = firebase.database().ref(`app/craftar/${this.props.history.id}`);
+      const ref = firebase.database().ref(`results/${this.props.history.id}/logo`);
       ref.once('value').then((snapshot) => {
         if (snapshot) {
           const value = snapshot.val();
-          console.log('Check craftar', value);
-          if (value.results && value.results.length > 0) {
-            that.setState({ name: value.results[0].item && value.results[0].item.name });
+          if (value && value.length > 0) {
+            console.log('Check logo', value);
+            that.setState({ logo: value.map(item => item.name) });
+          }
+        }
+      })
+      .catch(err => console.error(err));
+    }
+  }
+
+  checkTag() {
+    const that = this;
+    if (this.props.history.id) {
+      const ref = firebase.database().ref(`results/${this.props.history.id}/tag`);
+      ref.once('value').then((snapshot) => {
+        if (snapshot) {
+          const value = snapshot.val();
+          if (value && value.length > 0) {
+            console.log('Check tag', value);
+            that.setState({ tags: value.map(item => item.name) });
           }
         }
       })
@@ -91,31 +105,17 @@ export default class HistoryCell extends Component {
   checkVision() {
     const that = this;
     if (this.props.history.id) {
-      const ref = firebase.database().ref(`app/vision/${this.props.history.id}`);
+      const ref = firebase.database().ref(`results/${this.props.history.id}/vision`);
       ref.once('value').then((snapshot) => {
         if (snapshot) {
           const value = snapshot.val();
-          console.log('Check vision', value);
-          if (value.responses && value.responses.length > 0) {
-            if (value.responses[0].labelAnnotations && value.responses[0].labelAnnotations.length > 0) {
-              const tags = value.responses[0].labelAnnotations.map(item => item.description);
-              that.setState({ tags });
-            }
+          if (value && value.length > 0) {
+            console.log('Check logo', value);
+            that.setState({ logo: value.map(item => item.name) });
           }
         }
       })
       .catch(err => console.error(err));
-    }
-  }
-
-  openUrl(url) {
-    if (Platform.OS === 'ios') {
-      SafariView.isAvailable()
-        .then(SafariView.show({ url }))
-        .catch(err => console.error('Cannot open safari', err));
-    } else if (Platform.OS === 'android') {
-      Linking.openURL(url)
-        .catch(err => console.error('Cannot open url', err));
     }
   }
 
@@ -124,23 +124,23 @@ export default class HistoryCell extends Component {
       <TouchableHighlight
         onPress={() => Actions.result({
           type: 'replace',
-          craftar: this.state.name,
-          image: this.props.history.bucket && this.props.history.bucket.mediaLink,
-          tags: this.state.tags,
+          history: this.props.history,
+          isSearch: false,
         })}
         underlayColor="white"
       >
         <View style={styles.container}>
           <View style={styles.leftBlock}>
-            <Image
-              style={styles.image}
-              source={{ uri: this.props.history.bucket && this.props.history.bucket.mediaLink }}
-            />
+            <Image style={styles.image} source={{ uri: this.props.history.url }} />
           </View>
           <View style={styles.middleBlock}>
-            <Text style={styles.title}>{(this.state.name || (this.state.tags.length > 0 && this.state.tags[0])) || ''}</Text>
-            <Text style={styles.subtitile}>{(this.props.history.timestamp && moment(this.props.history.timestamp).format('LLL')) || ''}</Text>
-            <TagsCell tags={this.state.tags} maximum={8} />
+            <Text style={styles.title}>{
+              this.state.name
+              || (this.state.logo && this.state.logo.length > 0 && this.state.logo[0])
+              || (this.state.tags && this.state.tags.length > 0 && this.state.tags[0])
+              || ''}</Text>
+            <Text style={styles.subtitile}>{(this.props.history.created_datetime && moment(this.props.history.created_datetime).format('LLL')) || ''}</Text>
+            <TagsCell tags={this.state.tags} maximum={6} />
           </View>
           <View style={styles.rightBlock}>
             <Icon name="keyboard-arrow-right" color="#D2DEE3" size={24} />
@@ -148,14 +148,17 @@ export default class HistoryCell extends Component {
         </View>
       </TouchableHighlight>
     );
-  }
+  }  //
 }
 
 HistoryCell.propTypes = {
   history: React.PropTypes.shape({
     id: React.PropTypes.string,
-    bucket: React.PropTypes.object,
-    timestamp: React.PropTypes.number,
+    url: React.PropTypes.string,
+    // user_id: React.PropTypes.string,
+    // original_uri: React.PropTypes.string,
+    created_datetime: React.PropTypes.string,
+    // modified_datetime: React.PropTypes.string,
   }),
 };
 

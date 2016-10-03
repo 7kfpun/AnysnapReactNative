@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 
 export default class TagsCell extends Component {
   openUrl(query) {
-    const url = `https://www.google.com/search?q=${query}`;
+    const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
@@ -47,7 +47,7 @@ export default class TagsCell extends Component {
     return (
       <View style={styles.container}>
         <Icon style={{ marginRight: 2 }} name="label-outline" color="#7F7F7F" size={12} />
-        {this.props.tags.length === 0 && <Spinner style={styles.spinner} size={14} type="ThreeBounce" color="#7F7F7F" />}
+        {(!this.props.tags || this.props.tags.length === 0) && <Spinner style={styles.spinner} size={14} type="ThreeBounce" color="#7F7F7F" />}
         {this.props.tags.slice(0, this.props.maximum).map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
           <Text style={styles.text}>{item}{i + 1 < tagsLength ? ', ' : ''}</Text>
         </TouchableHighlight>)}

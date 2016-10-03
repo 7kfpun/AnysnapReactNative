@@ -203,3 +203,40 @@ export function googleVision(filename) {
     })
     .catch(error => console.warn(error));
 }
+
+export function getUserImages(UniqueID) {
+  console.log('getUserImages');
+  return fetch(  // eslint-disable-line no-undef
+    `https://frontn-anysnap.herokuapp.com/core/users/${UniqueID}/images/`,
+    {
+      method: 'GET',
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log('Get user images', json);
+      return json;
+    })
+    .catch(error => console.warn(error));
+}
+
+export function createUserImages(url, originalUri) {
+  console.log('createUserImages');
+  return fetch(  // eslint-disable-line no-undef
+    `https://frontn-anysnap.herokuapp.com/core/users/${uniqueID}/images/`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url,
+        original_uri: originalUri,
+      }),
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log('Create user images', json);
+      return json;
+    })
+    .catch(error => console.warn(error));
+}

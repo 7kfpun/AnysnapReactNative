@@ -11,9 +11,6 @@ import {
   View,
 } from 'react-native';
 
-import _ from 'lodash';  // eslint-disable-line import/no-extraneous-dependencies
-import firebase from 'firebase';
-
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
 import { Button } from 'react-native-elements';
@@ -24,9 +21,10 @@ import NavigationBar from 'react-native-navbar';
 
 import HistoryCell from '../elements/history-cell';
 
+import * as api from '../api';
 import commonStyle from '../utils/common-styles';
 
-const uniqueID = DeviceInfo.getUniqueID();
+const UniqueID = DeviceInfo.getUniqueID();
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   rowBack: {
@@ -57,44 +55,30 @@ export default class HistoryView extends Component {
   }
 
   componentDidMount() {
-    if (this.props.image && this.props.newImage) {
+    if (this.props.image && this.props.isSearch) {
       Actions.result({ image: this.props.image, type: 'replace' });
+    } else {
+      this.prepareRows();
     }
-
-    this.prepareRows();
   }
 
   prepareRows() {
     const that = this;
-    const ref = firebase.database().ref('app/image');
     this.setState({ refreshing: true });
+    api.getUserImages(UniqueID)
+    .then((json) => {
+      that.setState({ refreshing: false });
 
-    ref.orderByChild('uniqueID').equalTo(uniqueID).once('value')
-      .then((snapshot) => {
-        const value = snapshot.val();
-        console.log('Firebase', value);
-        if (value) {
-          let images = Object.keys(value).map(key => Object.assign({ id: key }, value[key]));
-          images = images.filter(item => !item.isDeleted);
-          images = _.sortBy(images, 'timestamp').reverse();
-
-          that.setState({
-            images,
-            dataSource: this.state.dataSource.cloneWithRows(images),
-            key: Math.random(),
-          });
-        } else {
-          that.setState({ isNothing: true });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+      if (json && json.results && json.results.length > 0) {
         that.setState({
-          loading: false,
-          hasResult: false,
+          images: json.results,
+          dataSource: this.state.dataSource.cloneWithRows(json.results),
+          key: Math.random(),
         });
-      });
-
+      } else {
+        that.setState({ isNothing: true });
+      }
+    });
     this.setState({ refreshing: false });
   }
 
@@ -184,11 +168,11 @@ export default class HistoryView extends Component {
 HistoryView.propTypes = {
   title: React.PropTypes.string,
   image: React.PropTypes.string,
-  newImage: React.PropTypes.bool,
+  isSearch: React.PropTypes.bool,
 };
 
 HistoryView.defaultProps = {
   title: '',
   image: '',
-  newImage: false,
+  isSearch: false,
 };

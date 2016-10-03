@@ -29,7 +29,7 @@ const scenes = Actions.create(
     <Scene key="intro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" panHandlers={null} />
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#DBDBDB' }}>
-      <Scene key="main" icon={TabIcon} iconName="timeline">
+      <Scene key="main" icon={TabIcon} iconName="inbox">
         <Scene key="history" title={I18n.t('history')} component={HistoryView} hideNavBar={true} />
         <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} />
       </Scene>

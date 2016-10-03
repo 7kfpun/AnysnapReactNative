@@ -12,7 +12,6 @@ import _ from 'lodash';  // eslint-disable-line import/no-extraneous-dependencie
 import firebase from 'firebase';
 
 // 3rd party libraries
-import { Actions } from 'react-native-router-flux';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
@@ -50,10 +49,6 @@ export default class FeedView extends Component {
   }
 
   componentDidMount() {
-    if (this.props.image && this.props.newImage) {
-      Actions.result({ image: this.props.image, type: 'replace' });
-    }
-
     this.prepareRows();
   }
 
@@ -145,12 +140,8 @@ export default class FeedView extends Component {
 
 FeedView.propTypes = {
   title: React.PropTypes.string,
-  image: React.PropTypes.string,
-  newImage: React.PropTypes.bool,
 };
 
 FeedView.defaultProps = {
   title: '',
-  image: '',
-  newImage: false,
 };

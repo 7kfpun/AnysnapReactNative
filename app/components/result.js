@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Dimensions,
   Image,
-  Linking,
   Platform,
   ScrollView,
   StyleSheet,
@@ -12,20 +11,25 @@ import {
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
+import { RNS3 } from 'react-native-aws3';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved,import/extensions
 import NavigationBar from 'react-native-navbar';
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 import Spinner from 'react-native-spinkit';
 
+import firebase from 'firebase';
+
 import TagsCell from '../elements/tags-cell';
-import CraftarImagesCell from '../elements/craftar-images-cell';
+// import CraftarImagesCell from '../elements/craftar-images-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
-import I18n from '../utils/i18n';
-
+import { config } from '../config';
 import commonStyle from '../utils/common-styles';
+import I18n from '../utils/i18n';
+import UniqueID from '../utils/unique-id';
+
+const uniqueID = UniqueID();  // eslint-disable-line no-unused-vars,new-cap
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   container: {
@@ -57,27 +61,20 @@ export default class ResultView extends Component {
   constructor(props) {
     super(props);
 
-    let filename;
-    if (this.props.image) {
-      try {
-        filename = /id=(.*)\&ext/i.exec(this.props.image)[0].replace('id=', '').replace('&ext', '');  // eslint-disable-line no-useless-escape
-      } catch (err) {
-        filename = this.props.image.replace(/^.*[\\\/]/, '').replace('.jpg', '');
-      }
-    }
-
     this.state = {
-      filename,
       // isLoading: true,
       isLoading: false,
-      tags: this.props.tags || [],
     };
   }
 
   componentDidMount() {
-    if (this.props.tags.length === 0) {
-      this.craftarSearch();
-      this.googleVision();
+    if (this.props.image && this.props.isSearch === true) {
+      // this.craftarSearch();
+      // this.googleVision();
+      this.uploadImage(this.props.image);
+    } else {
+      this.checkLogo();
+      this.checkTag();
     }
   }
 
@@ -87,58 +84,118 @@ export default class ResultView extends Component {
     }
   }
 
-  craftarSearch() {
+  uploadImage(image) {
+    let filename;
+    try {
+      filename = /id=(.*)\&ext/i.exec(image)[0].replace('id=', '').replace('&ext', '');  // eslint-disable-line no-useless-escape
+    } catch (err) {
+      filename = image.replace(/^.*[\\\/]/, '').replace('.jpg', '');
+    }
+
+    const options = Object.assign(config.s3, { keyPrefix: `uploads/${uniqueID}/` });
+
     const that = this;
-    ImageResizer.createResizedImage(this.props.image, 800, 800, 'JPEG', 60).then((resizedImageUri) => {
-      console.log('Image resized', resizedImageUri);
+    ImageResizer.createResizedImage(image, 1200, 1200, 'JPEG', 40).then((resizedImageUri) => {
+      console.log('resizedImageUri', resizedImageUri);
+      const file = {
+        uri: resizedImageUri,
+        name: `${filename}.jpg`,
+        type: 'image/jpg',
+      };
+      // ToastAndroid.show('Image resized', ToastAndroid.SHORT);
 
-      api.craftarSearch(this.state.filename, resizedImageUri)
-      .then((json) => {
-        that.setState({ isLoading: false });
-
-        if (json.results && json.results.length > 0) {
-          if (json.results[0].item && json.results[0].item.url) {
-            console.log('Craftar matched', json.results[0].item.name);
-            that.setState({
-              name: json.results[0].item.name,
-              url: json.results[0].item.url,
-              key: Math.random(),
-            });
-          }
+      RNS3.put(file, options).then((response) => {
+        if (response.status !== 201) {
+          console.log(response);
+          throw new Error('Failed to upload image to S3');
+        }
+        console.log('S3 uploaded', response.body);
+        // ToastAndroid.show('S3 uploaded', ToastAndroid.SHORT);
+      })
+      .progress((e) => {
+        console.log(e.loaded / e.total);
+        if (e.loaded / e.total < 1) {
+          that.setState({ status: 'UPLOADING' });
+        } else if (e.loaded / e.total === 1) {
+          console.log('Image uploaded');
         }
       });
+    }).catch((err) => {
+      console.log('ImageResizer', err);
     });
   }
 
-  googleVision() {
-    console.log('Upload image', this.state.filename, this.props.image);
-    api.uploadImageS3(this.state.filename, this.props.image);
-
-    api.uploadImage(this.state.filename, this.props.image)
-    .then(() => {
-      api.googleVision(this.state.filename)
-      .then((json) => {
-        console.log('Google vision done', json.responses[0].labelAnnotations);
-        const tags = json.responses[0].labelAnnotations.map(item => item.description);
-        this.setState({ tags });
-      });
-    });
-  }
-
-  openUrl(url) {
-    if (Platform.OS === 'ios') {
-      SafariView.isAvailable()
-        .then(SafariView.show({ url }))
-        .catch((err) => {
-          console.error('Cannot open safari', err);
-        });
-    } else if (Platform.OS === 'android') {
-      Linking.openURL(url)
-        .catch((err1) => {
-          console.error('Cannot open url', err1);
-        });
+  checkLogo() {
+    const that = this;
+    if (this.props.history.id) {
+      const ref = firebase.database().ref(`results/${this.props.history.id}/logo`);
+      ref.once('value').then((snapshot) => {
+        if (snapshot) {
+          const value = snapshot.val();
+          if (value && value.length > 0) {
+            console.log('Check logo', value);
+            that.setState({ logo: value.map(item => item.name) });
+          }
+        }
+      })
+      .catch(err => console.error(err));
     }
   }
+
+  checkTag() {
+    const that = this;
+    if (this.props.history.id) {
+      const ref = firebase.database().ref(`results/${this.props.history.id}/tag`);
+      ref.once('value').then((snapshot) => {
+        if (snapshot) {
+          const value = snapshot.val();
+          if (value && value.length > 0) {
+            console.log('Check tag', value);
+            that.setState({ tags: value.map(item => item.name) });
+          }
+        }
+      })
+      .catch(err => console.error(err));
+    }
+  }
+
+  // craftarSearch() {
+  //   const that = this;
+  //   ImageResizer.createResizedImage(this.props.image, 800, 800, 'JPEG', 60).then((resizedImageUri) => {
+  //     console.log('Image resized', resizedImageUri);
+  //
+  //     api.craftarSearch(this.state.filename, resizedImageUri)
+  //     .then((json) => {
+  //       that.setState({ isLoading: false });
+  //
+  //       if (json.results && json.results.length > 0) {
+  //         if (json.results[0].item && json.results[0].item.url) {
+  //           console.log('Craftar matched', json.results[0].item.name);
+  //           that.setState({
+  //             name: json.results[0].item.name,
+  //             url: json.results[0].item.url,
+  //             key: Math.random(),
+  //           });
+  //         }
+  //       }
+  //     });
+  //   });
+  // }
+  //
+  // googleVision() {
+  //   console.log('Upload image', this.state.filename, this.props.image);
+  //   api.uploadImageS3(this.state.filename, this.props.image);
+  //
+  //   api.uploadImage(this.state.filename, this.props.image)
+  //   .then(() => {
+  //     api.googleVision(this.state.filename)
+  //     .then((json) => {
+  //       console.log('Google vision done', json.responses[0].labelAnnotations);
+  //       const tags = json.responses[0].labelAnnotations.map(item => item.description);
+  //       this.setState({ tags });
+  //     });
+  //   });
+  // }
 
   renderLoading() {
     return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -151,7 +208,7 @@ export default class ResultView extends Component {
       <View style={styles.bottomBlock}>
         <Text style={styles.text}>{I18n.t('anysnap-results')}</Text>
         <ScrollView horizontal={true}>
-          <CraftarImagesCell name={this.props.craftar || this.state.name} key={this.state.key} />
+          {/* <CraftarImagesCell name={this.props.craftar || this.state.name} key={this.state.key} /> */}
           <RelatedImagesCell tags={this.state.tags} />
         </ScrollView>
 
@@ -169,17 +226,17 @@ export default class ResultView extends Component {
           title={{ title: this.props.title, tintColor: '#4A4A4A' }}
           leftButton={<Icon
             style={styles.navigatorLeftButton}
-            name="inbox"
+            name="arrow-back"
             size={26}
             color="gray"
             onPress={() => Actions.history({ type: 'replace' })}
           />}
-          // rightButton={<Icon
-          //   style={styles.navigatorRightButton}
-          //   name="sms-failed"
-          //   size={26}
-          //   color="gray"
-          // />}
+          rightButton={<Icon
+            style={styles.navigatorRightButton}
+            name="announcement"
+            size={26}
+            color="gray"
+          />}
         />
       );
     } else if (Platform.OS === 'android') {
@@ -203,10 +260,14 @@ export default class ResultView extends Component {
         {this.renderToolbar()}
 
         <ScrollView>
-          <Image
+          {(this.props.history.url || this.props.image) && <Image
             style={styles.image}
-            source={{ uri: this.props.image || 'https://66.media.tumblr.com/730ada421683ce9980c04dcd765bdcb1/tumblr_o2cp9zi2EW1qzayuxo9_1280.jpg' }}
-          />
+            source={{ uri: this.props.history.url || this.props.image }}
+          />}
+          {!this.props.history && !this.props.image && <Image
+            style={styles.image}
+            source={require('../../assets/icon.png')}
+          />}
 
           {this.state.isLoading && this.renderLoading()}
           {!this.state.isLoading && this.renderResult()}
@@ -218,11 +279,20 @@ export default class ResultView extends Component {
 
 ResultView.propTypes = {
   title: React.PropTypes.string,
+  isSearch: React.PropTypes.bool,
   image: React.PropTypes.string,
-  tags: React.PropTypes.arrayOf(React.PropTypes.string),
-  craftar: React.PropTypes.string,
+  history: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    url: React.PropTypes.string,
+    // user_id: React.PropTypes.string,
+    // original_uri: React.PropTypes.string,
+    // created_datetime: React.PropTypes.string,
+    // modified_datetime: React.PropTypes.string,
+  }),
 };
 
 ResultView.defaultProps = {
-  tags: [],
+  title: '',
+  isSearch: true,
+  history: {},
 };

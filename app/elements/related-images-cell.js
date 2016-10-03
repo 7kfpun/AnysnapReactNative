@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 
 export default class RelatedImagesCell extends Component {
   openUrl(query) {
-    const url = `https://www.google.com/search?q=${query}`;
+    const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))

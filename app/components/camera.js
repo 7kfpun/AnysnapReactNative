@@ -4,7 +4,6 @@ import {
   Image,
   Platform,
   StyleSheet,
-  Text,
   TouchableHighlight,
   View,
 } from 'react-native';
@@ -19,7 +18,6 @@ import NavigationBar from 'react-native-navbar';
 import store from 'react-native-simple-store';
 
 import commonStyle from '../utils/common-styles';
-import I18n from '../utils/i18n';
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   container: {
@@ -58,7 +56,7 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
     borderColor: '#CCCCCC',
   },
   selectedFooterButton: {
-    borderBottomWidth: StyleSheet.hairlineWidth * 5,
+    borderBottomWidth: StyleSheet.hairlineWidth * 4,
   },
 }));
 
@@ -89,7 +87,7 @@ export default class CameraView extends Component {
     this.camera.capture().then((data) => {
       console.log('Camera captured', data);
 
-      Actions.tabbar({ image: data.path, newImage: true });
+      Actions.tabbar({ image: data.path, isSearch: true });
     })
     .catch(err => console.error(err));
   }
@@ -100,7 +98,7 @@ export default class CameraView extends Component {
       if (response && response.uri) {
         // Actions.result({ image: response.uri });
         const uri = Platform.OS === 'ios' ? response.uri.replace('file://', '') : response.uri;
-        Actions.tabbar({ image: uri, newImage: true });
+        Actions.tabbar({ image: uri, isSearch: true });
       }
     });
   }
@@ -132,7 +130,7 @@ export default class CameraView extends Component {
 
         {this.state.permission === 'CAMERA-DENIED' && <View style={styles.preview}>
           <View style={styles.cameraIcons}>
-            <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={28} color="#9E9E9E" onPress={() => this.pickImage()} />
+            <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={22} color="#9E9E9E" onPress={() => this.pickImage()} />
             {/* <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.askPermission('camera')} /> */}
             <TouchableHighlight onPress={() => this.askPermission('camera')} underlayColor="white">
               <Image
@@ -144,7 +142,7 @@ export default class CameraView extends Component {
                 source={require('../../assets/images/capture-button.png')}
               />
             </TouchableHighlight>
-            <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="timeline" size={28} color="#9E9E9E" onPress={Actions.tabbar} />
+            <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="inbox" size={22} color="#9E9E9E" onPress={Actions.tabbar} />
           </View>
         </View>}
 
@@ -164,14 +162,14 @@ export default class CameraView extends Component {
             <Icon
               style={{ paddingTop: 20, paddingRight: 20 }}
               name={this.state.isFlashOn ? 'flash-on' : 'flash-off'}
-              size={28}
+              size={22}
               color="white"
               onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })}
             />
             <Icon
               style={{ paddingTop: 20, paddingLeft: 20 }}
               name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'}
-              size={28}
+              size={22}
               color="white"
               onPress={() => this.setState({ isCameraFront: !this.state.isCameraFront })}
             />
@@ -179,7 +177,7 @@ export default class CameraView extends Component {
         </Camera>}
 
         <View style={styles.snapBlock}>
-          <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={28} color="#9E9E9E" onPress={() => this.pickImage()} />
+          <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={22} color="#9E9E9E" onPress={() => this.pickImage()} />
           {/* <Icon style={{ padding: 0 }} name="radio-button-checked" size={120} color="#9E9E9E" onPress={() => this.takePicture()} /> */}
           <TouchableHighlight onPress={() => this.takePicture()} underlayColor="white">
             <Image
@@ -191,29 +189,29 @@ export default class CameraView extends Component {
               source={require('../../assets/images/capture-button.png')}
             />
           </TouchableHighlight>
-          <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="timeline" size={28} color="#9E9E9E" onPress={Actions.tabbar} />
+          <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="inbox" size={22} color="#9E9E9E" onPress={Actions.tabbar} />
         </View>
         <View style={styles.footerBlock}>
           <Button
             style={[styles.footerButton, this.state.selectedFeature === 'book' ? styles.selectedFooterButton : null]}
             onPress={() => this.setState({ selectedFeature: 'book' })}
-            textStyle={{ fontSize: 14 }}
+            textStyle={{ fontSize: 10 }}
           >
-            BOOK COVER
+            {'BOOK COVER'}
           </Button>
           <Button
             style={[styles.footerButton, this.state.selectedFeature === 'search' ? styles.selectedFooterButton : null]}
             onPress={() => this.setState({ selectedFeature: 'search' })}
-            textStyle={{ fontSize: 14 }}
+            textStyle={{ fontSize: 10 }}
           >
-            SEARCH
+            {'SEARCH '}
           </Button>
           <Button
             style={[styles.footerButton, this.state.selectedFeature === 'codescan' ? styles.selectedFooterButton : null]}
             onPress={() => this.setState({ selectedFeature: 'codescan' })}
-            textStyle={{ fontSize: 14 }}
+            textStyle={{ fontSize: 10 }}
           >
-            CODE SCAN
+            {'CODE SCAN'}
           </Button>
         </View>
       </View>
