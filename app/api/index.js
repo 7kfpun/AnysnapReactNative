@@ -219,10 +219,10 @@ export function getUserImages(UniqueID) {
     .catch(error => console.warn(error));
 }
 
-export function createUserImages(url, originalUri) {
-  console.log('createUserImages');
+export function createUserImage(url, originalUri, userId) {
+  console.log('createUserImage');
   return fetch(  // eslint-disable-line no-undef
-    `https://frontn-anysnap.herokuapp.com/core/users/${uniqueID}/images/`,
+    `https://frontn-anysnap.herokuapp.com/core/users/${userId}/images/`,
     {
       method: 'POST',
       headers: {
@@ -235,8 +235,23 @@ export function createUserImages(url, originalUri) {
     })
     .then(response => response.json())
     .then((json) => {
-      console.log('Create user images', json);
+      console.log('Create user image', json);
       return json;
     })
+    .catch(error => console.warn(error));
+}
+
+export function deleteUserImage(id, userId) {
+  console.log('deleteUserImage');
+  return fetch(  // eslint-disable-line no-undef
+    `https://frontn-anysnap.herokuapp.com/core/users/${userId}/images/${id}/`,
+    {
+      method: 'DELETE',
+    })
+    .then((json) => {
+      console.log('Delete user image', json);
+      return json;
+    })
+    .then(response => response.json())
     .catch(error => console.warn(error));
 }
