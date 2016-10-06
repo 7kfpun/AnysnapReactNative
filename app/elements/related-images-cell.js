@@ -64,6 +64,7 @@ export default class RelatedImagesCell extends Component {
 
   render() {
     const tagsLength = this.props.tags.length;
+    const maxLenght = 15;
     return (
       <View style={styles.container}>
         {this.props.tags.length === 0 && <View style={styles.imageLoading}>
@@ -78,7 +79,7 @@ export default class RelatedImagesCell extends Component {
                 style={styles.image}
                 source={require('../../assets/google.png')}  // eslint-disable-line global-require
               />
-              <Text style={styles.text}>{item}</Text>
+              <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>
             </View>
           </TouchableHighlight>
           {tagsLength !== i + 1 ? <View style={styles.blank} /> : null}

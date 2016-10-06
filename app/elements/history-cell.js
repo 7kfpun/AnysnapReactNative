@@ -122,11 +122,11 @@ export default class HistoryCell extends Component {
     return (
       <TouchableHighlight
         onPress={() => Actions.result({
-          type: 'replace',
+          // type: 'replace',
           history: this.props.history,
           isSearch: false,
         })}
-        underlayColor="white"
+        underlayColor="#EFEFF4"
       >
         <View style={styles.container}>
           <View style={styles.leftBlock}>

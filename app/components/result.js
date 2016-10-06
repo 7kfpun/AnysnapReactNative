@@ -91,7 +91,7 @@ export default class ResultView extends Component {
 
   onActionSelected(position) {
     if (position === 0) {  // index of 'History'
-      Actions.history({ type: 'replace' });
+      Actions.history();
     }
   }
 
@@ -264,9 +264,8 @@ export default class ResultView extends Component {
             name="arrow-back"
             size={26}
             color="gray"
-            onPress={() => Actions.history({
-              type: 'replace',
-            })}
+            // onPress={() => Actions.history({ type: 'replace' })}
+            onPress={() => Actions.pop()}
           />}
           rightButton={<Icon
             style={styles.navigatorRightButton}

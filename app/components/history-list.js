@@ -56,8 +56,13 @@ export default class HistoryView extends Component {
   }
 
   componentWillMount() {
-    if (this.props.image && this.props.isSearch) {
-      Actions.result({ image: this.props.image, isSearch: this.props.isSearch, type: 'replace' });
+    if (this.props.isGotoResult) {
+      Actions.result({
+        image: this.props.image,
+        history: this.props.history,
+        isSearch: this.props.isSearch,
+        // type: 'replace',
+      });
     }
   }
 
@@ -184,10 +189,20 @@ HistoryView.propTypes = {
   title: React.PropTypes.string,
   image: React.PropTypes.string,
   isSearch: React.PropTypes.bool,
+  isGotoResult: React.PropTypes.bool,
+  history: React.PropTypes.shape({
+    // id: React.PropTypes.string,
+    // url: React.PropTypes.string,
+    // user_id: React.PropTypes.string,
+    // original_uri: React.PropTypes.string,
+    // created_datetime: React.PropTypes.string,
+    // modified_datetime: React.PropTypes.string,
+  }),
 };
 
 HistoryView.defaultProps = {
   title: '',
   image: '',
   isSearch: false,
+  isGotoResult: false,
 };

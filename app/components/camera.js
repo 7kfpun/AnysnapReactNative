@@ -91,7 +91,7 @@ class CameraView extends Component {
     this.camera.capture().then((data) => {
       console.log('Camera captured', data);
 
-      Actions.tabbar({ image: data.path, isSearch: true });
+      Actions.tabbar({ image: data.path, isSearch: true, isGotoResult: true });
     })
     .catch(err => console.error(err));
   }
@@ -102,7 +102,7 @@ class CameraView extends Component {
       if (response && response.uri) {
         // Actions.result({ image: response.uri });
         const uri = Platform.OS === 'ios' ? response.uri.replace('file://', '') : response.uri;
-        Actions.tabbar({ image: uri, isSearch: true });
+        Actions.tabbar({ image: uri, isSearch: true, isGotoResult: true });
       }
     });
   }

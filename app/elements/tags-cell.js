@@ -30,16 +30,14 @@ const styles = StyleSheet.create({
 
 export default class TagsCell extends Component {
   openUrl(query) {
-    if (this.props.allowOpenUrl) {
-      const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
-      if (Platform.OS === 'ios') {
-        SafariView.isAvailable()
-          .then(SafariView.show({ url }))
-          .catch(err => console.error('Cannot open safari', err));
-      } else if (Platform.OS === 'android') {
-        Linking.openURL(url)
-          .catch(err => console.error('Cannot open url', err));
-      }
+    const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
+    if (Platform.OS === 'ios') {
+      SafariView.isAvailable()
+        .then(SafariView.show({ url }))
+        .catch(err => console.error('Cannot open safari', err));
+    } else if (Platform.OS === 'android') {
+      Linking.openURL(url)
+        .catch(err => console.error('Cannot open url', err));
     }
   }
 
@@ -50,9 +48,12 @@ export default class TagsCell extends Component {
       <View style={styles.container}>
         <Icon style={{ marginRight: 2 }} name="label-outline" color="#7F7F7F" size={12} />
         {(!this.props.tags || this.props.tags.length === 0) && <Spinner style={styles.spinner} size={14} type="ThreeBounce" color="#7F7F7F" />}
-        {this.props.tags.slice(0, this.props.maximum).map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
+        {this.props.allowOpenUrl && this.props.tags.slice(0, this.props.maximum).map((item, i) => <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
           <Text style={styles.text}>{item}{i + 1 < tagsLength ? ', ' : ''}</Text>
         </TouchableHighlight>)}
+        {!this.props.allowOpenUrl && this.props.tags.slice(0, this.props.maximum).map((item, i) =>
+          <Text key={i} style={styles.text}>{item}{i + 1 < tagsLength ? ', ' : ''}</Text>
+        )}
       </View>
     );
   }

@@ -31,6 +31,7 @@ I18n.translations = {
     'login-google': 'Login with Google+',
     cancel: 'Cancel',
     'anysnap-results': 'AnySnap results',
+    'notification-title': 'New updates',
   },
   zh: {
     main: '主頁',
@@ -60,6 +61,7 @@ I18n.translations = {
     'login-google': '使用 Google+ 帳戶登錄',
     cancel: '取消',
     'anysnap-results': 'AnySnap 結果',
+    'notification-title': '新更新',
   },
 };
 

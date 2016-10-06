@@ -11,7 +11,14 @@ import Anysnap from './app';
 const pendingNotifications = [];
 
 function handleNotification(notification) {
-  Actions.notification(notification);
+  try {
+    Actions.notification({
+      isNotification: true,
+      history: notification.data,
+    });
+  } catch (err) {
+    console.error(err);
+  }
   // title: notification.data.title,
   // link: notification.data.url,
   // action: notification.data.actionSelected
