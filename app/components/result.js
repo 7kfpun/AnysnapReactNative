@@ -9,6 +9,9 @@ import {
   View,
 } from 'react-native';
 
+import firebase from 'firebase';
+import moment from 'moment';
+
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
 import { RNS3 } from 'react-native-aws3';
@@ -16,20 +19,17 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved,import/extensions
 import NavigationBar from 'react-native-navbar';
 import Spinner from 'react-native-spinkit';
-
-import firebase from 'firebase';
+import store from 'react-native-simple-store';
 
 import TagsCell from '../elements/tags-cell';
 // import CraftarImagesCell from '../elements/craftar-images-cell';
+import LogoImagesCell from '../elements/logo-images-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
 
 import * as api from '../api';
 import { config } from '../config';
 import commonStyle from '../utils/common-styles';
 import I18n from '../utils/i18n';
-import UniqueID from '../utils/unique-id';
-
-const uniqueID = UniqueID();  // eslint-disable-line no-unused-vars,new-cap
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   container: {
@@ -41,6 +41,7 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').width,
     resizeMode: 'cover',
+    justifyContent: 'flex-end',
   },
   spinner: {
     margin: 50,
@@ -52,8 +53,13 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
     justifyContent: 'space-around',
   },
   text: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#212121',
+  },
+  moreResultsComing: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    margin: 10,
+    padding: 20,
   },
 }));
 
@@ -71,10 +77,15 @@ export default class ResultView extends Component {
     if (this.props.image && this.props.isSearch === true) {
       // this.craftarSearch();
       // this.googleVision();
-      this.uploadImage(this.props.image);
+      const that = this;
+      store.get('UNIQUEID').then((uniqueID) => {
+        if (uniqueID) {
+          that.uploadImage(that.props.image, uniqueID);
+        }
+      });
     } else {
-      this.checkLogo();
-      this.checkTag();
+      this.checkLogo(this.props.history.id);
+      this.checkTag(this.props.history.id);
     }
   }
 
@@ -84,7 +95,7 @@ export default class ResultView extends Component {
     }
   }
 
-  uploadImage(image) {
+  uploadImage(image, uniqueID) {
     let filename;
     try {
       filename = /id=(.*)\&ext/i.exec(image)[0].replace('id=', '').replace('&ext', '');  // eslint-disable-line no-useless-escape
@@ -92,6 +103,7 @@ export default class ResultView extends Component {
       filename = image.replace(/^.*[\\\/]/, '').replace('.jpg', '');
     }
 
+    console.log('this.state.UNIQUEID', this.state.UNIQUEID);
     const options = Object.assign(config.s3, { keyPrefix: `uploads/${uniqueID}/` });
 
     const that = this;
@@ -102,7 +114,6 @@ export default class ResultView extends Component {
         name: `${filename}.jpg`,
         type: 'image/jpg',
       };
-      // ToastAndroid.show('Image resized', ToastAndroid.SHORT);
 
       RNS3.put(file, options).then((response) => {
         if (response.status !== 201) {
@@ -110,13 +121,25 @@ export default class ResultView extends Component {
           throw new Error('Failed to upload image to S3');
         }
         console.log('S3 uploaded', response.body);
-        // ToastAndroid.show('S3 uploaded', ToastAndroid.SHORT);
+        if (response.body.postResponse && response.body.postResponse.location) {
+          api.createUserImage(response.body.postResponse.location.replace(/%2F/g, '/'), image, uniqueID).then((json) => {
+            console.log('createUserImage', json);
+            that.setState({ status: 'DONE' });
+            try {
+              that.checkLogo(json.results[0].id);
+              that.checkTag(json.results[0].id);
+            } catch (err) {
+              console.error(err);
+            }
+          });
+        }
       })
       .progress((e) => {
         console.log(e.loaded / e.total);
         if (e.loaded / e.total < 1) {
           that.setState({ status: 'UPLOADING' });
         } else if (e.loaded / e.total === 1) {
+          that.setState({ status: 'UPLOADED' });
           console.log('Image uploaded');
         }
       });
@@ -125,38 +148,34 @@ export default class ResultView extends Component {
     });
   }
 
-  checkLogo() {
+  checkLogo(imageId) {
+    console.log('checkLogo', imageId);
     const that = this;
-    if (this.props.history.id) {
-      const ref = firebase.database().ref(`results/${this.props.history.id}/logo`);
-      ref.once('value').then((snapshot) => {
-        if (snapshot) {
-          const value = snapshot.val();
-          if (value && value.length > 0) {
-            console.log('Check logo', value);
-            that.setState({ logo: value.map(item => item.name) });
-          }
+    const ref = firebase.database().ref(`results/${imageId}/logo`);
+    ref.on('value', (snapshot) => {
+      if (snapshot) {
+        const value = snapshot.val();
+        if (value && value.length > 0) {
+          console.log('Check logo', value);
+          that.setState({ logo: value.map(item => item.name) });
         }
-      })
-      .catch(err => console.error(err));
-    }
+      }
+    });
   }
 
-  checkTag() {
+  checkTag(imageId) {
+    console.log('checkTag', imageId);
     const that = this;
-    if (this.props.history.id) {
-      const ref = firebase.database().ref(`results/${this.props.history.id}/tag`);
-      ref.once('value').then((snapshot) => {
-        if (snapshot) {
-          const value = snapshot.val();
-          if (value && value.length > 0) {
-            console.log('Check tag', value);
-            that.setState({ tags: value.map(item => item.name) });
-          }
+    const ref = firebase.database().ref(`results/${imageId}/tag`);
+    ref.on('value', (snapshot) => {
+      if (snapshot) {
+        const value = snapshot.val();
+        if (value && value.length > 0) {
+          console.log('Check tag', value);
+          that.setState({ tags: value.map(item => item.name) });
         }
-      })
-      .catch(err => console.error(err));
-    }
+      }
+    });
   }
 
   // craftarSearch() {
@@ -203,12 +222,28 @@ export default class ResultView extends Component {
     </View>);
   }
 
+  renderMoreResultsComing() {
+    if (this.props.history && this.props.history.created_datetime && moment().diff(moment(this.props.history.created_datetime), 'minutes') < 60) {
+      return (<View style={styles.moreResultsComing}>
+        <Text style={[styles.text, { color: 'white' }]}>We would notice you when more results are coming...</Text>
+      </View>);
+    }
+    if (this.props.image) {
+      return (<View style={styles.moreResultsComing}>
+        <Text style={[styles.text, { color: 'white' }]}>We would notice you when more results are coming...</Text>
+      </View>);
+    }
+    return null;
+  }
+
   renderResult() {
     return (
       <View style={styles.bottomBlock}>
         <Text style={styles.text}>{I18n.t('anysnap-results')}</Text>
+
         <ScrollView horizontal={true}>
           {/* <CraftarImagesCell name={this.props.craftar || this.state.name} key={this.state.key} /> */}
+          <LogoImagesCell logos={this.state.logo} />
           <RelatedImagesCell tags={this.state.tags} />
         </ScrollView>
 
@@ -229,7 +264,9 @@ export default class ResultView extends Component {
             name="arrow-back"
             size={26}
             color="gray"
-            onPress={() => Actions.history({ type: 'replace' })}
+            onPress={() => Actions.history({
+              type: 'replace',
+            })}
           />}
           rightButton={<Icon
             style={styles.navigatorRightButton}
@@ -260,14 +297,22 @@ export default class ResultView extends Component {
         {this.renderToolbar()}
 
         <ScrollView>
-          {(this.props.history.url || this.props.image) && <Image
+          {this.props.history.url && <Image
             style={styles.image}
-            source={{ uri: this.props.history.url || this.props.image }}
-          />}
-          {!this.props.history && !this.props.image && <Image
+            source={[
+              { uri: this.props.history.url },
+              // { uri: this.props.history.original_uri },
+            ]}
+          >
+            {this.renderMoreResultsComing()}
+          </Image>}
+
+          {this.props.image && <Image
             style={styles.image}
-            source={require('../../assets/icon.png')}
-          />}
+            source={{ uri: this.props.image }}
+          >
+            {this.renderMoreResultsComing()}
+          </Image>}
 
           {this.state.isLoading && this.renderLoading()}
           {!this.state.isLoading && this.renderResult()}
@@ -286,7 +331,7 @@ ResultView.propTypes = {
     url: React.PropTypes.string,
     // user_id: React.PropTypes.string,
     // original_uri: React.PropTypes.string,
-    // created_datetime: React.PropTypes.string,
+    created_datetime: React.PropTypes.string,
     // modified_datetime: React.PropTypes.string,
   }),
 };

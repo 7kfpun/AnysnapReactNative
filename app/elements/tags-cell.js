@@ -30,14 +30,16 @@ const styles = StyleSheet.create({
 
 export default class TagsCell extends Component {
   openUrl(query) {
-    const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
-    if (Platform.OS === 'ios') {
-      SafariView.isAvailable()
-        .then(SafariView.show({ url }))
-        .catch(err => console.error('Cannot open safari', err));
-    } else if (Platform.OS === 'android') {
-      Linking.openURL(url)
-        .catch(err => console.error('Cannot open url', err));
+    if (this.props.allowOpenUrl) {
+      const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
+      if (Platform.OS === 'ios') {
+        SafariView.isAvailable()
+          .then(SafariView.show({ url }))
+          .catch(err => console.error('Cannot open safari', err));
+      } else if (Platform.OS === 'android') {
+        Linking.openURL(url)
+          .catch(err => console.error('Cannot open url', err));
+      }
     }
   }
 
@@ -59,9 +61,11 @@ export default class TagsCell extends Component {
 TagsCell.propTypes = {
   tags: React.PropTypes.arrayOf(React.PropTypes.string),
   maximum: React.PropTypes.number,
+  allowOpenUrl: React.PropTypes.bool,
 };
 
 TagsCell.defaultProps = {
   tags: [],
   maximum: 20,
+  allowOpenUrl: true,
 };

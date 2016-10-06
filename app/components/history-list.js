@@ -5,6 +5,7 @@ import {
   Image,
   ListView,
   Platform,
+  TouchableHighlight,
   RefreshControl,
   StyleSheet,
   Text,
@@ -54,12 +55,14 @@ export default class HistoryView extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.image && this.props.isSearch) {
-      Actions.result({ image: this.props.image, type: 'replace' });
-    } else {
-      this.prepareRows();
+      Actions.result({ image: this.props.image, isSearch: this.props.isSearch, type: 'replace' });
     }
+  }
+
+  componentDidMount() {
+    this.prepareRows();
   }
 
   prepareRows() {
@@ -150,13 +153,25 @@ export default class HistoryView extends Component {
           dataSource={this.state.dataSource}
           enableEmptySections={true}
           renderRow={rowData => <HistoryCell history={rowData} />}
-          renderHiddenRow={() => (
-            <View style={styles.rowBack}>
-              <View style={styles.rowBackBlock}>
-                <Icon name="close" color="white" size={30} />
-              </View>
+          renderHiddenRow={rowData => <TouchableHighlight
+            style={styles.rowBack}
+            onPress={() => {
+              console.log(rowData);
+              api.deleteUserImage(rowData.id, rowData.user_id)
+                .then((json) => {
+                  const that = this;
+                  if (json.results === 'success') {
+                    that.prepareRows();
+                  }
+                });
+            }}
+            underlayColor="#E57373"
+          >
+            <View style={styles.rowBackBlock}>
+              <Icon name="close" color="white" size={30} />
             </View>
-          )}
+          </TouchableHighlight>
+          }
           rightOpenValue={-75}
           disableRightSwipe={true}
         />

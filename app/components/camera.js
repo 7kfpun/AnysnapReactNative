@@ -8,6 +8,8 @@ import {
   View,
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
 import Button from 'apsl-react-native-button';
@@ -18,6 +20,8 @@ import NavigationBar from 'react-native-navbar';
 import store from 'react-native-simple-store';
 
 import commonStyle from '../utils/common-styles';
+
+import { increaseAction, decreaseAction } from '../actions/counter';
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   container: {
@@ -60,7 +64,7 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   },
 }));
 
-export default class CameraView extends Component {
+class CameraView extends Component {
   constructor(props) {
     super(props);
 
@@ -124,6 +128,8 @@ export default class CameraView extends Component {
   }
 
   render() {
+    const { value, onIncreaseClick, onDecreaseClick } = this.props;
+
     return (
       <View style={styles.container}>
         {this.renderToolbar()}
@@ -154,20 +160,21 @@ export default class CameraView extends Component {
           captureAudio={false}
           aspect={Camera.constants.Aspect.fill}
           captureTarget={Camera.constants.CaptureTarget.temp}
+          // captureTarget={Camera.constants.CaptureTarget.cameraRoll}
           // onBarCodeRead={data => this.onBarCodeRead(data)}
           flashMode={this.state.isFlashOn ? Camera.constants.FlashMode.on : Camera.constants.FlashMode.off}
           type={this.state.isCameraFront ? Camera.constants.Type.front : Camera.constants.Type.back}
         >
           <View style={styles.cameraOptionBlock}>
             <Icon
-              style={{ paddingTop: 20, paddingRight: 20 }}
+              style={{ paddingTop: 50, paddingRight: 50 }}
               name={this.state.isFlashOn ? 'flash-on' : 'flash-off'}
               size={22}
               color="white"
               onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })}
             />
             <Icon
-              style={{ paddingTop: 20, paddingLeft: 20 }}
+              style={{ paddingTop: 50, paddingLeft: 50 }}
               name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'}
               size={22}
               color="white"
@@ -177,7 +184,7 @@ export default class CameraView extends Component {
         </Camera>}
 
         <View style={styles.snapBlock}>
-          <Icon style={{ paddingVertical: 20, paddingRight: 20 }} name="collections" size={22} color="#9E9E9E" onPress={() => this.pickImage()} />
+          <Icon style={{ paddingVertical: 50, paddingRight: 50 }} name="collections" size={22} color="#9E9E9E" onPress={() => this.pickImage()} />
           {/* <Icon style={{ padding: 0 }} name="radio-button-checked" size={120} color="#9E9E9E" onPress={() => this.takePicture()} /> */}
           <TouchableHighlight onPress={() => this.takePicture()} underlayColor="white">
             <Image
@@ -189,12 +196,12 @@ export default class CameraView extends Component {
               source={require('../../assets/images/capture-button.png')}
             />
           </TouchableHighlight>
-          <Icon style={{ paddingVertical: 20, paddingLeft: 20 }} name="inbox" size={22} color="#9E9E9E" onPress={Actions.tabbar} />
+          <Icon style={{ paddingVertical: 50, paddingLeft: 50 }} name="inbox" size={22} color="#9E9E9E" onPress={Actions.tabbar} />
         </View>
         <View style={styles.footerBlock}>
           <Button
             style={[styles.footerButton, this.state.selectedFeature === 'book' ? styles.selectedFooterButton : null]}
-            onPress={() => this.setState({ selectedFeature: 'book' })}
+            onPress={() => { this.setState({ selectedFeature: 'book' }); onDecreaseClick(); }}
             textStyle={{ fontSize: 10 }}
           >
             {'BOOK COVER'}
@@ -208,7 +215,7 @@ export default class CameraView extends Component {
           </Button>
           <Button
             style={[styles.footerButton, this.state.selectedFeature === 'codescan' ? styles.selectedFooterButton : null]}
-            onPress={() => this.setState({ selectedFeature: 'codescan' })}
+            onPress={() => { this.setState({ selectedFeature: 'codescan' }); onIncreaseClick(); }}
             textStyle={{ fontSize: 10 }}
           >
             {'CODE SCAN'}
@@ -221,8 +228,30 @@ export default class CameraView extends Component {
 
 CameraView.propTypes = {
   title: React.PropTypes.string,
+  value: React.PropTypes.number,
+  onIncreaseClick: React.PropTypes.func,
+  onDecreaseClick: React.PropTypes.func,
 };
 
 CameraView.defaultProps = {
   title: '',
 };
+
+const mapStateToProps = (state) => {
+  return {
+    value: state.counter.count,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onIncreaseClick: () => {
+      dispatch(increaseAction());
+    },
+    onDecreaseClick: () => {
+      dispatch(decreaseAction());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CameraView);

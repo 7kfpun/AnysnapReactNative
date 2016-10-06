@@ -26,12 +26,15 @@ OneSignal.configure({
   onNotificationOpened(message, data, isActive) {
     const notification = { message, data, isActive };
     console.log('NOTIFICATION OPENED: ', notification);
-    if (!Actions.notification) { // Check if there is a navigator object. If not, waiting with the notification.
+    if (!Actions.notification) {  // Check if there is a navigator object. If not, waiting with the notification.
       console.log('Navigator is null, adding notification to pending list...');
       pendingNotifications.push(notification);
       return;
     }
-    handleNotification(notification);
+
+    if (!isActive) {
+      handleNotification(notification);
+    }
   },
 });
 

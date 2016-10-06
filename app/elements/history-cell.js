@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Dimensions,
   Image,
   StyleSheet,
   Text,
@@ -40,8 +41,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   image: {
-    width: 70,
-    height: 70,
+    width: Dimensions.get('window').width / 4,
+    height: Dimensions.get('window').width / 4,
     resizeMode: 'cover',
   },
   title: {
@@ -89,7 +90,7 @@ export default class HistoryCell extends Component {
     const that = this;
     if (this.props.history.id) {
       const ref = firebase.database().ref(`results/${this.props.history.id}/tag`);
-      ref.once('value').then((snapshot) => {
+      ref.on('value', (snapshot) => {
         if (snapshot) {
           const value = snapshot.val();
           if (value && value.length > 0) {
@@ -97,8 +98,7 @@ export default class HistoryCell extends Component {
             that.setState({ tags: value.map(item => item.name) });
           }
         }
-      })
-      .catch(err => console.error(err));
+      });
     }
   }
 
@@ -106,7 +106,7 @@ export default class HistoryCell extends Component {
     const that = this;
     if (this.props.history.id) {
       const ref = firebase.database().ref(`results/${this.props.history.id}/vision`);
-      ref.once('value').then((snapshot) => {
+      ref.on('value', (snapshot) => {
         if (snapshot) {
           const value = snapshot.val();
           if (value && value.length > 0) {
@@ -114,8 +114,7 @@ export default class HistoryCell extends Component {
             that.setState({ logo: value.map(item => item.name) });
           }
         }
-      })
-      .catch(err => console.error(err));
+      });
     }
   }
 
@@ -131,7 +130,13 @@ export default class HistoryCell extends Component {
       >
         <View style={styles.container}>
           <View style={styles.leftBlock}>
-            <Image style={styles.image} source={{ uri: this.props.history.url }} />
+            <Image
+              style={styles.image}
+              source={[
+                { uri: this.props.history.url },
+                // { uri: this.props.history.original_uri },
+              ]}
+            />
           </View>
           <View style={styles.middleBlock}>
             <Text style={styles.title}>{
@@ -140,7 +145,7 @@ export default class HistoryCell extends Component {
               || (this.state.tags && this.state.tags.length > 0 && this.state.tags[0])
               || ''}</Text>
             <Text style={styles.subtitile}>{(this.props.history.created_datetime && moment(this.props.history.created_datetime).format('LLL')) || ''}</Text>
-            <TagsCell tags={this.state.tags} maximum={6} />
+            <TagsCell tags={this.state.tags} maximum={6} allowOpenUrl={false} />
           </View>
           <View style={styles.rightBlock}>
             <Icon name="keyboard-arrow-right" color="#D2DEE3" size={24} />
@@ -148,7 +153,7 @@ export default class HistoryCell extends Component {
         </View>
       </TouchableHighlight>
     );
-  }  //
+  }
 }
 
 HistoryCell.propTypes = {

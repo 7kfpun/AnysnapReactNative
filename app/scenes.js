@@ -11,7 +11,7 @@ import NotificationView from './components/notification';
 import CameraView from './components/camera';
 import CameraTabView from './components/camera-tab';
 import ResultView from './components/result';
-import HistoryView from './components/history';
+import HistoryListView from './components/history-list';
 // import SettingsView from './components/settings';
 // import AdminView from './components/admin';
 import IntroView from './components/intro';
@@ -30,7 +30,7 @@ const scenes = Actions.create(
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#DBDBDB' }}>
       <Scene key="main" icon={TabIcon} iconName="inbox">
-        <Scene key="history" title={I18n.t('history')} component={HistoryView} hideNavBar={true} />
+        <Scene key="history" title={I18n.t('history')} component={HistoryListView} hideNavBar={true} />
         <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} />
       </Scene>
 

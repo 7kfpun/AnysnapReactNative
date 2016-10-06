@@ -5,9 +5,22 @@ import { Router } from 'react-native-router-flux';
 
 import firebase from 'firebase';
 
+import { Provider, connect } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+
 import { config } from './config';
 import scenes from './scenes';
 import UniqueID from './utils/unique-id';
+
+import reducers from './reducers';
+
+const middleware = [thunk];
+const store = compose(
+  applyMiddleware(...middleware)
+)(createStore)(reducers);
+
+const RouterWithRedux = connect()(Router);
 
 firebase.initializeApp(config.firebase);
 const uniqueID = UniqueID();  // eslint-disable-line no-unused-vars,new-cap
@@ -24,7 +37,9 @@ console.ignoredYellowBox = [
 ];
 
 const App = function App() {
-  return <Router scenes={scenes} />;
+  return (<Provider store={store}>
+    <RouterWithRedux scenes={scenes} />
+  </Provider>);
 };
 
 export default App;

@@ -9,26 +9,23 @@ import store from 'react-native-simple-store';
 
 import uuid from './uuid';
 
-let uniqueID;
-
 function UniqueID() {
-  store.get('UniqueID')
+  let UNIQUEID;
+  store.get('UNIQUEID')
     .then((savedUniqueID) => {
       if (!savedUniqueID) {
         if (Platform.OS === 'ios') {
-          uniqueID = DeviceInfo.getUniqueID();
+          UNIQUEID = DeviceInfo.getUniqueID();
         } else if (Platform.OS === 'android') {
-          uniqueID = uuid.uuid();
+          UNIQUEID = uuid.uuid();
         }
-        console.log('UniqueID', uniqueID);
-        store.save('UniqueID', uniqueID);
+        store.save('UNIQUEID', UNIQUEID);
       } else {
-        uniqueID = savedUniqueID;
-        console.log('UniqueID', uniqueID);
+        UNIQUEID = savedUniqueID;
       }
-      OneSignal.sendTag('UniqueID', uniqueID);
+      console.log('UNIQUEID', UNIQUEID);
+      OneSignal.sendTag('UNIQUEID', UNIQUEID);
     });
-  return uniqueID;
 }
 
 export default UniqueID;
