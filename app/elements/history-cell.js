@@ -8,13 +8,12 @@ import {
   View,
 } from 'react-native';
 
-// 3rd party libraries
-import { Actions } from 'react-native-router-flux';
-
-import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import firebase from 'firebase';
 import moment from 'moment';
+
+// 3rd party libraries
+import { Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import TagsCell from './tags-cell';
 

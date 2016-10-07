@@ -95,5 +95,5 @@ RelatedImagesCell.propTypes = {
 };
 
 RelatedImagesCell.defaultProps = {
-  tags: ['loading...'],
+  tags: [],
 };

@@ -32,6 +32,7 @@ I18n.translations = {
     cancel: 'Cancel',
     'anysnap-results': 'AnySnap results',
     'notification-title': 'New updates',
+    'would-notice-when-more-results': 'We would notice you when more results are coming...',
   },
   zh: {
     main: '主頁',
@@ -62,6 +63,7 @@ I18n.translations = {
     cancel: '取消',
     'anysnap-results': 'AnySnap 結果',
     'notification-title': '新更新',
+    'would-notice-when-more-results': '當我們得到更多答案，我們會通知您。',
   },
 };
 

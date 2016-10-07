@@ -195,44 +195,6 @@ export default class ResultView extends Component {
     });
   }
 
-  // craftarSearch() {
-  //   const that = this;
-  //   ImageResizer.createResizedImage(this.props.image, 800, 800, 'JPEG', 60).then((resizedImageUri) => {
-  //     console.log('Image resized', resizedImageUri);
-  //
-  //     api.craftarSearch(this.state.filename, resizedImageUri)
-  //     .then((json) => {
-  //       that.setState({ isLoading: false });
-  //
-  //       if (json.results && json.results.length > 0) {
-  //         if (json.results[0].item && json.results[0].item.url) {
-  //           console.log('Craftar matched', json.results[0].item.name);
-  //           that.setState({
-  //             name: json.results[0].item.name,
-  //             url: json.results[0].item.url,
-  //             key: Math.random(),
-  //           });
-  //         }
-  //       }
-  //     });
-  //   });
-  // }
-  //
-  // googleVision() {
-  //   console.log('Upload image', this.state.filename, this.props.image);
-  //   api.uploadImageS3(this.state.filename, this.props.image);
-  //
-  //   api.uploadImage(this.state.filename, this.props.image)
-  //   .then(() => {
-  //     api.googleVision(this.state.filename)
-  //     .then((json) => {
-  //       console.log('Google vision done', json.responses[0].labelAnnotations);
-  //       const tags = json.responses[0].labelAnnotations.map(item => item.description);
-  //       this.setState({ tags });
-  //     });
-  //   });
-  // }
-
   renderLoading() {
     return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <Spinner style={styles.spinner} size={40} type="Pulse" color="#424242" />
@@ -240,17 +202,11 @@ export default class ResultView extends Component {
   }
 
   renderMoreResultsComing() {
-    if (this.props.history && this.props.history.created_datetime && moment().diff(moment(this.props.history.created_datetime), 'minutes') < 60) {
+    if (this.props.image || (this.props.history && this.props.history.created_datetime && moment().diff(moment(this.props.history.created_datetime), 'minutes') < 60)) {
       return (<View style={styles.moreResultsComing}>
-        <Text style={[styles.text, { color: 'white' }]}>We would notice you when more results are coming...</Text>
+        <Text style={[styles.text, { color: 'white' }]}>{I18n.t('would-notice-when-more-results')}</Text>
       </View>);
     }
-    if (this.props.image) {
-      return (<View style={styles.moreResultsComing}>
-        <Text style={[styles.text, { color: 'white' }]}>We would notice you when more results are coming...</Text>
-      </View>);
-    }
-    return null;
   }
 
   renderResult() {
