@@ -25,7 +25,7 @@ import I18n from './utils/i18n';
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="camera" title={'AnySnap'} component={CameraView} hideNavBar={true} direction="vertical" initial={true} />
+    <Scene key="camera" title={'AnySnap'} component={CameraView} hideNavBar={true} direction="leftToRight" initial={true} />
     <Scene key="intro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" panHandlers={null} />
 
     <Scene key="tabbar" tabs={true} tabBarStyle={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#DBDBDB' }}>

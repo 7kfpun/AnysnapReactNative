@@ -4,10 +4,12 @@ import {
   Image,
   Platform,
   StyleSheet,
+  Text,
   TouchableHighlight,
   View,
 } from 'react-native';
 
+import _ from 'lodash';  // eslint-disable-line import/no-extraneous-dependencies
 import { connect } from 'react-redux';
 
 // 3rd party libraries
@@ -18,6 +20,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
 import NavigationBar from 'react-native-navbar';
 import store from 'react-native-simple-store';
+import timer from 'react-native-timer';
 
 import commonStyle from '../utils/common-styles';
 
@@ -47,6 +50,10 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
     alignItems: 'center',
     padding: 20,
   },
+  codeDetect: {
+    color: 'white',
+    fontSize: 12,
+  },
   footerBlock: {
     height: 40,
     flexDirection: 'row',
@@ -73,25 +80,40 @@ class CameraView extends Component {
       isCameraFront: false,
       isIntroDone: false,
       selectedFeature: 'book',
+      code: {},
     };
 
     console.log('commonStyle', commonStyle);
+
+    this.onBarCodeRead = _.throttle(this.onBarCodeRead, 5000);
   }
 
   componentDidMount() {
-    store.get('isIntroDone')
-      .then((isIntroDone) => {
-        if (!isIntroDone) {
-          Actions.intro();
-        }
-      });
+    // store.get('isIntroDone')
+    //   .then((isIntroDone) => {
+    //     if (!isIntroDone) {
+    //       Actions.intro();
+    //     }
+    //   });
+  }
+
+  onBarCodeRead(data) {
+    console.log(data);
+
+    if (data.type === 'org.gs1.EAN-13' && data.data) {
+      // Actions.tabbar({ code: response.data, isSearch: true, isGotoResult: true });
+      this.setState({ code: Object.assign({}, data, { type: 'EAN-13' }) });
+    }
+
+    timer.setTimeout(this, 'name', () => this.setState({ code: {} }), 3000);
   }
 
   takePicture() {
-    this.camera.capture().then((data) => {
-      console.log('Camera captured', data);
-
-      Actions.tabbar({ image: data.path, isSearch: true, isGotoResult: true });
+    this.camera.capture().then((response) => {
+      console.log('Camera captured', response);
+      if (response && response.path) {
+        Actions.tabbar({ image: response.path, isSearch: true, isGotoResult: true, code: this.state.code });
+      }
     })
     .catch(err => console.error(err));
   }
@@ -100,7 +122,6 @@ class CameraView extends Component {
     ImagePicker.launchImageLibrary({}, (response) => {
       console.log('ImagePicker', response);
       if (response && response.uri) {
-        // Actions.result({ image: response.uri });
         const uri = Platform.OS === 'ios' ? response.uri.replace('file://', '') : response.uri;
         Actions.tabbar({ image: uri, isSearch: true, isGotoResult: true });
       }
@@ -161,7 +182,9 @@ class CameraView extends Component {
           aspect={Camera.constants.Aspect.fill}
           captureTarget={Camera.constants.CaptureTarget.temp}
           // captureTarget={Camera.constants.CaptureTarget.cameraRoll}
-          // onBarCodeRead={data => this.onBarCodeRead(data)}
+
+          onBarCodeRead={this.onBarCodeRead.bind(this)}  // eslint-disable-line react/jsx-no-bind
+
           flashMode={this.state.isFlashOn ? Camera.constants.FlashMode.on : Camera.constants.FlashMode.off}
           type={this.state.isCameraFront ? Camera.constants.Type.front : Camera.constants.Type.back}
         >
@@ -173,6 +196,7 @@ class CameraView extends Component {
               color="white"
               onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })}
             />
+            {this.state.code && this.state.code.type && <Text style={styles.codeDetect}>{this.state.code.type} code detected</Text>}
             <Icon
               style={{ paddingTop: 50, paddingLeft: 50 }}
               name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'}

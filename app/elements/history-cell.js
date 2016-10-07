@@ -101,22 +101,6 @@ export default class HistoryCell extends Component {
     }
   }
 
-  checkVision() {
-    const that = this;
-    if (this.props.history.id) {
-      const ref = firebase.database().ref(`results/${this.props.history.id}/vision`);
-      ref.on('value', (snapshot) => {
-        if (snapshot) {
-          const value = snapshot.val();
-          if (value && value.length > 0) {
-            console.log('Check logo', value);
-            that.setState({ logo: value.map(item => item.name) });
-          }
-        }
-      });
-    }
-  }
-
   render() {
     return (
       <TouchableHighlight

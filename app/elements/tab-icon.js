@@ -20,7 +20,6 @@ const TabIcon = function TabIcon(props) {
   return (
     <View style={styles.container}>
       <Icon name={props.iconName} color={props.selected ? 'black' : '#CEDADF'} size={24} />
-      {/* <Text style={[styles.text, { color: props.selected ? 'black' : 'white' }]}>{props.title}</Text> */}
     </View>
   );
 };

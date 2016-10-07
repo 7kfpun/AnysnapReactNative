@@ -16,16 +16,14 @@ import {
 import { Actions } from 'react-native-router-flux';
 import { Button } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
+import store from 'react-native-simple-store';
 
 import HistoryCell from '../elements/history-cell';
 
 import * as api from '../api';
 import commonStyle from '../utils/common-styles';
-
-const UniqueID = DeviceInfo.getUniqueID();
 
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   rowBack: {
@@ -42,15 +40,15 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   },
 }));
 
-export default class HistoryView extends Component {
+export default class HistoryListView extends Component {
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    this.dataSource = new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 });
 
     this.state = {
-      ds,
       key: Math.random(),
-      dataSource: ds.cloneWithRows([]),
+      dataSource: this.dataSource.cloneWithRows([]),
       refreshing: false,
     };
   }
@@ -73,20 +71,25 @@ export default class HistoryView extends Component {
   prepareRows() {
     const that = this;
     this.setState({ refreshing: true });
-    api.getUserImages(UniqueID)
-    .then((json) => {
-      that.setState({ refreshing: false });
+    store.get('UNIQUEID').then((uniqueID) => {
+      if (uniqueID) {
+        api.getUserImages(uniqueID)
+        .then((json) => {
+          that.setState({ refreshing: false });
 
-      if (json && json.results && json.results.length > 0) {
-        that.setState({
-          images: json.results,
-          dataSource: this.state.dataSource.cloneWithRows(json.results),
-          key: Math.random(),
+          if (json && json.results && json.results.length > 0) {
+            that.setState({
+              images: json.results,
+              dataSource: this.dataSource.cloneWithRows(json.results),
+              key: Math.random(),
+            });
+          } else {
+            that.setState({ isNothing: true });
+          }
         });
-      } else {
-        that.setState({ isNothing: true });
       }
     });
+
     this.setState({ refreshing: false });
   }
 
@@ -145,9 +148,9 @@ export default class HistoryView extends Component {
           style={{ height: 60 }}
           size="small"
         />}
-        <SwipeListView
-          ref={(c) => { this.scrollView = c; }}
-          key={this.state.key}
+        <ListView
+          // ref={(c) => { this.scrollView = c; }}
+          // key={this.state.key}
           style={{ marginTop: 2 }}
           refreshControl={
             <RefreshControl
@@ -185,7 +188,7 @@ export default class HistoryView extends Component {
   }
 }
 
-HistoryView.propTypes = {
+HistoryListView.propTypes = {
   title: React.PropTypes.string,
   image: React.PropTypes.string,
   isSearch: React.PropTypes.bool,
@@ -200,7 +203,7 @@ HistoryView.propTypes = {
   }),
 };
 
-HistoryView.defaultProps = {
+HistoryListView.defaultProps = {
   title: '',
   image: '',
   isSearch: false,
