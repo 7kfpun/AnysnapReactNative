@@ -63,7 +63,7 @@ export default class RelatedImagesCell extends Component {
   }
 
   render() {
-    const tagsLength = this.props.tags.length;
+    const resultsLength = this.props.tags.length;
     const maxLenght = 15;
     return (
       <View style={styles.container}>
@@ -82,7 +82,7 @@ export default class RelatedImagesCell extends Component {
               <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>
             </View>
           </TouchableHighlight>
-          {tagsLength !== i + 1 ? <View style={styles.blank} /> : null}
+          {i <= resultsLength ? <View style={styles.blank} /> : null}
         </View>
         )}
       </View>

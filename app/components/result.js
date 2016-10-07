@@ -22,7 +22,7 @@ import Spinner from 'react-native-spinkit';
 import store from 'react-native-simple-store';
 
 import TagsCell from '../elements/tags-cell';
-// import CraftarImagesCell from '../elements/craftar-images-cell';
+import CraftarImagesCell from '../elements/craftar-images-cell';
 import LogoImagesCell from '../elements/logo-images-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
 
@@ -84,6 +84,7 @@ export default class ResultView extends Component {
         }
       });
     } else {
+      this.checkCraftar(this.props.history.id);
       this.checkLogo(this.props.history.id);
       this.checkTag(this.props.history.id);
     }
@@ -126,6 +127,7 @@ export default class ResultView extends Component {
             console.log('createUserImage', json);
             that.setState({ status: 'DONE' });
             try {
+              that.checkCraftar(json.results[0].id);
               that.checkLogo(json.results[0].id);
               that.checkTag(json.results[0].id);
             } catch (err) {
@@ -145,6 +147,21 @@ export default class ResultView extends Component {
       });
     }).catch((err) => {
       console.log('ImageResizer', err);
+    });
+  }
+
+  checkCraftar(imageId) {
+    console.log('checkLogo', imageId);
+    const that = this;
+    const ref = firebase.database().ref(`results/${imageId}/recognition`);
+    ref.on('value', (snapshot) => {
+      if (snapshot) {
+        const value = snapshot.val();
+        if (value && value.length > 0) {
+          console.log('Check craftar', value);
+          that.setState({ craftar: value });
+        }
+      }
     });
   }
 
@@ -242,8 +259,8 @@ export default class ResultView extends Component {
         <Text style={styles.text}>{I18n.t('anysnap-results')}</Text>
 
         <ScrollView horizontal={true}>
-          {/* <CraftarImagesCell name={this.props.craftar || this.state.name} key={this.state.key} /> */}
-          <LogoImagesCell logos={this.state.logo} />
+          {this.state.craftar && <CraftarImagesCell results={this.state.craftar} />}
+          {this.state.logo && <LogoImagesCell results={this.state.logo} />}
           <RelatedImagesCell tags={this.state.tags} />
         </ScrollView>
 

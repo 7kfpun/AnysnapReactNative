@@ -13,8 +13,6 @@ import {
 // 3rd party libraries
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 
-import firebase from 'firebase';
-
 const BLANK_WIDTH = 10;
 
 const styles = StyleSheet.create({
@@ -59,21 +57,6 @@ export default class CraftarImagesCell extends Component {
     };
   }
 
-  componentDidMount() {
-    const that = this;
-    if (this.props.name) {
-      const ref = firebase.database().ref(`data/${this.props.name}`);
-      ref.once('value').then((snapshot) => {
-        if (snapshot) {
-          const value = snapshot.val();
-          console.log('Check data', value);
-          that.setState({ results: value });
-        }
-      })
-      .catch(err => console.error(err));
-    }
-  }
-
   openUrl(url) {
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
@@ -86,21 +69,25 @@ export default class CraftarImagesCell extends Component {
   }
 
   render() {
-    const tagsLength = this.state.results.length;
-    const maxLenght = 12;
+    const resultsLength = this.state.results.length;
+    const maxLenght = 15;
     return (
       <View style={styles.container}>
-        {this.state.results.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
-          <TouchableHighlight key={i} onPress={() => this.openUrl(item.url)} underlayColor="white">
+        {this.props.results.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
+          <TouchableHighlight key={i} onPress={() => this.openUrl(item.payload && item.payload.item && item.payload.item.url)} underlayColor="white">
             <View style={styles.imageBlock}>
               <Image
                 style={styles.image}
-                source={{ uri: item.image }}  // eslint-disable-line global-require
+                source={{ uri: item.payload && item.payload.image && item.payload.image.thumb_120 }}  // eslint-disable-line global-require
               />
-              <Text style={styles.text}>{item.name && item.name.length > maxLenght ? `${item.name.substring(0, maxLenght - 3)}...` : item.name}</Text>
+              {item.payload && item.payload.item && item.payload.item.name && <Text style={styles.text}>
+                {item.payload.item.name && item.payload.item.name.length > maxLenght ? `${item.payload.item.name.substring(0, maxLenght - 3)}...`
+                :
+                item.payload.item.name}
+              </Text>}
             </View>
           </TouchableHighlight>
-          {tagsLength !== i ? <View style={styles.blank} /> : null}
+          {i <= resultsLength + 1 ? <View style={styles.blank} /> : null}
         </View>
         )}
       </View>
@@ -109,7 +96,9 @@ export default class CraftarImagesCell extends Component {
 }
 
 CraftarImagesCell.propTypes = {
-  name: React.PropTypes.string,
+  results: React.PropTypes.arrayOf(React.PropTypes.object),
 };
 
-CraftarImagesCell.defaultProps = {};
+CraftarImagesCell.defaultProps = {
+  results: {},
+};

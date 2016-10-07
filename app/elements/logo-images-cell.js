@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import {
   Dimensions,
-  Image,
-  Linking,
-  Platform,
   StyleSheet,
   Text,
-  TouchableHighlight,
   View,
 } from 'react-native';
 
-// 3rd party libraries
-import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
+import ImageCell from './image-cell';
 
 const BLANK_WIDTH = 10;
 
@@ -49,34 +44,21 @@ const styles = StyleSheet.create({
 });
 
 export default class LogoImagesCell extends Component {
-  openUrl(query) {
-    const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
-    if (Platform.OS === 'ios') {
-      SafariView.isAvailable()
-        .then(SafariView.show({ url }))
-        .catch(err => console.error('Cannot open safari', err));
-    } else if (Platform.OS === 'android') {
-      Linking.openURL(url)
-        .catch(err => console.error('Cannot open url', err));
-    }
-  }
-
   render() {
-    const logosLength = this.props.logos.length;
+    const resultsLength = this.props.results.length;
     const maxLenght = 15;
     return (
       <View style={styles.container}>
-        {this.props.logos.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
-          <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
-            <View style={styles.imageBlock}>
-              <Image
-                style={styles.image}
-                source={require('../../assets/google.png')}  // eslint-disable-line global-require
-              />
-              <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>
-            </View>
-          </TouchableHighlight>
-          {logosLength !== i ? <View style={styles.blank} /> : null}
+        {this.props.results.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
+          <View key={i} style={styles.imageBlock}>
+            <ImageCell
+              style={styles.image}
+              source={require('../../assets/google.png')}  // eslint-disable-line global-require
+              text={item}
+            />
+            <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>
+          </View>
+          {i <= resultsLength + 1 ? <View style={styles.blank} /> : null}
         </View>
         )}
       </View>
@@ -85,9 +67,9 @@ export default class LogoImagesCell extends Component {
 }
 
 LogoImagesCell.propTypes = {
-  logos: React.PropTypes.arrayOf(React.PropTypes.string),
+  results: React.PropTypes.arrayOf(React.PropTypes.string),
 };
 
 LogoImagesCell.defaultProps = {
-  logos: [],
+  results: [],
 };

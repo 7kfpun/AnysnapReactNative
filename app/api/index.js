@@ -255,3 +255,22 @@ export function deleteUserImage(id, userId) {
     .then(response => response.json())
     .catch(error => console.warn(error));
 }
+
+export function bingImageSearch(query) {
+  console.log('bingImageSearch', query);
+  return fetch(  // eslint-disable-line no-undef
+    `https://api.cognitive.microsoft.com/bing/v5.0/images/search?q=${query}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Ocp-Apim-Subscription-Key': config.microsoft.bingSearch,
+      },
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log('bingImageSearch', json);
+      return json;
+    })
+    .catch(error => console.warn(error));
+}
