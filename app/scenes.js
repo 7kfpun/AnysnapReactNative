@@ -25,27 +25,27 @@ import I18n from './utils/i18n';
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="camera" title={'AnySnap'} component={CameraView} hideNavBar={true} direction="leftToRight" initial={true} />
-    <Scene key="intro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" panHandlers={null} />
+    <Scene key="camera" title={'AnySnap'} component={CameraView} hideNavBar direction="leftToRight" initial />
+    <Scene key="intro" title={I18n.t('intro')} component={IntroView} hideNavBar hideTabBar direction="vertical" panHandlers={null} />
 
-    <Scene key="tabbar" tabs={true} tabBarStyle={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#DBDBDB' }}>
+    <Scene key="tabbar" tabs tabBarStyle={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#DBDBDB' }}>
       <Scene key="main" icon={TabIcon} iconName="inbox">
-        <Scene key="history" title={I18n.t('history')} component={HistoryListView} hideNavBar={true} />
-        <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar={true} />
+        <Scene key="history" title={I18n.t('history')} component={HistoryListView} hideNavBar panHandlers={null} />
+        <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar panHandlers={null} />
       </Scene>
 
-      <Scene key="feed" title={I18n.t('feed')} icon={TabIcon} iconName="dashboard" component={FeedView} hideNavBar={true} />
-      <Scene key="cameraTab" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" component={CameraTabView} hideNavBar={true} />
-      <Scene key="notification" title={I18n.t('notification')} icon={TabIcon} iconName="notifications" component={NotificationView} hideNavBar={true} />
+      <Scene key="feed" title={I18n.t('discovery')} icon={TabIcon} iconName="dashboard" component={FeedView} hideNavBar panHandlers={null} />
+      <Scene key="cameraTab" title={I18n.t('main')} icon={TabIcon} iconName="add-a-photo" component={CameraTabView} hideNavBar />
+      <Scene key="notification" title={I18n.t('notification')} icon={TabIcon} iconName="notifications" component={NotificationView} hideNavBar panHandlers={null} />
 
-      <Scene key="settingsFeedback" title={I18n.t('feedback')} icon={TabIcon} iconName="announcement" component={FeedbackView} hideNavBar={true} />
+      <Scene key="settingsFeedback" title={I18n.t('feedback')} icon={TabIcon} iconName="announcement" component={FeedbackView} hideNavBar panHandlers={null} />
 
       {/* <Scene key="settings" icon={TabIcon} iconName="account-circle">
-        <Scene key="settingsMain" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
-        <Scene key="settingsIntro" title={I18n.t('intro')} component={IntroView} hideNavBar={true} hideTabBar={true} direction="vertical" />
-        <Scene key="settingsLogin" title={I18n.t('login')} component={LoginView} hideNavBar={true} hideTabBar={true} direction="vertical" />
-        <Scene key="settingsFeedback" title={I18n.t('feedback')} component={FeedbackView} hideNavBar={true} hideTabBar={true} direction="vertical" />
-        <Scene key="settingsSendMail" title={I18n.t('settings')} component={SettingsView} hideNavBar={true} />
+        <Scene key="settingsMain" title={I18n.t('settings')} component={SettingsView} hideNavBar />
+        <Scene key="settingsIntro" title={I18n.t('intro')} component={IntroView} hideNavBar hideTabBar direction="vertical" />
+        <Scene key="settingsLogin" title={I18n.t('login')} component={LoginView} hideNavBar hideTabBar direction="vertical" />
+        <Scene key="settingsFeedback" title={I18n.t('feedback')} component={FeedbackView} hideNavBar hideTabBar direction="vertical" />
+        <Scene key="settingsSendMail" title={I18n.t('settings')} component={SettingsView} hideNavBar />
       </Scene> */}
     </Scene>
   </Scene>
