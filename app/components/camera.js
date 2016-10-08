@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   Platform,
@@ -19,7 +20,8 @@ import Camera from 'react-native-camera';  // eslint-disable-line import/no-name
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
 import NavigationBar from 'react-native-navbar';
-import store from 'react-native-simple-store';
+import Permissions from 'react-native-permissions';
+// import store from 'react-native-simple-store';
 import timer from 'react-native-timer';
 
 import commonStyle from '../utils/common-styles';
@@ -108,14 +110,42 @@ class CameraView extends Component {
     timer.setTimeout(this, 'name', () => this.setState({ code: {} }), 3000);
   }
 
+  alertPermission(permissionType) {
+    let title;
+    let message;
+    if (permissionType === 'photo') {
+      title = 'Can we access your photos?';
+      message = 'We need access so you can get your picture';
+    } else {
+      title = 'Can we access your camera?';
+      message = 'We need access so you can take a photo';
+    }
+
+    Alert.alert(
+      title,
+      message,
+      [
+        { text: 'No way', onPress: () => console.log('permission denied'), style: 'cancel' },
+        { text: 'Open Settings', onPress: Permissions.openSettings },
+      ]
+    );
+  }
+
   takePicture() {
-    this.camera.capture().then((response) => {
-      console.log('Camera captured', response);
-      if (response && response.path) {
-        Actions.tabbar({ image: response.path, isSearch: true, isGotoResult: true, code: this.state.code });
-      }
-    })
-    .catch(err => console.error(err));
+    Permissions.requestPermission('photo')
+      .then((permission) => {
+        if (permission === 'authorized') {
+          this.camera.capture().then((response) => {
+            console.log('Camera captured', response);
+            if (response && response.path) {
+              Actions.tabbar({ image: response.path, isSearch: true, isGotoResult: true, code: this.state.code });
+            }
+          })
+          .catch(err => console.error(err));
+        } else {
+          this.alertPermission('camera');
+        }
+      });
   }
 
   pickImage() {
@@ -124,6 +154,10 @@ class CameraView extends Component {
       if (response && response.uri) {
         const uri = Platform.OS === 'ios' ? response.uri.replace('file://', '') : response.uri;
         Actions.tabbar({ image: uri, isSearch: true, isGotoResult: true });
+      }
+
+      if (response.error === 'Photo library permissions not granted') {
+        this.alertPermission('photo');
       }
     });
   }

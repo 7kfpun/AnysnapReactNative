@@ -25,6 +25,7 @@
     "react-native-maps": "0.8.2",
     "react-native-navbar": "^1.5.4",
     "react-native-onesignal": "^1.2.1",
+    "react-native-permissions": "^0.2.5",
     "react-native-router-flux": "github:aksonov/react-native-router-flux",
     "react-native-safari-view": "^1.1.0",
     "react-native-simple-store": "^1.1.0",
