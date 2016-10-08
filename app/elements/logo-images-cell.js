@@ -52,6 +52,7 @@ export default class LogoImagesCell extends Component {
         {this.props.results.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
           <View key={i} style={styles.imageBlock}>
             <ImageCell
+              cellType="logo"
               style={styles.image}
               source={require('../../assets/google.png')}  // eslint-disable-line global-require
               text={item}

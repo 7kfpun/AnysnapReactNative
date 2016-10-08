@@ -22,7 +22,13 @@ export default class LogoImagesCell extends Component {
   }
 
   componentDidMount() {
-    this.bingImageSearch(this.props.text);
+    if (this.props.cellType === 'logo') {
+      this.bingImageSearch(this.props.text);
+    }
+
+    if (this.props.cellType === 'related') {
+      this.googleSearch(this.props.text);
+    }
   }
 
   bingImageSearch(query) {
@@ -34,6 +40,29 @@ export default class LogoImagesCell extends Component {
         that.setState({
           thumbnailUrl: json.value[0].thumbnailUrl,
           hostPageUrl: json.value[0].hostPageUrl,
+        });
+      }
+    });
+  }
+
+  googleSearch(query) {
+    const that = this;
+    that.setState({
+      hostPageUrl: `https://www.google.com/search?q=${query}`.replace(/\s/g, '+'),
+    });
+
+    api.googleSearch(query.replace(/\s/g, '+'))
+    .then((json) => {
+      console.log('googleSearchgoogleSearch', json);
+      if (json.items && json.items.length > 0) {
+        that.setState({
+          thumbnailUrl: (json.items[0].pagemap.cse_thumbnail && json.items[0].pagemap.cse_thumbnail[0].src)
+            || (json.items[0].pagemap.cse_image && json.items[0].pagemap.cse_image[0].src)
+            || 'https://vignette2.wikia.nocookie.net/logopedia/images/d/d2/Google_icon_2015.png/revision/latest?cb=20150902024016',
+        });
+      } else {
+        that.setState({
+          thumbnailUrl: 'https://vignette2.wikia.nocookie.net/logopedia/images/d/d2/Google_icon_2015.png/revision/latest?cb=20150902024016',
         });
       }
     });
@@ -63,6 +92,7 @@ export default class LogoImagesCell extends Component {
 }
 
 LogoImagesCell.propTypes = {
+  cellType: React.PropTypes.string,
   text: React.PropTypes.string,
   style: React.PropTypes.number,
 };

@@ -274,3 +274,22 @@ export function bingImageSearch(query) {
     })
     .catch(error => console.warn(error));
 }
+
+export function googleSearch(query) {
+  console.log('googleSearch', query);
+  const resultsForPage = 5;
+  return fetch(  // eslint-disable-line no-undef
+    `https://www.googleapis.com/customsearch/v1?q=${query}&lr=lang_en&safe=high&cx=${config.googleSearch.cx}&key=${config.googleSearch.key}&lr=lang_zh-TW&num=${resultsForPage}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log('googleSearch', json);
+      return json;
+    })
+    .catch(error => console.warn(error));
+}

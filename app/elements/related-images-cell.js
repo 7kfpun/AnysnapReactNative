@@ -14,6 +14,8 @@ import {
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 import Spinner from 'react-native-spinkit';
 
+import ImageCell from './image-cell';
+
 const BLANK_WIDTH = 10;
 
 const styles = StyleSheet.create({
@@ -73,15 +75,15 @@ export default class RelatedImagesCell extends Component {
           <Spinner style={styles.spinner} size={40} type="Bounce" color="#7F7F7F" />
         </View>}
         {this.props.tags.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
-          <TouchableHighlight key={i} onPress={() => this.openUrl(item)} underlayColor="white">
-            <View style={styles.imageBlock}>
-              <Image
-                style={styles.image}
-                source={require('../../assets/google.png')}  // eslint-disable-line global-require
-              />
-              <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>
-            </View>
-          </TouchableHighlight>
+          <View style={styles.imageBlock}>
+            <ImageCell
+              cellType="related"
+              style={styles.image}
+              source={require('../../assets/google.png')}  // eslint-disable-line global-require
+              text={item}
+            />
+            <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>
+          </View>
           {i <= resultsLength ? <View style={styles.blank} /> : null}
         </View>
         )}
