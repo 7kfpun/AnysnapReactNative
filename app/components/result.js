@@ -22,6 +22,7 @@ import Spinner from 'react-native-spinkit';
 import store from 'react-native-simple-store';
 
 import TagsCell from '../elements/tags-cell';
+import CodeImagesCell from '../elements/code-images-cell';
 import CraftarImagesCell from '../elements/craftar-images-cell';
 import LogoImagesCell from '../elements/logo-images-cell';
 import RelatedImagesCell from '../elements/related-images-cell';
@@ -215,6 +216,7 @@ export default class ResultView extends Component {
         <Text style={styles.text}>{I18n.t('anysnap-results')}</Text>
 
         <ScrollView horizontal={true}>
+          {this.props.code && this.props.code.data && <CodeImagesCell code={this.props.code} />}
           {this.state.craftar && <CraftarImagesCell results={this.state.craftar} />}
           {this.state.logo && <LogoImagesCell results={this.state.logo} />}
           <RelatedImagesCell tags={this.state.tags} />
@@ -272,19 +274,12 @@ export default class ResultView extends Component {
         {this.renderToolbar()}
 
         <ScrollView>
-          {this.props.history.url && <Image
+          {(this.props.history.url || this.props.image) && <Image
             style={styles.image}
             source={[
-              { uri: this.props.history.url },
+              { uri: this.props.history.url || this.props.image },
               // { uri: this.props.history.original_uri },
             ]}
-          >
-            {this.renderMoreResultsComing()}
-          </Image>}
-
-          {this.props.image && <Image
-            style={styles.image}
-            source={{ uri: this.props.image }}
           >
             {this.renderMoreResultsComing()}
           </Image>}
@@ -308,6 +303,10 @@ ResultView.propTypes = {
     // original_uri: React.PropTypes.string,
     created_datetime: React.PropTypes.string,
     // modified_datetime: React.PropTypes.string,
+  }),
+  code: React.PropTypes.shape({
+    type: React.PropTypes.string,
+    data: React.PropTypes.string,
   }),
 };
 

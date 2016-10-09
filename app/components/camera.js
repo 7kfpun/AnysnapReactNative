@@ -105,9 +105,11 @@ class CameraView extends Component {
     if (data.type === 'org.gs1.EAN-13' && data.data) {
       // Actions.tabbar({ code: response.data, isSearch: true, isGotoResult: true });
       this.setState({ code: Object.assign({}, data, { type: 'EAN-13' }) });
+    } else if (data.type === 'org.iso.QRCode' && data.data) {
+      this.setState({ code: Object.assign({}, data, { type: 'QR' }) });
     }
 
-    timer.setTimeout(this, 'name', () => this.setState({ code: {} }), 3000);
+    timer.setTimeout(this, 'name', () => this.setState({ code: {} }), 4000);
   }
 
   alertPermission(permissionType) {
@@ -132,13 +134,15 @@ class CameraView extends Component {
   }
 
   takePicture() {
-    Permissions.requestPermission('photo')
+    const that = this;
+    Permissions.requestPermission('camera')
       .then((permission) => {
+        console.log('permission', permission);
         if (permission === 'authorized') {
           this.camera.capture().then((response) => {
             console.log('Camera captured', response);
             if (response && response.path) {
-              Actions.tabbar({ image: response.path, isSearch: true, isGotoResult: true, code: this.state.code });
+              Actions.tabbar({ image: response.path, isSearch: true, isGotoResult: true, code: that.state.code });
             }
           })
           .catch(err => console.error(err));

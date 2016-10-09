@@ -58,11 +58,11 @@ export default class LogoImagesCell extends Component {
         that.setState({
           thumbnailUrl: (json.items[0].pagemap.cse_thumbnail && json.items[0].pagemap.cse_thumbnail[0].src)
             || (json.items[0].pagemap.cse_image && json.items[0].pagemap.cse_image[0].src)
-            || 'https://vignette2.wikia.nocookie.net/logopedia/images/d/d2/Google_icon_2015.png/revision/latest?cb=20150902024016',
+            || 'https://firebasestorage.googleapis.com/v0/b/frontn-anysnap.appspot.com/o/app%2Fgoogle-search.png?alt=media&token=6306a8d5-d46d-4d2b-960a-7daec85379fd',
         });
       } else {
         that.setState({
-          thumbnailUrl: 'https://vignette2.wikia.nocookie.net/logopedia/images/d/d2/Google_icon_2015.png/revision/latest?cb=20150902024016',
+          thumbnailUrl: 'https://firebasestorage.googleapis.com/v0/b/frontn-anysnap.appspot.com/o/app%2Fgoogle-search.png?alt=media&token=6306a8d5-d46d-4d2b-960a-7daec85379fd',
         });
       }
     });

@@ -100,5 +100,5 @@ CraftarImagesCell.propTypes = {
 };
 
 CraftarImagesCell.defaultProps = {
-  results: {},
+  results: [],
 };

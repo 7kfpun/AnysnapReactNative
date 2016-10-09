@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import {
   Dimensions,
+  Image,
   Linking,
   Platform,
   StyleSheet,
   Text,
+  TouchableHighlight,
   View,
 } from 'react-native';
 
 // 3rd party libraries
 import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
-import Spinner from 'react-native-spinkit';
-
-import ImageCell from './image-cell';
 
 const BLANK_WIDTH = 10;
 
@@ -49,9 +48,22 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class RelatedImagesCell extends Component {
+export default class CodeImagesCell extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      results: [],
+    };
+  }
+
   openUrl(query) {
-    const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
+    let url;
+    if (query.startsWith('http')) {
+      url = query;
+    } else {
+      url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
+    }
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))
@@ -63,37 +75,37 @@ export default class RelatedImagesCell extends Component {
   }
 
   render() {
-    const resultsLength = this.props.tags.length;
     const maxLenght = 15;
     return (
       <View style={styles.container}>
-        {this.props.tags.length === 0 && <View style={styles.imageLoading}>
-          <Spinner style={styles.spinner} size={40} type="Bounce" color="#7F7F7F" />
-          <Spinner style={styles.spinner} size={40} type="Bounce" color="#7F7F7F" />
-          <Spinner style={styles.spinner} size={40} type="Bounce" color="#7F7F7F" />
-        </View>}
-        {this.props.tags.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
-          <View style={styles.imageBlock}>
-            <ImageCell
-              cellType="related"
-              style={styles.image}
-              source={require('../../assets/google.png')}  // eslint-disable-line global-require
-              text={item}
-            />
-            <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>
-          </View>
-          {i <= resultsLength ? <View style={styles.blank} /> : null}
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableHighlight onPress={() => this.openUrl(this.props.code.data)} underlayColor="white">
+            <View style={styles.imageBlock}>
+              <Image
+                style={styles.image}
+                source={{ url: 'https://firebasestorage.googleapis.com/v0/b/frontn-anysnap.appspot.com/o/app%2Fgoogle-search.png?alt=media&token=6306a8d5-d46d-4d2b-960a-7daec85379fd' }}
+              />
+              <Text style={styles.text}>
+                {this.props.code.data.length > maxLenght ? `${this.props.code.data.substring(0, maxLenght - 3)}...`
+                :
+                this.props.code.data}
+              </Text>
+            </View>
+          </TouchableHighlight>
+          <View style={styles.blank} />
         </View>
-        )}
       </View>
     );
   }
 }
 
-RelatedImagesCell.propTypes = {
-  tags: React.PropTypes.arrayOf(React.PropTypes.string),
+CodeImagesCell.propTypes = {
+  code: React.PropTypes.shape({
+    data: React.PropTypes.string,
+    // type: React.PropTypes.string,
+  }),
 };
 
-RelatedImagesCell.defaultProps = {
-  tags: [],
+CodeImagesCell.defaultProps = {
+  code: {},
 };

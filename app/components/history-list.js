@@ -59,6 +59,7 @@ export default class HistoryListView extends Component {
         image: this.props.image,
         history: this.props.history,
         isSearch: this.props.isSearch,
+        code: this.props.code,
         // type: 'replace',
       });
     }
@@ -193,14 +194,8 @@ HistoryListView.propTypes = {
   image: React.PropTypes.string,
   isSearch: React.PropTypes.bool,
   isGotoResult: React.PropTypes.bool,
-  history: React.PropTypes.shape({
-    // id: React.PropTypes.string,
-    // url: React.PropTypes.string,
-    // user_id: React.PropTypes.string,
-    // original_uri: React.PropTypes.string,
-    // created_datetime: React.PropTypes.string,
-    // modified_datetime: React.PropTypes.string,
-  }),
+  history: React.PropTypes.shape({}),
+  code: React.PropTypes.shape({}),
 };
 
 HistoryListView.defaultProps = {
