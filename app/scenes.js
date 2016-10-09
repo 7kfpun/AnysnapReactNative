@@ -11,6 +11,7 @@ import NotificationView from './components/notification';
 import CameraView from './components/camera';
 import CameraTabView from './components/camera-tab';
 import ResultView from './components/result';
+import ResultFeedbackView from './components/result-feedback';
 import HistoryListView from './components/history-list';
 // import SettingsView from './components/settings';
 // import AdminView from './components/admin';
@@ -31,7 +32,8 @@ const scenes = Actions.create(
     <Scene key="tabbar" tabs tabBarStyle={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#DBDBDB' }}>
       <Scene key="main" icon={TabIcon} iconName="inbox">
         <Scene key="history" title={I18n.t('history')} component={HistoryListView} hideNavBar panHandlers={null} />
-        <Scene key="result" title={I18n.t('more-information')} component={ResultView} hideNavBar panHandlers={null} />
+        <Scene key="result" title={I18n.t('anysnap-results')} component={ResultView} hideNavBar panHandlers={null} />
+        <Scene key="resultFeedback" title={I18n.t('result-feedback')} component={ResultFeedbackView} hideNavBar panHandlers={null} />
       </Scene>
 
       <Scene key="feed" title={I18n.t('discovery')} icon={TabIcon} iconName="dashboard" component={FeedView} hideNavBar panHandlers={null} />

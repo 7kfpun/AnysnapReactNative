@@ -245,6 +245,9 @@ export default class ResultView extends Component {
             name="announcement"
             size={26}
             color="gray"
+            onPress={() => Actions.resultFeedback({
+              history: this.props.history,
+            })}
           />}
         />
       );
