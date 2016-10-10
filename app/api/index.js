@@ -157,7 +157,7 @@ export function uploadImageS3(filename, image) {
 }
 
 export function googleVision(filename) {
-  console.log(filename);
+  console.log('googleVision', filename);
   return fetch(  // eslint-disable-line no-undef
     `https://vision.googleapis.com/v1/images:annotate?key=${config.gcloudVision}`,
     {
@@ -205,7 +205,7 @@ export function googleVision(filename) {
 }
 
 export function getUserImages(UniqueID) {
-  console.log('getUserImages');
+  console.log('getUserImages', UniqueID);
   return fetch(  // eslint-disable-line no-undef
     `https://frontn-anysnap.herokuapp.com/core/users/${UniqueID}/images/`,
     {
@@ -220,7 +220,7 @@ export function getUserImages(UniqueID) {
 }
 
 export function createUserImage(url, originalUri, userId) {
-  console.log('createUserImage');
+  console.log('createUserImage', url, originalUri, userId);
   return fetch(  // eslint-disable-line no-undef
     `https://frontn-anysnap.herokuapp.com/core/users/${userId}/images/`,
     {
@@ -242,7 +242,7 @@ export function createUserImage(url, originalUri, userId) {
 }
 
 export function deleteUserImage(id, userId) {
-  console.log('deleteUserImage');
+  console.log('deleteUserImage', id, userId);
   return fetch(  // eslint-disable-line no-undef
     `https://frontn-anysnap.herokuapp.com/core/users/${userId}/images/${id}/`,
     {
@@ -253,6 +253,27 @@ export function deleteUserImage(id, userId) {
       return json;
     })
     .then(response => response.json())
+    .catch(error => console.warn(error));
+}
+
+export function createUserImageResult(userId, imageId, code) {
+  console.log('createUserImageResult', userId, imageId, code);
+  return fetch(  // eslint-disable-line no-undef
+    `https://frontn-anysnap.herokuapp.com/core/users/${userId}/images/${imageId}/results/`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        payload: code,
+      }),
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log('Create user image result', json);
+      return json;
+    })
     .catch(error => console.warn(error));
 }
 

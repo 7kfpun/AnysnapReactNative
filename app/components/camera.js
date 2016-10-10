@@ -104,9 +104,9 @@ class CameraView extends Component {
 
     if (data.type === 'org.gs1.EAN-13' && data.data) {
       // Actions.tabbar({ code: response.data, isSearch: true, isGotoResult: true });
-      this.setState({ code: Object.assign({}, data, { type: 'EAN-13' }) });
+      this.setState({ code: Object.assign({}, data, { shortType: 'EAN-13' }) });
     } else if (data.type === 'org.iso.QRCode' && data.data) {
-      this.setState({ code: Object.assign({}, data, { type: 'QR' }) });
+      this.setState({ code: Object.assign({}, data, { shortType: 'QR' }) });
     }
 
     timer.setTimeout(this, 'name', () => this.setState({ code: {} }), 4000);
@@ -234,7 +234,7 @@ class CameraView extends Component {
               color="white"
               onPress={() => this.setState({ isFlashOn: !this.state.isFlashOn })}
             />
-            {this.state.code && this.state.code.type && <Text style={styles.codeDetect}>{this.state.code.type} code detected</Text>}
+            {this.state.code && this.state.code.shortType && <Text style={styles.codeDetect}>{this.state.code.shortType} code detected</Text>}
             <Icon
               style={{ paddingTop: 50, paddingLeft: 50 }}
               name={this.state.isCameraFront ? 'camera-front' : 'camera-rear'}

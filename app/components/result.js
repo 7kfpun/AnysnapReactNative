@@ -131,6 +131,10 @@ export default class ResultView extends Component {
               that.checkCraftar(json.results[0].id);
               that.checkLogo(json.results[0].id);
               that.checkTag(json.results[0].id);
+
+              if (that.props.code) {
+                api.createUserImageResult(json.results[0].user_id, json.results[0].id, that.props.code);
+              }
             } catch (err) {
               console.error(err);
             }
