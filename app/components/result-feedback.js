@@ -15,6 +15,7 @@ import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import { Button, CheckBox, FormLabel, FormInput } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import NavigationBar from 'react-native-navbar';
 
 import { config } from '../config';
@@ -24,10 +25,8 @@ import I18n from '../utils/i18n';
 const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   body: {
     flex: 1,
-    marginVertical: 2,
     backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 30,
   },
   cell: {
     backgroundColor: 'white',
@@ -56,9 +55,8 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
     fontSize: 16,
     color: '#212121',
   },
-  subtitile: {
-    fontSize: 12,
-    color: '#9E9E9E',
+  button: {
+    marginVertical: 5,
   },
 }));
 
@@ -193,7 +191,7 @@ export default class ResultFeedbackView extends Component {
     return (
       <View style={styles.container}>
         {this.renderToolbar()}
-        <ScrollView style={{ flex: 1, backgroundColor: 'white', padding: 30 }}>
+        <ScrollView style={styles.body}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {this.props.history.url && <Image
               style={styles.image}
@@ -209,49 +207,61 @@ export default class ResultFeedbackView extends Component {
           <View style={{ marginVertical: 20, borderColor: '#BDBDBD', borderWidth: StyleSheet.hairlineWidth * 2 }} />
 
           {!this.state.answer && <View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <View style={{ flex: 1 }}>
-                <Button
-                  small
-                  title={ANSWERS[0]}
-                  backgroundColor="#2BBDC3"
-                  onPress={() => {
-                    this.setState({ answer: ANSWERS[0] });
-                    this.sendGreatFeedback();
-                  }}
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Button small title={ANSWERS[2]} backgroundColor="#2BBDC3" onPress={() => this.setState({ answer: ANSWERS[2] })} />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <View style={{ flex: 1 }}>
-                <Button small title={ANSWERS[1]} backgroundColor="#2BBDC3" onPress={() => this.setState({ answer: ANSWERS[1] })} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Button small title={ANSWERS[3]} backgroundColor="#2BBDC3" onPress={() => this.setState({ answer: ANSWERS[3] })} />
-              </View>
-            </View>
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[0]}
+              backgroundColor="#2BBDC3"
+              onPress={() => { this.setState({ answer: ANSWERS[0] }); this.sendGreatFeedback(); }}
+            />
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[1]}
+              backgroundColor="#2BBDC3"
+              onPress={() => this.setState({ answer: ANSWERS[1] })}
+            />
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[2]}
+              backgroundColor="#2BBDC3"
+              onPress={() => this.setState({ answer: ANSWERS[2] })}
+            />
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[3]}
+              backgroundColor="#2BBDC3"
+              onPress={() => this.setState({ answer: ANSWERS[3] })}
+            />
           </View>}
 
           {this.state.answer && <View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <View style={{ flex: 1 }}>
-                <Button small title={ANSWERS[0]} backgroundColor={this.state.answer === ANSWERS[0] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[0] })} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Button small title={ANSWERS[2]} backgroundColor={this.state.answer === ANSWERS[2] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[2] })} />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <View style={{ flex: 1 }}>
-                <Button small title={ANSWERS[1]} backgroundColor={this.state.answer === ANSWERS[1] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[1] })} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Button small title={ANSWERS[3]} backgroundColor={this.state.answer === ANSWERS[3] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[3] })} />
-              </View>
-            </View>
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[0]}
+              backgroundColor={this.state.answer === ANSWERS[0] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[0] })}
+            />
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[1]}
+              backgroundColor={this.state.answer === ANSWERS[1] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[1] })}
+            />
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[2]}
+              backgroundColor={this.state.answer === ANSWERS[2] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[2] })}
+            />
+            <Button
+              small
+              buttonStyle={styles.button}
+              title={ANSWERS[3]}
+              backgroundColor={this.state.answer === ANSWERS[3] ? '#9E9E9E' : '#BDBDBD'} onPress={() => this.setState({ answer: ANSWERS[3] })}
+            />
           </View>}
 
           {this.state.answer === ANSWERS[0] && <Text style={[styles.titile, { textAlign: 'center', margin: 10 }]}>Thanks for your help!</Text>}
@@ -274,6 +284,7 @@ export default class ResultFeedbackView extends Component {
           </View>}
         </ScrollView>
 
+        <KeyboardSpacer />
       </View>
     );
   }

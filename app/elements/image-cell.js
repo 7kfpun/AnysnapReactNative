@@ -16,8 +16,8 @@ export default class LogoImagesCell extends Component {
     super(props);
 
     this.state = {
-      thumbnailUrl: 'https://www.safmarine.com/assets/saf/img/assets/lazyload.gif',
-      hostPageUrl: 'https://www.safmarine.com/assets/saf/img/assets/lazyload.gif',
+      thumbnailUrl: 'https://firebasestorage.googleapis.com/v0/b/frontn-anysnap.appspot.com/o/app%2Floading.gif?alt=media&token=d598952d-66ae-453f-b5ca-c6a9906b2252',
+      hostPageUrl: 'https://www.google.com',
     };
   }
 
