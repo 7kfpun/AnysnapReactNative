@@ -81,7 +81,7 @@ export default class NotificationView extends Component {
 
   renderNoNotifications() {
     return (<View style={styles.body}>
-      <Text>No notifications yet</Text>
+      <Text>{I18n.t('no-notifications-yet')}</Text>
     </View>);
   }
 

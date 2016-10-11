@@ -25,6 +25,7 @@ import Permissions from 'react-native-permissions';
 import timer from 'react-native-timer';
 
 import commonStyle from '../utils/common-styles';
+import I18n from '../utils/i18n';
 
 import { increaseAction, decreaseAction } from '../actions/counter';
 
@@ -187,7 +188,8 @@ class CameraView extends Component {
   }
 
   render() {
-    const { value, onIncreaseClick, onDecreaseClick } = this.props;
+    // const { value, onIncreaseClick, onDecreaseClick } = this.props;
+    const { onIncreaseClick, onDecreaseClick } = this.props;
 
     return (
       <View style={styles.container}>
@@ -266,21 +268,21 @@ class CameraView extends Component {
             onPress={() => { this.setState({ selectedFeature: 'book' }); onDecreaseClick(); }}
             textStyle={{ fontSize: 10 }}
           >
-            {'BOOK COVER'}
+            {I18n.t('book-cover')}
           </Button>
           <Button
             style={[styles.footerButton, this.state.selectedFeature === 'search' ? styles.selectedFooterButton : null]}
             onPress={() => this.setState({ selectedFeature: 'search' })}
             textStyle={{ fontSize: 10 }}
           >
-            {'SEARCH '}
+            {I18n.t('search')}
           </Button>
           <Button
             style={[styles.footerButton, this.state.selectedFeature === 'codescan' ? styles.selectedFooterButton : null]}
             onPress={() => { this.setState({ selectedFeature: 'codescan' }); onIncreaseClick(); }}
             textStyle={{ fontSize: 10 }}
           >
-            {'CODE SCAN'}
+            {I18n.t('code-scan')}
           </Button>
         </View>
       </View>
@@ -290,7 +292,7 @@ class CameraView extends Component {
 
 CameraView.propTypes = {
   title: React.PropTypes.string,
-  value: React.PropTypes.number,
+  // value: React.PropTypes.number,
   onIncreaseClick: React.PropTypes.func,
   onDecreaseClick: React.PropTypes.func,
 };
@@ -299,13 +301,13 @@ CameraView.defaultProps = {
   title: '',
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {  // eslint-disable-line arrow-body-style
   return {
     value: state.counter.count,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {  // eslint-disable-line arrow-body-style
   return {
     onIncreaseClick: () => {
       dispatch(increaseAction());

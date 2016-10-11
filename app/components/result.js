@@ -85,6 +85,7 @@ export default class ResultView extends Component {
         }
       });
     } else {
+      this.checkCode(this.props.history.id);
       this.checkCraftar(this.props.history.id);
       this.checkLogo(this.props.history.id);
       this.checkTag(this.props.history.id);
@@ -128,6 +129,7 @@ export default class ResultView extends Component {
             console.log('createUserImage', json);
             that.setState({ status: 'DONE' });
             try {
+              that.checkCode(json.results[0].id);
               that.checkCraftar(json.results[0].id);
               that.checkLogo(json.results[0].id);
               that.checkTag(json.results[0].id);
@@ -152,6 +154,21 @@ export default class ResultView extends Component {
       });
     }).catch((err) => {
       console.log('ImageResizer', err);
+    });
+  }
+
+  checkCode(imageId) {
+    console.log('checkCode', imageId);
+    const that = this;
+    const ref = firebase.database().ref(`results/${imageId}/code`);
+    ref.on('value', (snapshot) => {
+      if (snapshot) {
+        const value = snapshot.val();
+        if (value && value.length > 0) {
+          console.log('Check tag', value);
+          that.setState({ codes: value });
+        }
+      }
     });
   }
 
@@ -220,7 +237,8 @@ export default class ResultView extends Component {
         <Text style={styles.text}>{I18n.t('anysnap-results')}</Text>
 
         <ScrollView horizontal={true}>
-          {this.props.code && this.props.code.data && <CodeImagesCell code={this.props.code} />}
+          {/* this.props.code && this.props.code.data && <CodeImagesCell code={this.props.code} /> */}
+          {this.state.codes && <CodeImagesCell results={this.state.codes} />}
           {this.state.craftar && <CraftarImagesCell results={this.state.craftar} />}
           {this.state.logo && <LogoImagesCell results={this.state.logo} />}
           <RelatedImagesCell tags={this.state.tags} />

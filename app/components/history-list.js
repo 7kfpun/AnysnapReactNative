@@ -149,7 +149,7 @@ export default class HistoryListView extends Component {
           style={{ height: 60 }}
           size="small"
         />}
-        <ListView
+        <SwipeListView
           // ref={(c) => { this.scrollView = c; }}
           // key={this.state.key}
           style={{ marginTop: 2 }}

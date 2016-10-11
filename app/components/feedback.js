@@ -101,17 +101,6 @@ export default class FeedbackView extends Component {
                   validator: 'isEmail',
                 }],
               },
-              // phoneNumber: {
-              //   title: 'Phone number',
-              //   validate: [{
-              //     validator: 'isLength',
-              //     arguments: [-1, 255],
-              //   }, {
-              //     validator: 'matches',
-              //     arguments: /^\++[\-\s0-9]*$/,
-              //     message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters',
-              //   }],
-              // },
             }}
           >
 
@@ -141,15 +130,6 @@ export default class FeedbackView extends Component {
               autoCorrect={false}
               image={<Icon style={{ marginLeft: 10 }} name="email" size={20} color="#616161" />}
             />
-
-            {/* <GiftedForm.TextInputWidget
-              name="phoneNumber"
-              title={I18n.t('phone-number')}
-              placeholder="+852 8000 0000"
-              keyboardType="email-address"
-              clearButtonMode="while-editing"
-              image={<Icon style={{ marginLeft: 10 }} name="email" size={20} color="#616161" />}
-            /> */}
 
             <GiftedForm.SeparatorWidget />
 

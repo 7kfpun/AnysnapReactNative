@@ -77,7 +77,6 @@ export default class RelatedImagesCell extends Component {
             <ImageCell
               cellType="related"
               style={styles.image}
-              source={require('../../assets/google.png')}  // eslint-disable-line global-require
               text={item}
             />
             <Text style={styles.text}>{item && item.length > maxLenght ? `${item.substring(0, maxLenght - 3)}...` : item}</Text>

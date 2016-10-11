@@ -91,7 +91,7 @@ export default class ResultFeedbackView extends Component {
 
   toggleTag(toggleItem) {
     console.log(toggleItem);
-    const tempTags = this.state.tags.map(item => item.name === toggleItem.name ? Object.assign({}, item, { checked: !toggleItem.checked }) : item);
+    const tempTags = this.state.tags.map(item => item.name === toggleItem.name ? Object.assign({}, item, { checked: !toggleItem.checked }) : item);  // eslint-disable-line no-confusing-arrow
     this.setState({ tags: tempTags });
   }
 
@@ -183,10 +183,10 @@ export default class ResultFeedbackView extends Component {
 
   render() {
     const ANSWERS = [
-      'Great!',
-      'Could be better',
-      'Missed the point',
-      'What the heck?!',
+      I18n.t('great'),
+      I18n.t('could-be-better'),
+      I18n.t('missed-the-point'),
+      I18n.t('what-the-heck'),
     ];
     return (
       <View style={styles.container}>
@@ -267,20 +267,20 @@ export default class ResultFeedbackView extends Component {
           {this.state.answer === ANSWERS[0] && <Text style={[styles.titile, { textAlign: 'center', margin: 10 }]}>Thanks for your help!</Text>}
 
           {this.state.answer && this.state.answer !== ANSWERS[0] && <View style={{ marginVertical: 30 }}>
-            <Text style={[styles.titile, { textAlign: 'center' }]}>{'Hmm.. Uncheck those not accurate...'}</Text>
+            <Text style={[styles.titile, { textAlign: 'center' }]}>{I18n.t('uncheck-those-not-accurate')}</Text>
 
             {this.state.tags && this.state.tags.map((item, i) =>
               <CheckBox key={i} title={item.name} checked={item.checked} onPress={() => this.toggleTag(item)} />
             )}
 
-            <FormLabel>Other:</FormLabel>
+            <FormLabel>{I18n.t('other')}</FormLabel>
             <FormInput
-              placeholder={'Type a better identification here'}
+              placeholder={I18n.t('type-better-identification')}
               onChangeText={other => this.setState({ other })}
             />
             <View style={{ height: 20 }} />
 
-            <Button title="SUMMIT" onPress={() => this.sendResultFeedback()} />
+            <Button title={I18n.t('submit')} onPress={() => this.sendResultFeedback()} />
           </View>}
         </ScrollView>
 
