@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Dimensions,
   Image,
+  Linking,
   Platform,
   ScrollView,
   StyleSheet,
@@ -14,10 +15,13 @@ import moment from 'moment';
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
+import { Button } from 'react-native-elements';
 import { RNS3 } from 'react-native-aws3';
+import * as Animatable from 'react-native-animatable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer';  // eslint-disable-line import/no-unresolved,import/extensions
 import NavigationBar from 'react-native-navbar';
+import SafariView from 'react-native-safari-view';  // eslint-disable-line import/no-unresolved,import/extensions
 import Spinner from 'react-native-spinkit';
 import store from 'react-native-simple-store';
 
@@ -98,6 +102,17 @@ export default class ResultView extends Component {
     }
   }
 
+  openUrl(url) {
+    if (Platform.OS === 'ios') {
+      SafariView.isAvailable()
+        .then(SafariView.show({ url }))
+        .catch(err => console.error('Cannot open safari', err));
+    } else if (Platform.OS === 'android') {
+      Linking.openURL(url)
+        .catch(err => console.error('Cannot open url', err));
+    }
+  }
+
   uploadImage(image, uniqueID) {
     let filename;
     try {
@@ -110,7 +125,7 @@ export default class ResultView extends Component {
     const options = Object.assign(config.s3, { keyPrefix: `uploads/${uniqueID}/` });
 
     const that = this;
-    ImageResizer.createResizedImage(image, 1200, 1200, 'JPEG', 40).then((resizedImageUri) => {
+    ImageResizer.createResizedImage(image, 400, 400, 'JPEG', 40).then((resizedImageUri) => {
       console.log('resizedImageUri', resizedImageUri);
       const file = {
         uri: resizedImageUri,
@@ -125,10 +140,13 @@ export default class ResultView extends Component {
         }
         console.log('S3 uploaded', response.body);
         if (response.body.postResponse && response.body.postResponse.location) {
-          api.createUserImage(response.body.postResponse.location.replace(/%2F/g, '/'), image, uniqueID).then((json) => {
+          const location = response.body.postResponse.location.replace(/%2F/g, '/');
+
+          api.createUserImage(location, image, uniqueID).then((json) => {
             console.log('createUserImage', json);
             that.setState({ status: 'DONE' });
             try {
+              that.setState({ history: json.results[0] });
               that.checkCode(json.results[0].id);
               that.checkCraftar(json.results[0].id);
               that.checkLogo(json.results[0].id);
@@ -225,9 +243,9 @@ export default class ResultView extends Component {
 
   renderMoreResultsComing() {
     if (this.props.image || (this.props.history && this.props.history.created_datetime && moment().diff(moment(this.props.history.created_datetime), 'minutes') < 60)) {
-      return (<View style={styles.moreResultsComing}>
+      return (<Animatable.View animation="fadeIn" delay={2000} style={styles.moreResultsComing}>
         <Text style={[styles.text, { color: 'white' }]}>{I18n.t('would-notice-when-more-results')}</Text>
-      </View>);
+      </Animatable.View>);
     }
   }
 
@@ -243,6 +261,19 @@ export default class ResultView extends Component {
           {this.state.logo && <LogoImagesCell results={this.state.logo} />}
           <RelatedImagesCell tags={this.state.tags} />
         </ScrollView>
+
+        <View style={{ marginVertical: 10 }}>
+          <Button
+            small
+            icon={{ name: 'search' }}
+            title="Reverse Image Search"
+            backgroundColor="#81D4FA"
+            onPress={() => {
+              console.log('Google image reverse search', this.props.history.url || this.state.history.url);
+              this.openUrl(`https://www.google.com/searchbyimage?&image_url=${this.props.history.url || this.state.history.url}`);
+            }}
+          />
+        </View>
 
         <TagsCell tags={this.state.tags} />
       </View>
@@ -327,8 +358,8 @@ ResultView.propTypes = {
     // modified_datetime: React.PropTypes.string,
   }),
   code: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    data: React.PropTypes.string,
+    // type: React.PropTypes.string,
+    // data: React.PropTypes.string,
   }),
 };
 

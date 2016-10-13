@@ -69,6 +69,7 @@ export default class FeedCell extends Component {
 
   render() {
     const actionOptions = [I18n.t('cancel'), I18n.t('it-should-not--be-on-anysnap'), I18n.t('its-spam')];
+    const maxLenght = 50;
 
     return (
       <TouchableHighlight
@@ -77,7 +78,7 @@ export default class FeedCell extends Component {
       >
         <View style={styles.container}>
           <ActionSheet
-            ref={(o) => this.ActionSheet = o}
+            ref={(o) => { this.ActionSheet = o; }}
             title={I18n.t('flag-title')}
             options={actionOptions}
             cancelButtonIndex={0}
@@ -96,7 +97,9 @@ export default class FeedCell extends Component {
           </Image>
           <View style={styles.infomationBlock}>
             <Text style={styles.title}>{(this.props.data[0] && this.props.data[0].name) || ''}</Text>
-            <Text style={styles.subtitile}>{(this.props.data[0] && this.props.data[0].url) || ''}</Text>
+            <Text style={styles.subtitile}>{
+              (this.props.data[0] && this.props.data[0].url && this.props.data[0].url.length > maxLenght ? `${this.props.data[0].url.substring(0, maxLenght - 3)}...` : this.props.data[0].url)
+              || ''}</Text>
           </View>
         </View>
       </TouchableHighlight>

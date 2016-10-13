@@ -64,7 +64,7 @@ export default class RelatedImagesCell extends Component {
 
   render() {
     const resultsLength = this.props.tags.length;
-    const maxLenght = 15;
+    const maxLenght = 20;
     return (
       <View style={styles.container}>
         {this.props.tags.length === 0 && <View style={styles.imageLoading}>

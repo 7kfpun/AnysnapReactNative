@@ -83,7 +83,7 @@ export default class CodeImagesCell extends Component {
 
   render() {
     const resultsLength = this.state.results.length;
-    const maxLenght = 15;
+    const maxLenght = 20;
     return (
       <View style={styles.container}>
         {this.props.results.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
@@ -100,7 +100,7 @@ export default class CodeImagesCell extends Component {
                 fgColor="white"
               />}
               {item.payload && item.payload.data && <Text style={styles.text}>
-                {item.payload.data > maxLenght ? `${item.payload.data.substring(0, maxLenght - 3)}...`
+                {item.payload.data.length > maxLenght ? `${item.payload.data.substring(0, maxLenght - 3)}...`
                 :
                 item.payload.data}
               </Text>}

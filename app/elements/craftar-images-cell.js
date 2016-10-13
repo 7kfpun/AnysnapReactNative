@@ -70,7 +70,7 @@ export default class CraftarImagesCell extends Component {
 
   render() {
     const resultsLength = this.state.results.length;
-    const maxLenght = 15;
+    const maxLenght = 20;
     return (
       <View style={styles.container}>
         {this.props.results.map((item, i) => <View key={i} style={{ flexDirection: 'row' }}>
