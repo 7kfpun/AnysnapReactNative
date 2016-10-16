@@ -46,7 +46,7 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').width,
     resizeMode: 'cover',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   spinner: {
     margin: 50,
@@ -63,7 +63,6 @@ const styles = StyleSheet.create(Object.assign({}, commonStyle, {
   },
   moreResultsComing: {
     backgroundColor: 'rgba(0,0,0,0.6)',
-    margin: 10,
     padding: 20,
   },
 }));

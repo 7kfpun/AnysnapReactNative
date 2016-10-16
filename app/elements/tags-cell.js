@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 
 export default class TagsCell extends Component {
   openUrl(query) {
-    const url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()
         .then(SafariView.show({ url }))

@@ -69,7 +69,7 @@ export default class FeedCell extends Component {
 
   render() {
     const actionOptions = [I18n.t('cancel'), I18n.t('it-should-not--be-on-anysnap'), I18n.t('its-spam')];
-    const maxLenght = 50;
+    const maxLenght = 40;
 
     return (
       <TouchableHighlight

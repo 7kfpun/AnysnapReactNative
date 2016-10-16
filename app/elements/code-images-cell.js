@@ -66,10 +66,10 @@ export default class CodeImagesCell extends Component {
     }
 
     let url;
-    if (query.startsWith('http')) {
+    if (query.startsWith('http') || query.startsWith('HTTP') || query.startsWith('www.')) {
       url = query;
     } else {
-      url = `https://www.google.com/search?q=${query}`.replace(/\s/g, '+');
+      url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     }
     if (Platform.OS === 'ios') {
       SafariView.isAvailable()

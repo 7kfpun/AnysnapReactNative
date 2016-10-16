@@ -29,7 +29,7 @@ export default class LogoImagesCell extends Component {
     if (this.props.cellType === 'related') {
       // this.googleSearch(this.props.text);
       this.setState({
-        hostPageUrl: `https://www.google.com/search?q=${this.props.text}`.replace(/\s/g, '+'),
+        hostPageUrl: `https://www.google.com/search?q=${encodeURIComponent(this.props.text)}`,
         thumbnailUrl: 'https://firebasestorage.googleapis.com/v0/b/frontn-anysnap.appspot.com/o/app%2Fgoogle-search.png?alt=media&token=6306a8d5-d46d-4d2b-960a-7daec85379fd',
       });
     }
@@ -42,8 +42,13 @@ export default class LogoImagesCell extends Component {
       if (json.value && json.value.length > 0) {
         console.log(json.value[0].thumbnailUrl);
         that.setState({
+          hostPageUrl: `https://www.google.com/search?q=${encodeURIComponent(this.props.text)}`,
           thumbnailUrl: json.value[0].thumbnailUrl,
-          hostPageUrl: json.value[0].hostPageUrl,
+        });
+      } else {
+        that.setState({
+          hostPageUrl: `https://www.google.com/search?q=${encodeURIComponent(this.props.text)}`,
+          thumbnailUrl: 'https://firebasestorage.googleapis.com/v0/b/frontn-anysnap.appspot.com/o/app%2Fgoogle-search.png?alt=media&token=6306a8d5-d46d-4d2b-960a-7daec85379fd',
         });
       }
     });
@@ -52,7 +57,7 @@ export default class LogoImagesCell extends Component {
   googleSearch(query) {
     const that = this;
     that.setState({
-      hostPageUrl: `https://www.google.com/search?q=${query}`.replace(/\s/g, '+'),
+      hostPageUrl: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
     });
 
     api.googleSearch(query.replace(/\s/g, '+'))
